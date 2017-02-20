@@ -1,9 +1,27 @@
 {{outlet}}
-
 <h1>Registro de Visitas</h1>
+<table>
+	<thead>
+		<tr>
+			<th>Nombre Completo</th>
+			<th>Cedula</th>
+			<th>Organizacion</th>
+			<th>Área</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+		 	<td>Nestor Bonilla</td>
+			<td>xxx-xxxxxxx-xxxx</td>
+			<td>xxxxxx</td>
+			<td>CI</td>
+		</tr>
+		<td><input type="text" placeholder="Nombre"></td>
+		<td><input type="text" placeholder="Cédula"></td>
+		<td><input type="text" placeholder="Organización"></td>
+		<td><input type="text" placeholder="Area"></td>
+		<td><button {{action 'expand'}} type="button" class="button">Registrar</button></td>
+	</tbody>
+</table>	
 
-<form class="pure-form">
-    <input type="text" placeholder="Email">
-    <button type="button" class="pure-button pure-button-primary">Sign in</button>
-</form>
 
