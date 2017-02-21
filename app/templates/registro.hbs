@@ -1,7 +1,8 @@
-{{outlet}}
+
 <h1>Registro de Visitas</h1>
 <table>
 	<thead>
+
 		<tr>
 			<th>Nombre Completo</th>
 			<th>Cedula</th>
@@ -11,10 +12,12 @@
 	</thead>
 	<tbody>
 		<tr>
-		 	<td>Nestor Bonilla</td>
-			<td>xxx-xxxxxxx-xxxx</td>
-			<td>xxxxxx</td>
-			<td>CI</td>
+			{{#each model as |reg|}}
+		 	<td>{{reg.nombre}}</td>
+			<td>{{reg.cedula}}</td>
+			<td>{{reg.org}}</td>
+			<td>{{reg.area}}</td>
+			{{/each}}
 		</tr>
 		<td><input type="text" placeholder="Nombre"></td>
 		<td><input type="text" placeholder="Cédula"></td>
@@ -23,5 +26,3 @@
 		<td><button {{action 'expand'}} type="button" class="button">Registrar</button></td>
 	</tbody>
 </table>	
-
-
