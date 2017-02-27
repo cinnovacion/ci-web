@@ -7,7 +7,7 @@ const Router = Ember.Router.extend({
 });
 
 Router.map(function() {
-  this.route('registro');
+	this.route('registro');
 });
 
 export default Router;
