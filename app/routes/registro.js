@@ -11,30 +11,8 @@ var elementos = [
 
 export default Ember.Route.extend({
     model() {
-        var contenido = $.getJSON('dist/assets/ton.json');
-        console.log();
-        registro = 
-        [{
-            nombre  : 'Nestor Brenes',
-            cedula  : 'xxxxxxxx',
-            org     : 'FZT',
-            area    : 'CI',
-            entrada : '8:00 am'
-        },
-        {
-            nombre  : 'Nestor Bonilla',
-            cedula  : 'xxxxxxxx',
-            org     : 'FZT',
-            area    : 'CI',
-            entrada : '8:00 am'
-        },
-        {
-            nombre  : 'Alice',
-            cedula  : 'xxxxxxxx',
-            org     : 'FZT',
-            area    : 'SP',
-            entrada : '8:00 am'
-        }];
+        var contenido = $.getJSON('ton.json');
+        registro = contenido;
         return registro;    
     },
 
@@ -67,7 +45,7 @@ export default Ember.Route.extend({
                 registro.addObject(obj);
             }
         },
-        registrar_entrada: function(event){
+        registrar_salida: function(event){
             var salida = moment().format('LT');
             console.log(this.get('id'));
         }
