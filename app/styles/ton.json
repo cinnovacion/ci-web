@@ -1,0 +1,23 @@
+{
+	{
+	    nombre  : 'Nestor Brenes',
+	    cedula  : 'xxxxxxxx',
+	    org     : 'FZT',
+	    area    : 'CI',
+	    entrada : '8:00 am'
+	},
+	{
+	    nombre  : 'Nestor Bonilla',
+	    cedula  : 'xxxxxxxx',
+	    org     : 'FZT',
+	    area    : 'CI',
+	    entrada : '8:00 am'
+	},
+	{
+	    nombre  : 'Alice',
+	    cedula  : 'xxxxxxxx',
+	    org     : 'FZT',
+	    area    : 'SP',
+	    entrada : '8:00 am'
+	} 
+}

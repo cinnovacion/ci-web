@@ -6,21 +6,25 @@
 			<th>Cedula</th>
 			<th>Organizacion</th>
 			<th>Área</th>
+			<th>Entrada</th>
+			<th>Salida</th>
 		</tr>
 	</thead>
 	<tbody>
-		{{#each model as |reg|}}
+		{{#each model as |registro|}}
 		<tr>
-			<td>{{reg.nombre}}</td>
-			<td>{{reg.cedula}}</td>
-			<td>{{reg.org}}</td>
-			<td>{{reg.area}}</td>
+			<td>{{registro.nombre}}</td>
+			<td>{{registro.cedula}}</td>
+			<td>{{registro.org}}</td>
+			<td>{{registro.area}}</td>
+			<td>{{registro.entrada}}</td>
+			<td><button class="button button-yellow" {{action "registrar_salida"}}>Salida</button></td>
 		</tr>
 		{{/each}}
-		<td><input id='name' type="text" placeholder="Nombre"></td>
-		<td><input id='ced'type="text" placeholder="Cédula"></td>
-		<td><input id='org' type="text" placeholder="Organización"></td>
-		<td><input id='area' type="text" placeholder="Area"></td>
-		<td><button class="button" {{action "click"}}>OK</button></td>
+		<td><input id="nombre" type="text" placeholder="Nombre"></td>
+		<td><input id="cedula" type="text" placeholder="Cédula"></td>
+		<td><input id="org" type="text" placeholder="Organización"></td>
+		<td><input id="area" type="text" placeholder="Area"></td>
+		<td><button class="button button-green" {{action "registrar_entrada"}}>Registrar</button></td>
 	</tbody>
 </table>	
