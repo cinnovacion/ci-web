@@ -3,12 +3,13 @@
     "type": "Assistent Control Innovation Center",
     "description": "Sistema de control de Asistencia del centro de innovacion.",
     "keywords": ["visitas","asistencia","voluntarios", "control"],
-    "homepage": "asscic.net",
+    "homepage": "",
     "license": "GNU GENERAL PUBLIC LICENSE",
     "authors": [
         {
             "name": "Samuel J. Gutierrez Aviles",
-            "email": "search.sama@gmail.com"
+            "email": "search.sama@gmail.com",
+            "homepage": ""
         }
     ],
     "require": {
