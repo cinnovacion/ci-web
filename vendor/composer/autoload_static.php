@@ -4,85 +4,71 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitd1d6d4fc9310820fff4110814034761c
+class ComposerStaticInit2811b3e967a732d5044700ccb58d9797
 {
     public static $files = array (
-        'e40631d46120a9c38ea139981f8dab26' => __DIR__ . '/..' . '/ircmaxell/password-compat/lib/password.php',
-        '17fd9fef37c97cfdc0c7794299a8423d' => __DIR__ . '/..' . '/vrana/notorm/NotORM.php',
+        '253c157292f75eb38082b5acb06f3f01' => __DIR__ . '/..' . '/nikic/fast-route/src/functions.php',
     );
 
     public static $prefixLengthsPsr4 = array (
-        'U' => 
-        array (
-            'Underscore\\' => 11,
-        ),
         'S' => 
         array (
-            'Slim\\Views\\' => 11,
-            'Slim\\Middleware\\' => 16,
+            'Slim\\' => 5,
         ),
         'P' => 
         array (
-            'Patchwork\\' => 10,
+            'Psr\\Http\\Message\\' => 17,
+            'Psr\\Container\\' => 14,
+        ),
+        'I' => 
+        array (
+            'Interop\\Container\\' => 18,
+        ),
+        'F' => 
+        array (
+            'FastRoute\\' => 10,
         ),
     );
 
     public static $prefixDirsPsr4 = array (
-        'Underscore\\' => 
+        'Slim\\' => 
         array (
-            0 => __DIR__ . '/..' . '/anahkiasen/underscore-php/src',
-            1 => __DIR__ . '/..' . '/anahkiasen/underscore-php/tests',
+            0 => __DIR__ . '/..' . '/slim/slim/Slim',
         ),
-        'Slim\\Views\\' => 
+        'Psr\\Http\\Message\\' => 
         array (
-            0 => __DIR__ . '/..' . '/slim/views',
+            0 => __DIR__ . '/..' . '/psr/http-message/src',
         ),
-        'Slim\\Middleware\\' => 
+        'Psr\\Container\\' => 
         array (
-            0 => __DIR__ . '/..' . '/tuupola/slim-basic-auth/src',
+            0 => __DIR__ . '/..' . '/psr/container/src',
         ),
-        'Patchwork\\' => 
+        'Interop\\Container\\' => 
         array (
-            0 => __DIR__ . '/..' . '/patchwork/utf8/src/Patchwork',
+            0 => __DIR__ . '/..' . '/container-interop/container-interop/src/Interop/Container',
+        ),
+        'FastRoute\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/nikic/fast-route/src',
         ),
     );
 
     public static $prefixesPsr0 = array (
-        'T' => 
+        'P' => 
         array (
-            'Twig_' => 
+            'Pimple' => 
             array (
-                0 => __DIR__ . '/..' . '/twig/twig/lib',
+                0 => __DIR__ . '/..' . '/pimple/pimple/src',
             ),
         ),
-        'S' => 
-        array (
-            'Slim' => 
-            array (
-                0 => __DIR__ . '/../..' . '/',
-                1 => __DIR__ . '/..' . '/slim/slim',
-            ),
-        ),
-        'D' => 
-        array (
-            'Doctrine\\Common\\Inflector\\' => 
-            array (
-                0 => __DIR__ . '/..' . '/doctrine/inflector/lib',
-            ),
-        ),
-    );
-
-    public static $classMap = array (
-        'Normalizer' => __DIR__ . '/..' . '/patchwork/utf8/src/Normalizer.php',
     );
 
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitd1d6d4fc9310820fff4110814034761c::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitd1d6d4fc9310820fff4110814034761c::$prefixDirsPsr4;
-            $loader->prefixesPsr0 = ComposerStaticInitd1d6d4fc9310820fff4110814034761c::$prefixesPsr0;
-            $loader->classMap = ComposerStaticInitd1d6d4fc9310820fff4110814034761c::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit2811b3e967a732d5044700ccb58d9797::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit2811b3e967a732d5044700ccb58d9797::$prefixDirsPsr4;
+            $loader->prefixesPsr0 = ComposerStaticInit2811b3e967a732d5044700ccb58d9797::$prefixesPsr0;
 
         }, null, ClassLoader::class);
     }
