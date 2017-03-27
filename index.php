@@ -37,9 +37,9 @@ $config = array(
     'pdo' => array(
         'driver'    => 'mysql',
         'host'      => 'localhost',
-        'database'  => 'tyrant',
+        'database'  => 'test',
         'username'  => 'root',
-        'password'  => 'root',
+        'password'  => '',
         'charset'   => 'utf8'
     ),
     /**
