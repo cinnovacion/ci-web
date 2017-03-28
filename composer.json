@@ -1,29 +1,8 @@
 {
-    "name": "ASSCIC",
-    "type": "Assistent Control Innovation Center",
-    "description": "Sistema de control de Asistencia del centro de innovacion.",
-    "keywords": ["visitas","asistencia","voluntarios", "control"],
-    "homepage": "",
-    "license": "GNU GENERAL PUBLIC LICENSE",
-    "authors": [
-        {
-            "name": "Samuel J. Gutierrez Aviles",
-            "email": "search.sama@gmail.com",
-            "homepage": ""
-        }
-    ],
     "require": {
-        "slim/slim": "^2.6",
-        "slim/views": "^0.1.3",
-        "twig/twig": "^1.22",
-        "tuupola/slim-basic-auth": "^1.0",
-        "anahkiasen/underscore-php": "^2.0",
-        "vrana/notorm": "dev-master"
-    },
-    "suggest": {
-        "ext-mcrypt": "Required for HTTP cookie encryption"
-    },
-    "autoload": {
-        "psr-0": { "Slim": "." }
+        "slim/slim": "^3.8",
+        "monolog/monolog": "^1.22",
+        "slim/twig-view": "^2.2",
+        "illuminate/database": "~5.1"
     }
 }

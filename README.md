@@ -2,18 +2,24 @@
 
 Sistema de Control de Asistencia del Centro de Innovacion - Fundacion Zamora Teran
 
-## Instalar PHP
+## Instalar PHP y Mariadb
 
 > Fedora
 
 ``` bashscript
-$ su -c "dnf -y install php"
+$ su -c "dnf -y install php mariadb-server"
 ```
 
 > Ubuntu / Debian
 
 ``` bashscript
-$ sudo apt-get install php
+$ sudo apt-get install php mariadb
+```
+
+> Mageia
+
+``` bashscript
+$ su -c "dnf -y install php php-phar mariadb"
 ```
 
 ## Instalar composer
@@ -36,6 +42,8 @@ $ su -c "mv composer.phar /usr/local/bin/composer"
 ``` bashscript
 $ sudo mv composer.phar /usr/local/bin/composer
 ```
+
+## Configuara Apache
 
 ## Clonar el repo
 

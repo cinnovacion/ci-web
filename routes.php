@@ -1,15 +1,22 @@
 <?php
 // Archivo de rutas de la aplicacion y controlador con api's
-use Underscore\Types\Arrays;
 
-$app->map('/', function() use($app) {
-    $app->render('inicio.html');
-})->name('inicio')->via('GET', 'POST');
+use Slim\Views\Twig;
+use Psr\Log\LoggerInterface;
+use Illuminate\Database\Query\Builder;
+use Psr\Http\Message\ServerRequestInterface as Request;
+use Psr\Http\Message\ResponseInterface as Response;
 
-$app->group('/usuario', function() use($app, $db){
-    // Ver todos los usuarios
-    $app->get('/todos', function() use($app, $db){
-        $usuarios = $db->usuarios();
-        echo json_encode($usuarios);
-    })->name('usuarios');
-});
+$app->any('/', function (Request $request, Response $response) {
+    return "Hola";
+})->setName('inicio');
+
+$app->any('/inicio', function ($request, $response, $args) {
+    $mapper = new PruebaController();
+    echo $mapper; die();
+    return $this->view->render($response, 'hola.html');
+})->setName('inicio');
+
+$app->any('/hello/{name}', function ($request, $response, $args) {
+    return $this->view->render($response, 'profile.html', ['name' => $args['name']]);
+})->setName('profile');
