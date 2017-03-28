@@ -1,15 +1,22 @@
 <?php
 // Archivo de rutas de la aplicacion y controlador con api's
-use Underscore\Types\Arrays;
 
-$app->map('/', function() use($app) {
-    $app->render('inicio.html');
-})->name('inicio')->via('GET', 'POST');
+use \Psr\Http\Message\ServerRequestInterface as Request;
+use \Psr\Http\Message\ResponseInterface as Response;
 
-$app->group('/usuario', function() use($app, $db){
-    // Ver todos los usuarios
-    $app->get('/todos', function() use($app, $db){
-        $usuarios = $db->usuarios();
-        echo json_encode($usuarios);
-    })->name('usuarios');
-});
+$app->get('/{name}', function ($request, $response, $args) {
+    $name = $request->getAttribute('name');
+    $response->getBody()->write("Hello, $name");
+    return $response;
+})->setName('inicio');
+
+$app->get('/hello/{name}', function ($request, $response, $args) {
+    return $this->view->render($response, 'profile.html', ['names' => $args['name']]);
+})->setName('profile');
+
+$app->get('/nombre/{index}', function ($request, $response, $args) {
+    $this->logger->addInfo("Names list");
+    $mapper = new NotORM($this->db);
+    $data['names'] = $mapper->enlace('id', $args['index'])->fetch();
+    return $this->view->render($response, 'nombres.html', $data);
+})->setName('base');

@@ -7,18 +7,27 @@ namespace Composer\Autoload;
 class ComposerStaticInit2811b3e967a732d5044700ccb58d9797
 {
     public static $files = array (
+        '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
         '253c157292f75eb38082b5acb06f3f01' => __DIR__ . '/..' . '/nikic/fast-route/src/functions.php',
+        '17fd9fef37c97cfdc0c7794299a8423d' => __DIR__ . '/..' . '/vrana/notorm/NotORM.php',
     );
 
     public static $prefixLengthsPsr4 = array (
         'S' => 
         array (
+            'Symfony\\Polyfill\\Mbstring\\' => 26,
+            'Slim\\Views\\' => 11,
             'Slim\\' => 5,
         ),
         'P' => 
         array (
+            'Psr\\Log\\' => 8,
             'Psr\\Http\\Message\\' => 17,
             'Psr\\Container\\' => 14,
+        ),
+        'M' => 
+        array (
+            'Monolog\\' => 8,
         ),
         'I' => 
         array (
@@ -31,9 +40,21 @@ class ComposerStaticInit2811b3e967a732d5044700ccb58d9797
     );
 
     public static $prefixDirsPsr4 = array (
+        'Symfony\\Polyfill\\Mbstring\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/polyfill-mbstring',
+        ),
+        'Slim\\Views\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/slim/twig-view/src',
+        ),
         'Slim\\' => 
         array (
             0 => __DIR__ . '/..' . '/slim/slim/Slim',
+        ),
+        'Psr\\Log\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/psr/log/Psr/Log',
         ),
         'Psr\\Http\\Message\\' => 
         array (
@@ -42,6 +63,10 @@ class ComposerStaticInit2811b3e967a732d5044700ccb58d9797
         'Psr\\Container\\' => 
         array (
             0 => __DIR__ . '/..' . '/psr/container/src',
+        ),
+        'Monolog\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/monolog/monolog/src/Monolog',
         ),
         'Interop\\Container\\' => 
         array (
@@ -54,6 +79,20 @@ class ComposerStaticInit2811b3e967a732d5044700ccb58d9797
     );
 
     public static $prefixesPsr0 = array (
+        'T' => 
+        array (
+            'Twig_' => 
+            array (
+                0 => __DIR__ . '/..' . '/twig/twig/lib',
+            ),
+        ),
+        'S' => 
+        array (
+            'Slim' => 
+            array (
+                0 => __DIR__ . '/../..' . '/',
+            ),
+        ),
         'P' => 
         array (
             'Pimple' => 

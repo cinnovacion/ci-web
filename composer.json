@@ -1,5 +1,25 @@
 {
+	"name": " ",
+    "type": " ",
+    "description": " ",
+    "keywords": [" ", " ", " "],
+    "license": "GNU GENERAL PUBLIC LICENSE",
+    "authors": [
+        {
+            "name": "Samuel J. Gutierrez Aviles",
+            "email": "search.sama@gmail.com"
+        }
+    ],    
     "require": {
-        "slim/slim": "^3.8"
+        "slim/slim": "^3.8",
+        "monolog/monolog": "^1.22",
+        "slim/twig-view": "^2.2",
+        "vrana/notorm": "dev-master"
+    },
+    "suggest": {
+        "ext-mcrypt": "Required for HTTP cookie encryption"
+    },
+    "autoload": {
+        "psr-0": { "Slim": "." }
     }
 }
