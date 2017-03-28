@@ -20,7 +20,7 @@ $config = [
         'addContentLengthHeader' => false,
         /**
 	     * Configuracion de Logger
-	     *  - Datos de configuracion el log de la aplicacion. 
+	     *  - Datos de configuracion el log de la aplicacion.
 	     */
         'logger' => [
             'name'  => 'logger',
@@ -29,7 +29,7 @@ $config = [
         ],
         /**
 	     * Configuracion de PDO
-	     *  - Datos de configuracion para la conexion con la base de datos. 
+	     *  - Datos de configuracion para la conexion con la base de datos.
 	     */
         'db' => [
         	'host' 	 => 'localhost',
@@ -84,5 +84,5 @@ $container['view'] = function ($container) {
 // Inicializacion de las rutas
 require 'routes.php';
 
+// Ejecutar la aplicación
 $app->run();
-
