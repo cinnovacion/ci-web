@@ -9,47 +9,76 @@ spl_autoload_register(function ($classname) {
     require ("classes/" . $classname . ".php");
 });
 
-$config['displayErrorDetails']    = true;
-$config['addContentLengthHeader'] = false;
+// Datos de configuracion global
+$config = [
+	/**
+     * Configuracion de Slim
+     *  - Datos de configuracion del framework
+     */
+    'settings' => [
+        'displayErrorDetails' 	 => true,
+        'addContentLengthHeader' => false,
+        /**
+	     * Configuracion de Logger
+	     *  - Datos de configuracion el log de la aplicacion.
+	     */
+        'logger' => [
+            'name'  => 'logger',
+            'level' => Monolog\Logger::DEBUG,
+            'path' 	=> __DIR__ . '/logs/app.log',
+        ],
+        /**
+	     * Configuracion de PDO
+	     *  - Datos de configuracion para la conexion con la base de datos.
+	     */
+        'db' => [
+        	'host' 	 => 'localhost',
+        	'user' 	 => 'root',
+        	'pass' 	 => 'root',
+        	'dbname' => 'local',
+        ],
+        /**
+	     * Configuracion de Twig
+	     *  - Datos de configuracion del motor de plantillas.
+	     */
+        'view' => [
+        	'path'  => __DIR__ . '/views',
+        	'cache' => false,
+        ],
+    ],
+];
 
-$config['db']['driver']     = "mysql";
-$config['db']['host']       = "localhost";
-$config['db']['username']   = "root";
-$config['db']['password']   = "root";
-$config['db']['database']   = "tyrant";
-$config['db']['charset']    = "utf8";
-$config['db']['collation']  = "utf8_general_ci";
-$config['db']['prefix']     = "";
+// Inicializacion de Slim Framework
+$app = new \Slim\App($config);
 
-$config['logger']['name']  = 'slim-app';
-$config['logger']['level'] = Monolog\Logger::DEBUG;
-$config['logger']['path']  = __DIR__ . 'logs/app.log';
-
-$app = new \Slim\App(['settings' => $config]);
-
+// Inicializacion el contenedor de depencias
 $container = $app->getContainer();
 
-$container['logger'] = function($c) {
-    $logger = new \Monolog\Logger('my_logger');
-    $file_handler = new \Monolog\Handler\StreamHandler("logs/app.log");
-    $logger->pushHandler($file_handler);
-    return $logger;
+// Inicializando del Logger de la aplicacion
+$container['logger'] = function($container) {
+	$logger = $container['settings']['logger'];
+    $log = new \Monolog\Logger($logger['name']);
+    $file_handler = new \Monolog\Handler\StreamHandler($logger['path']);
+    $log->pushHandler($file_handler);
+    return $log;
 };
 
-$container['db'] = function ($c) {
-    $capsule = new \Illuminate\Database\Capsule\Manager;
-    $capsule->addConnection($c['settings']['db']);
-    $capsule->setAsGlobal();
-    $capsule->bootEloquent();
-    return $capsule;
+// Inicializando conexion a la base de datos con driver PDO
+$container['db'] = function ($container) {
+    $db = $container['settings']['db'];
+    $pdo = new PDO("mysql:host=" . $db['host'] . ";dbname=" . $db['dbname'], $db['user'], $db['pass']);
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+    return $pdo;
 };
 
-$container['view'] = function ($c) {
-    $view = new \Slim\Views\Twig(__DIR__ . '/views', [
-        'cache' => false,
-    ]);
-    $view->addExtension(new Slim\Views\TwigExtension( $c['router'], $c['request']->getUri()));
-    return $view;
+// Inicializacion del Motor de Plantillas Twig
+$container['view'] = function ($container) {
+	$view = $container['settings']['view'];
+    $templates = new \Slim\Views\Twig($view['path'], ['cache' => $view['cache']]);
+    $basePath = rtrim(str_ireplace('index.php', '', $container['request']->getUri()->getBasePath()), '/');
+    $templates->addExtension(new Slim\Views\TwigExtension($container['router'], $basePath));
+    return $templates;
 };
 
 // Inicializacion de las rutas
