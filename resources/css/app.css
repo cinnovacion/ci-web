@@ -1,0 +1,49 @@
+nav{
+	background-color: #FFFFFF;
+}
+
+body{
+	background-color: #7fc836;
+	margin: 0;
+}
+
+.centrar{
+	text-align: center;
+	margin-left: auto;
+  	margin-right: auto;
+}
+
+.izquierda{
+	text-align: left;
+}
+
+.derecha{
+	text-align: right;
+	margin-top: auto;
+}
+
+div{
+	top: 50px;
+	text-align: center;
+	margin: auto;
+
+}
+
+.borde{
+	border-style: groove;
+	border-radius: 10px 10px 10px 10px;
+   	background-color: #FFFFFF;
+}
+
+footer {
+	text-align: center;
+   background: #008dd3;
+   height: 85px;
+   font-weight: 100%;
+   position: fixed;
+   bottom: 0;
+   width: 100%;
+ }
+
+
+

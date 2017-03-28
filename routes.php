@@ -20,3 +20,7 @@ $app->get('/nombre/{index}', function ($request, $response, $args) {
     $data['names'] = $mapper->enlace('id', $args['index'])->fetch();
     return $this->view->render($response, 'nombres.html', $data);
 })->setName('base');
+
+$app->any('/', function ($request, $response, $args) {
+    return $this->view->render($response, 'inicio.html');
+})->setName('inicio');

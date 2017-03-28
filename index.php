@@ -34,8 +34,8 @@ $config = [
         'db' => [
         	'host' 	 => 'localhost',
         	'user' 	 => 'root',
-        	'pass' 	 => 'root',
-        	'dbname' => 'local',
+        	'pass' 	 => '',
+        	'dbname' => 'prueba',
         ],
         /**
 	     * Configuracion de Twig
