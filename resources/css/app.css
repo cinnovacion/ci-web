@@ -3,8 +3,9 @@ nav{
 }
 
 body{
-	background-color: #7fc836;
+	background-color: #1fd111;
 	margin: 0;
+	margin-bottom: 150px;
 }
 
 .centrar{
@@ -26,12 +27,15 @@ div{
 	top: 50px;
 	text-align: center;
 	margin: auto;
+	background-color: #FFFFFF;
+	color: #448aff;
+}
 
 }
 
 .borde{
 	border-style: groove;
-	border-radius: 10px 10px 10px 10px;
+	border-radius: 10px;
    	background-color: #FFFFFF;
 }
 
@@ -43,7 +47,11 @@ footer {
    position: fixed;
    bottom: 0;
    width: 100%;
+   background-color: #FFFFFF;
  }
-
-
-
+button {
+	background-color: #448aff;
+}
+a{
+	color: #448aff;
+}

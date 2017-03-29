@@ -4,11 +4,11 @@
 use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;
 
-$app->get('/{name}', function ($request, $response, $args) {
+/*$app->get('/{name}', function ($request, $response, $args) {
     $name = $request->getAttribute('name');
     $response->getBody()->write("Hello, $name");
     return $response;
-})->setName('inicio');
+})->setName('inicio');*/
 
 $app->get('/hello/{name}', function ($request, $response, $args) {
     return $this->view->render($response, 'profile.html', ['names' => $args['name']]);
@@ -24,3 +24,7 @@ $app->get('/nombre/{index}', function ($request, $response, $args) {
 $app->any('/', function ($request, $response, $args) {
     return $this->view->render($response, 'inicio.html');
 })->setName('inicio');
+
+$app->any('/visitas', function ($request, $response, $args) {
+    return $this->view->render($response, 'visitas.html');
+})->setName('visitas');

@@ -1,58 +1,21 @@
-<!DOCTYPE html>
-<html>
-	<head>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<title>Centro de Innovación</title>
+{% extends "layouts/layout.html" %}
 
-		<!-- CSS -->
-		<link rel="icon" href="https://milligram.github.io/images/icon.png">
-		<link rel="stylesheet" type="text/css" href="../resources/css/milligram.min.css">
-		<link rel="stylesheet" type="text/css" href="../resources/css/app.css">
-	</head>
-	<body>
+{% block content %}
 
-		<nav>
-			<div class="row">
-				<div class="column">
-					<img src="http://fundacionzt.org/wp-content/themes/fundacion/assets/img/logo.png">
-				</div>
-    			<div class="column">
-    				<a href="">Asistencia</a>
-					<a href="">Visitas</a>
-    			</div>
-    			<div class="column">
-					<button>Administrar</button>
-    			</div>
-			</div>
-		</nav>
+<div class="borde">
+	<div class="tab">
+	    <button class="tablinks" onclick="openCity(event, 'London')">Trabajadores</button>
+	    <button class="tablinks" onclick="openCity(event, 'Paris')">Voluntarios</button>
+	</div>
 
-		<div class="container">
-			<div class="borde">
-				<div class="tab">
-				    <button class="tablinks" onclick="openCity(event, 'London')">Trabajadores</button>
-				    <button class="tablinks" onclick="openCity(event, 'Paris')">Voluntarios</button>
-				</div>
+	<div id="Cedulat" class="tabcontent" >
+		<input type="text" name="cedulat" placeholder="Cedula Trabajador" >
+	</div>
 
-				<div id="Cedulat" class="tabcontent" >
-					<input type="text" name="cedulat" placeholder="Cedula Trabajador" >
-				</div>
+	<div id="PCedulav" class="tabcontent" style="display:none;" >
+		<input type="text" name="cedulav" placeholder="Cedula Voluntario" >
+	</div>
 
-				<div id="PCedulav" class="tabcontent" style="display:none;" >
-					<input type="text" name="cedulav" placeholder="Cedula Trabajador" >
-				</div>
-
-				<button>Aceptar</button>
-			</div>
-
-		</div>
-
-		<footer>
-			<div>
-				© 2016 Centro de Innocación Fundación Zamora Terán. Todos los derechos reservados.
-			</div>
-		</footer>
-
-		<script type="text/javascript" src="{{ base_url('/resources/js/jquery-3.1.1.min.js') }}"></script>
-	</body>
-</html>
+	<button>Aceptar</button>
+</div>
+{% endblock %}
