@@ -40,6 +40,8 @@ html {
   font-family: "Roboto", sans-serif;
   font-weight: normal;
   color: rgba(0, 0, 0, 0.87);
+  position: relative;
+  min-height: 100%;
 }
 
 body {
@@ -157,10 +159,12 @@ nav button#btn_admin:hover {
 /** Footer **/
 footer {
 	color: #448AFF;
-   	position: fixed;
+   	position: absolute;
    	bottom: 0;
    	width: 100%;
    	background-color: #FFFFFF;
+   	
+
  }
 
  footer div.row {
