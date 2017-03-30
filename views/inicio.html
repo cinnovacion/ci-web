@@ -1,21 +1,36 @@
 {% extends "layouts/layout.html" %}
 
 {% block content %}
+<div class="row">
+    <div class="column column-50 column-offset-25 alto">
+		<div class="login centrar panel">
 
-<div class="borde">
-	<div class="tab">
-	    <button class="tablinks" onclick="openCity(event, 'London')">Trabajadores</button>
-	    <button class="tablinks" onclick="openCity(event, 'Paris')">Voluntarios</button>
+			<div class="row tabs">
+    			<div id="voluntarios" class="column">
+					<a class="button button-clear tablinks active">Voluntario</a>
+				</div>
+				<div id="trabajadores" class="column">
+					<a class="button button-clear tablinks">Trabajador</a>
+				</div>
+			</div>
+
+			
+			<div class="tabcontent">
+				<div id="tab_vol">
+					<form>
+						<input type="text" name="ced-vol" placeholder="Cedula Voluntario" >
+						<input class="button" type="submit" value="Aceptar">
+					</form>
+				</div>
+				<div id="tab_tbj" style="display:none;" >
+					<form>
+						<input type="text" name="ced-tbj" placeholder="Cedula Trabajador" >
+						<input class="button" type="submit" value="Aceptar">
+					</form>
+				</div>
+			</div>
+
+		</div>
 	</div>
-
-	<div id="Cedulat" class="tabcontent" >
-		<input type="text" name="cedulat" placeholder="Cedula Trabajador" >
-	</div>
-
-	<div id="PCedulav" class="tabcontent" style="display:none;" >
-		<input type="text" name="cedulav" placeholder="Cedula Voluntario" >
-	</div>
-
-	<button>Aceptar</button>
 </div>
 {% endblock %}

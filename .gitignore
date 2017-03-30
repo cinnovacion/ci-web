@@ -7,6 +7,7 @@
 # dependencies
 /node_modules
 /bower_components
+/vendor
 
 # misc
 /.sass-cache
@@ -15,6 +16,3 @@
 /libpeerconnection.log
 npm-debug.log*
 testem.log
-
-# composer
-#/vendor

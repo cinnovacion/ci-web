@@ -1,10 +1,12 @@
 {% extends "layouts/layout.html" %}
 
 {% block content %}
-<div class="borde">
+<div class="panel">
 	<form action="" method="post">
 		<fieldset>
-			<legend>Registrar Visita</legend>
+			
+			<h2>Registrar Visita</h2>
+			<hr>
 
 			<label for="nombre">Nombre:</label>
 			<input type="text" name="name" id="nombre" placeholder="Ingrese su Nombre">
@@ -24,7 +26,10 @@
 				<option>Aqui va lo proporcionado por Sofana</option>
 				<option>Aqui va lo proporcionado por Sofana</option>
 			</select>
+			<input class="button" type="submit" value="Aceptar">
 		</fieldset>
 	</form>
 </div>
+
+<div style="margin-top: 170px;"></div>
 {% endblock %}

@@ -1,57 +1,206 @@
-nav{
-	background-color: #FFFFFF;
+/** Tipografia **/
+@font-face {
+  font-family: "Roboto";
+  src: local(Roboto Thin), url("../fonts/roboto/Roboto-Thin.eot");
+  src: url("../fonts/Roboto-Thin.eot?#iefix") format("embedded-opentype"), url("../fonts/Roboto-Thin.woff2") format("woff2"), url("../fonts/roboto/Roboto-Thin.woff") format("woff"), url("../fonts/roboto/Roboto-Thin.ttf") format("truetype");
+  font-weight: 200;
 }
 
-body{
-	background-color: #1fd111;
+@font-face {
+  font-family: "Roboto";
+  src: local(Roboto Light), url("../fonts/roboto/Roboto-Light.eot");
+  src: url("../fonts/Roboto-Light.eot?#iefix") format("embedded-opentype"), url("../fonts/Roboto-Light.woff2") format("woff2"), url("../fonts/roboto/Roboto-Light.woff") format("woff"), url("../fonts/roboto/Roboto-Light.ttf") format("truetype");
+  font-weight: 300;
+}
+
+@font-face {
+  font-family: "Roboto";
+  src: local(Roboto Regular), url("../fonts/roboto/Roboto-Regular.eot");
+  src: url("../fonts/Roboto-Regular.eot?#iefix") format("embedded-opentype"), url("../fonts/Roboto-Regular.woff2") format("woff2"), url("../fonts/roboto/Roboto-Regular.woff") format("woff"), url("../fonts/roboto/Roboto-Regular.ttf") format("truetype");
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: "Roboto";
+  src: url("../fonts/Roboto-Medium.eot");
+  src: url("../fonts/Roboto-Medium.eot?#iefix") format("embedded-opentype"), url("../fonts/Roboto-Medium.woff2") format("woff2"), url("../fonts/roboto/Roboto-Medium.woff") format("woff"), url("../fonts/roboto/Roboto-Medium.ttf") format("truetype");
+  font-weight: 500;
+}
+
+@font-face {
+  font-family: "Roboto";
+  src: url("../fonts/Roboto-Bold.eot");
+  src: url("../fonts/Roboto-Bold.eot?#iefix") format("embedded-opentype"), url("../fonts/Roboto-Bold.woff2") format("woff2"), url("../fonts/roboto/Roboto-Bold.woff") format("woff"), url("../fonts/roboto/Roboto-Bold.ttf") format("truetype");
+  font-weight: 700;
+}
+
+/** Estilos globales **/
+html {
+  line-height: 1.5;
+  font-family: "Roboto", sans-serif;
+  font-weight: normal;
+  color: rgba(0, 0, 0, 0.87);
+}
+
+body {
+	background-color: #1FD111;
 	margin: 0;
-	margin-bottom: 150px;
 }
 
-.centrar{
-	text-align: center;
-	margin-left: auto;
-  	margin-right: auto;
+a {
+	color: #448AFF !important;
+	font-size: 1.3rem;
 }
 
-.izquierda{
-	text-align: left;
+a.button {
+	font-size: 1.3rem;
 }
 
-.derecha{
-	text-align: right;
-	margin-top: auto;
+button {
+	background-color: #448AFF;
+	border-radius: 0;
+	border-color: transparent;
+	font-size: 1.3rem;
 }
 
-div{
-	top: 50px;
-	text-align: center;
-	margin: auto;
-	background-color: #FFFFFF;
-	color: #448aff;
+button:focus, 
+button:hover {
+	background-color: #1FD111;
+	border-color: transparent;
 }
 
+input[type='email'], 
+input[type='number'], 
+input[type='password'], 
+input[type='search'], 
+input[type='tel'], 
+input[type='text'], 
+input[type='url'], 
+textarea, 
+select {
+	border-width: 2px;
+	border-radius: 0;
 }
 
-.borde{
-	border-style: groove;
-	border-radius: 10px;
+input[type='email']:focus, 
+input[type='number']:focus, 
+input[type='password']:focus, 
+input[type='search']:focus, 
+input[type='tel']:focus, 
+input[type='text']:focus, 
+input[type='url']:focus, 
+textarea:focus, 
+select:focus {
+	border-color: #448AFF;
+}
+
+
+
+.centrar {
+	text-align: center !important;
+}
+
+.izquierda {
+	text-align: left !important;
+}
+
+.derecha {
+	text-align: right !important;
+}
+
+.alto {
+	margin: auto !important;
+}
+
+.panel {
+	margin: 50px;
    	background-color: #FFFFFF;
 }
 
-footer {
-	text-align: center;
-   background: #008dd3;
-   height: 85px;
-   font-weight: 100%;
-   position: fixed;
-   bottom: 0;
-   width: 100%;
-   background-color: #FFFFFF;
- }
-button {
-	background-color: #448aff;
+.row {
+	width: 100%;
 }
-a{
-	color: #448aff;
+
+input.button {
+	background-color: #448AFF;
+	border-radius: 0;
+	border-color: transparent;
+}
+
+input.button:focus, 
+input.button:hover {
+	background-color: #1FD111;
+	border-color: transparent;
+}
+
+/** NavBar **/
+nav {
+	background-color: #FFFFFF;
+}
+
+nav .row {
+	height: 120px;
+}
+
+nav button#btn_admin {
+	border: 2px #448AFF solid;
+	background-color: transparent;
+	color: #448AFF;
+	margin-bottom: 0;
+}
+
+nav button#btn_admin:hover {
+	background-color: #448AFF;
+	color: #FFFFFF;
+}
+
+/** Footer **/
+footer {
+	color: #448AFF;
+   	position: fixed;
+   	bottom: 0;
+   	width: 100%;
+   	background-color: #FFFFFF;
+ }
+
+ footer div.row {
+ 	height: 120px;
+ }
+
+/** Formulario de Acceso **/
+.login div.row {
+	width: calc(100% + 2.0rem);
+}
+
+.login .tabs .tablinks {
+	margin-bottom: 0;
+	color: #448AFF;
+	border-radius: 0;
+	width: 100%;
+}
+
+.login .tabs .tablinks:hover {
+	border-bottom: 2px #448AFF solid;
+}
+
+.login .tabs .active {
+	border-bottom: 2px #448AFF solid;
+}
+
+.login .tabs #voluntarios {
+	padding-right: 0;
+}
+
+.login .tabs #trabajadores {
+	padding-left: 0;
+}
+
+.login .tabcontent {
+	padding: 2.0rem;
+}
+
+/** Visitas **/
+
+.panel form fieldset {
+	padding: 2.0rem;
 }
