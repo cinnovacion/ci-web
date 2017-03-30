@@ -56,7 +56,7 @@ $container = $app->getContainer();
 
 // Inicializando del Logger de la aplicacion
 $container['logger'] = function($container) {
-	$logger = $container['settings']['logger'];
+    $logger = $container['settings']['logger'];
     $log = new \Monolog\Logger($logger['name']);
     $file_handler = new \Monolog\Handler\StreamHandler($logger['path']);
     $log->pushHandler($file_handler);
@@ -69,12 +69,14 @@ $container['db'] = function ($container) {
     $pdo = new PDO("mysql:host=" . $db['host'] . ";dbname=" . $db['dbname'], $db['user'], $db['pass']);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
-    return $pdo;
+    $db = new NotORM($pdo);
+    $db->debug = true;
+    return $db;
 };
 
 // Inicializacion del Motor de Plantillas Twig
 $container['view'] = function ($container) {
-	$view = $container['settings']['view'];
+    $view = $container['settings']['view'];
     $templates = new \Slim\Views\Twig($view['path'], ['cache' => $view['cache']]);
     $basePath = rtrim(str_ireplace('index.php', '', $container['request']->getUri()->getBasePath()), '/');
     $templates->addExtension(new Slim\Views\TwigExtension($container['router'], $basePath));
