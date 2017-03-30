@@ -32,10 +32,10 @@ $config = [
 	     *  - Datos de configuracion para la conexion con la base de datos.
 	     */
         'db' => [
-        	'host' 	 => 'localhost',
+        	'host' 	 => '127.0.0.1',
         	'user' 	 => 'root',
         	'pass' 	 => '',
-        	'dbname' => 'prueba',
+        	'dbname' => 'visita',
         ],
         /**
 	     * Configuracion de Twig
