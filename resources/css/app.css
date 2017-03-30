@@ -43,7 +43,7 @@ html {
 }
 
 body {
-	background-color: #1FD111;
+	background-color: #7fc836;
 	margin: 0;
 }
 
@@ -129,7 +129,7 @@ input.button {
 
 input.button:focus, 
 input.button:hover {
-	background-color: #1FD111;
+	background-color: #7fc836;
 	border-color: transparent;
 }
 
@@ -157,7 +157,7 @@ nav button#btn_admin:hover {
 /** Footer **/
 footer {
 	color: #448AFF;
-   	position: fixed;
+	position: fixed;
    	bottom: 0;
    	width: 100%;
    	background-color: #FFFFFF;

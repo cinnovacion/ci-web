@@ -1,0 +1,63 @@
+{% extends "layouts/layout.html" %}
+
+{% block content %}
+<div class="panel">
+	<form action="/visitas/registro" method="post" name="registro">
+		<fieldset>
+			
+			<h2 class="centrar">Registrar Visita</h2>
+			<hr>
+
+			<div class="row">
+				<div class="column column-50">
+
+					<label for="nombre">Nombre:</label>
+					<input type="text" name="name" id="nombre" placeholder="Ingrese su Nombre">
+
+					<label for="apellido">Apellido:</label>
+					<input type="text" name="apellido" id="apellido" placeholder="Ingrese su Apellido">
+
+					<label for="ced">No. de Cédula:</label>
+					<input type="text" name="ced" id="ced" placeholder="Ingrese su Cédula">
+				
+					<label for="no_placa">No. Placa:</label>
+					<input type="text" name="no_placa" id="no_placa" placeholder="Ingrese el número de placa">
+				</div>
+				<div class="column column-50">
+					<label for="org_vi">Organización que Representa:</label>
+					<input type="text" name="org_vi" id="org_vi" placeholder="Ingrese la Organización que Representa">
+
+					<label for="tipo_visita">Tipo de Visita:</label>
+					<input type="radio" name="tipo_visita" value="interna" id="tipo_visita_0" onclick="mostrarReferencia()" checked><strong>Interna</strong>
+					<input type="radio" name="tipo_visita" value="externa" id="tipo_visita_1" onclick="mostrarReferencia()"><strong>Externa</strong>
+
+					<div id="motivo_interno" style="display: block;">
+						<label for="motivo_int">Motivo:</label>
+						<select name="motivo_int" id="motivo_int">
+							<option>Atención de Evento</option>
+							<option>Recibimiento de Visita</option>
+							<option>Asistencia en Taller</option>
+							<option>Visita Administrativa</option>
+							<option>Sesión de Trabajo</option>
+							<option>Reunión de Equipo</option>
+						</select>
+					</div>
+
+					<div id="motivo_externo" style="display: none;">
+						<label for="motivo_ext">Motivo:</label>
+						<select name="motivo_ext" id="motivo_ext">
+							<option>Primera Visita/Recorrido en CI</option>
+							<option>Reunión de Trabajo</option>
+							<option>Asistencia en Taller</option>
+							<option>Visita Administrativa</option>
+						</select>	
+					</div>
+				</div>
+			</div>
+			<input class="button" type="submit" value="Aceptar">
+		</fieldset>
+	</form>
+</div>
+
+<div style="margin-top: 170px;"></div>
+{% endblock %}
