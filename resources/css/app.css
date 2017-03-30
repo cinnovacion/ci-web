@@ -116,7 +116,7 @@ select:focus {
 
 .panel {
 	margin: 50px;
-   	background-color: #FFFFFF;
+   	background-color: #FFFFFF;}
 }
 
 .row {
@@ -163,8 +163,6 @@ footer {
    	bottom: 0;
    	width: 100%;
    	background-color: #FFFFFF;
-   	
-
  }
 
  footer div.row {

@@ -10,10 +10,11 @@ $app->any('/', function ($request, $response, $args) {
 
 
 $app->any('/visitas', function ($request, $response, $args) {
-    return $this->view->render($response, '/visitas/visitas.html');
+    return $this->view->render($response, 'visitas.html');
 })->setName('visitas');
 
-$app->any('/visitas/registro', function ($request, $response, $args) {
+
+$app->any('/inicio/asistencia', function ($request, $response, $args) {
 	$parsedBody = $request->getParsedBody();
 	$registro=$this->db->registro();
 	//organizando los datos en un nuevo arreglo
@@ -41,3 +42,20 @@ $app->any('/visitas/registro', function ($request, $response, $args) {
 	$registro()->insert($data);
 	die();	
 })->setName('visitas_reg');
+
+	$asistencia = $this->db->asisprueba();
+
+	if ($parsedBody["ced-vol"]) {
+		echo "Cedula del voluntario: ".$parsedBody["ced-vol"];
+		$data['cedula'] = $parsedBody["ced-vol"];
+		$row = $asistencia->insert($data);
+	}elseif ($parsedBody["ced-tbj"]) {
+		$data['cedula'] = $parsedBody["ced-tbj"];
+		$row = $asistencia->insert($data);
+		echo "Cedula del trabajador";
+	}else{
+		echo "El campo esta vacio".$parsedBody;
+	}
+
+	die();
+})->setName('asistencia');
