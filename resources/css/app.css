@@ -45,7 +45,7 @@ html {
 }
 
 body {
-	background-color: #1FD111;
+	background-color: #7fc836;
 	margin: 0;
 }
 
@@ -116,7 +116,7 @@ select:focus {
 
 .panel {
 	margin: 50px;
-   	background-color: #FFFFFF;
+   	background-color: #FFFFFF;}
 }
 
 .row {
@@ -131,7 +131,7 @@ input.button {
 
 input.button:focus, 
 input.button:hover {
-	background-color: #1FD111;
+	background-color: #7fc836;
 	border-color: transparent;
 }
 
@@ -163,8 +163,6 @@ footer {
    	bottom: 0;
    	width: 100%;
    	background-color: #FFFFFF;
-   	
-
  }
 
  footer div.row {

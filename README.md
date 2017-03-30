@@ -9,7 +9,7 @@ Dependencias del sistema operativo para el funcionamiento del framework.
 > Fedora
 
 ``` bashscript
-$ su -c "dnf -y install php mariadb-server"
+$ su -c "dnf -y install php php-pdo php-pdo_mysql mariadb-server"
 ```
 
 > Ubuntu / Debian
