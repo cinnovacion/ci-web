@@ -8,6 +8,7 @@ $app->any('/', function ($request, $response, $args) {
     return $this->view->render($response, 'inicio.html');
 })->setName('inicio');
 
+
 $app->any('/visitas', function ($request, $response, $args) {
     return $this->view->render($response, 'visitas.html');
 })->setName('visitas');
