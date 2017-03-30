@@ -9,12 +9,12 @@ $app->any('/', function ($request, $response, $args) {
 })->setName('inicio');
 
 
-$app->any('/visitas', function ($request, $response, $args) {
-    return $this->view->render($response, 'visitas.html');
+$app->any('/visitas/visitas_reg', function ($request, $response, $args) {
+    return $this->view->render($response, '/visitas/visitas.html');
 })->setName('visitas');
 
 
-$app->any('/inicio/asistencia', function ($request, $response, $args) {
+$app->any('/visitas/registro', function ($request, $response, $args) {
 	$parsedBody = $request->getParsedBody();
 	$registro=$this->db->registro();
 	//organizando los datos en un nuevo arreglo
@@ -43,6 +43,8 @@ $app->any('/inicio/asistencia', function ($request, $response, $args) {
 	die();	
 })->setName('visitas_reg');
 
+$app->any('/inicio/asistencia_reg', function ($request, $response, $args) {
+	$parsedBody = $request->getParsedBody();
 	$asistencia = $this->db->asisprueba();
 
 	if ($parsedBody["ced-vol"]) {

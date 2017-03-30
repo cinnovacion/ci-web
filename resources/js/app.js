@@ -34,3 +34,6 @@ document.getElementById('motivo_externo').style.display='block';
 }
 }
 }
+function reset(){
+    document.getElementById('registro').reset();
+}

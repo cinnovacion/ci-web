@@ -2,7 +2,7 @@
 
 {% block content %}
 <div class="panel">
-	<form action="/visitas/registro" method="post" name="registro">
+	<form action="/visitas/registro" method="post" name="registro" id="registro">
 		<fieldset>
 			
 			<h2 class="centrar">Registrar Visita</h2>
@@ -54,7 +54,7 @@
 					</div>
 				</div>
 			</div>
-			<input class="button" type="submit" value="Aceptar">
+			<input class="button" type="submit" value="Aceptar" onclick="reset()">
 		</fieldset>
 	</form>
 </div>
