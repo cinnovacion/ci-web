@@ -15,7 +15,7 @@ $ su -c "dnf -y install php php-pdo php-pdo_mysql mariadb-server"
 > Ubuntu / Debian
 
 ``` bashscript
-$ sudo apt-get install php mariadb
+$ sudo apt-get install php mariadb-server
 ```
 
 > Mageia

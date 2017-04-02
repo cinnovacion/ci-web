@@ -8,6 +8,12 @@ $app->any('/', function ($request, $response, $args) {
     return $this->view->render($response, 'inicio.html');
 })->setName('inicio');
 
+$app->any('/inicio/login', function ($request, $response, $args) {
+    $parsedBody = $request->getParsedBody();
+    echo("Usuario: ".$parsedBody['user']."</br>"."Pass: ".$parsedBody['pass']);
+    die();
+})->setName('login');
+
 
 $app->any('/visitas/visitas_reg', function ($request, $response, $args) {
     return $this->view->render($response, '/visitas/visitas.html');
@@ -40,7 +46,7 @@ $app->any('/visitas/registro', function ($request, $response, $args) {
 	var_dump($data);
 
 	$registro()->insert($data);
-	die();	
+	die();
 })->setName('visitas_reg');
 
 $app->any('/inicio/asistencia_reg', function ($request, $response, $args) {

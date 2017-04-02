@@ -21,8 +21,26 @@
 					<a class="button button-clear" href="/visitas/visitas_reg">Visitas</a>
     			</div>
     			<div class="column alto centrar">
-					<button id="btn_admin">Administrar</button>
-    			</div>
+					<button onclick="document.getElementById('id01').style.display='block'" id="btn_admin">Administrar</button>
+					<!-- The Modal -->
+						<div id="id01" class="modal">
+						<span onclick="document.getElementById('id01').style.display='none'"
+						class="close" title="Close Modal">&times;</span>
+						<!-- Modal Content -->
+							<form class="modal-content animate" method="post" action="/inicio/login">
+								<div>
+									<h2>Login</h2>
+								</div>
+								<div class="container">
+									<label><b>Usuario</b></label>
+									<input type="text" placeholder="Usuario" name="user" required>
+									<label><b>Contraseña</b></label>
+									<input type="password" placeholder="Contraseña" name="pass" required>
+									<button type="submit">Entrar</button>
+								</div>
+							</form>
+						</div>
+					</div>
 			</div>
 		</nav>
 
