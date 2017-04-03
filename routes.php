@@ -67,3 +67,13 @@ $app->any('/inicio/asistencia_reg', function ($request, $response, $args) {
 
 	die();
 })->setName('asistencia');
+
+$app->any('/voluntarios/voluntarios_reg', function ($request, $response, $args) {
+    return $this->view->render($response, '/voluntarios/voluntarios.html');
+})->setName('voluntarios');
+
+$app->any('/voluntarios/registro', function ($request, $response, $args) {
+    $parsedBody = $request->getParsedBody();
+    echo("Registrar Voluntarios");
+    die();
+})->setName('voluntarios_reg');

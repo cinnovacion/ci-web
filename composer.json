@@ -16,7 +16,11 @@
         {
             "name": "Jorge A. Valverde Mejia",
             "email": "jorgeavalverdem@hotmail.com"
-        }
+        },
+		{
+			"name": "Nestor F. Bonilla Brenes",
+            "email": "nestorbonillabrenes@gmail.com"
+		}
     ],
     "require": {
         "slim/slim": "^3.8",
