@@ -44,6 +44,7 @@ html {
   color: rgba(0, 0, 0, 0.87);
   position: relative;
   min-height: 100%;
+  width: 100%;
 }
 
 body {
@@ -164,7 +165,7 @@ nav button#btn_admin:hover {
 
 /** Footer **/
 footer {
-	color: #448AFF;
+	  color: #448AFF;
    	position: absolute;
    	bottom: 0;
    	width: 100%;
@@ -248,8 +249,7 @@ form{
     top: 0;
     color: #000;
     font-size: 35px;
-    font-weight: bold;
-}
+    font-weight: bold;}
 
 /* Close button on hover */
 .close:hover,
