@@ -56,6 +56,10 @@ a {
 	font-size: 1.3rem;
 }
 
+a:hover {
+  color: #7fc836 !important; 
+}
+
 a.button {
 	font-size: 1.3rem;
 }
