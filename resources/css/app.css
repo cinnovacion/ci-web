@@ -34,8 +34,6 @@
   font-weight: 700;
 }
 
-
-
 /** Estilos globales **/
 html {
   line-height: 1.5;
@@ -102,8 +100,6 @@ textarea:focus,
 select:focus {
 	border-color: #448AFF;
 }
-
-
 
 .centrar {
 	text-align: center !important;
@@ -209,7 +205,6 @@ footer {
 }
 
 /** Visitas **/
-
 .panel form fieldset {
 	padding: 2.0rem;
 }
@@ -217,7 +212,6 @@ form{
 	color: #448AFF;
 }
 /*MODAL*/
-
 /* The Modal (background) */
 .modal {
     display: none; /* Hidden by default */
