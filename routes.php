@@ -36,10 +36,15 @@ $app->any('/visitas/registro', function ($request, $response, $args) {
 		$data['motivo']=$parsedBody['motivo_int'];
 	}
 
+	$fecha = getdate();
+	$fecha_visita=$fecha['mday']."/".$fecha['mon']."/".$fecha['year'];
+
 	echo "<p>hola</p>";
 	var_dump($data);
+	echo "<p>hola</p>";
+	var_dump($fecha_visita);
 
-	$registro()->insert($data);
+	//$registro()->insert($data);
 	die();	
 })->setName('visitas_reg');
 
