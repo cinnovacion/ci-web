@@ -8,12 +8,38 @@ $app->any('/', function ($request, $response, $args) {
     return $this->view->render($response, 'inicio.html');
 })->setName('inicio');
 
+// Ruta para iniciar sesion como administrador
 $app->any('/inicio/login', function ($request, $response, $args) {
     $parsedBody = $request->getParsedBody();
-    echo("Usuario: ".$parsedBody['user']."</br>"."Pass: ".$parsedBody['pass']);
+    $login=$this->db->login()->select('user');
+    $passw=$this->db->login()->select('pass');
+    echo ($parsedBody['user']);
+    echo ($parsedBody['pass']);
+    $contador = 0;
+    $contadord = 0;
+
+    if($user=$this->db->login()->select([user:$parsedBody['user'], pass:$parsedBody['pass']])){
+    	
+    }
+
+    foreach ($login as $log) {
+    	$contador++;
+		if (strcmp($log['user'], $parsedBody['user']) == 0) {
+			echo $log['user'].' se encuentra en la base de datos';
+			break;
+		}
+    }
+    foreach ($passw as $pas) {
+    	$contadord++; 
+    	if ($contadord == $contador) {
+    		if (strcmp($pas['pass'], $parsedBody['pass']) == 0) {
+				echo $log['pass'].' la contraseña es correcta';
+			}
+    	}
+    }
+    //echo("Usuario: ".$parsedBody['user']."</br>"."Pass: ".$parsedBody['pass']);
     die();
 })->setName('login');
-
 
 $app->any('/visitas/visitas_reg', function ($request, $response, $args) {
     return $this->view->render($response, '/visitas/visitas.html');
@@ -49,6 +75,7 @@ $app->any('/visitas/registro', function ($request, $response, $args) {
 	die();
 })->setName('visitas_reg');
 
+
 $app->any('/inicio/asistencia_reg', function ($request, $response, $args) {
 	$parsedBody = $request->getParsedBody();
 	$asistencia = $this->db->asisprueba();
@@ -74,6 +101,15 @@ $app->any('/voluntarios/voluntarios_reg', function ($request, $response, $args) 
 
 $app->any('/voluntarios/registro', function ($request, $response, $args) {
     $parsedBody = $request->getParsedBody();
-    echo("Registrar Voluntarios");
+    //$vol_reg = $this->db->reg_vol();
+    var_dump($parsedBody);
+    echo ($parsedBody['nombre'] ." hello word");
+    
+   /* $data['nombre']=$parsedBody['nombre'];
+    $data['apellido']=$parsedBody['apellido'];
+    $data['cedula']=$parsedBody['ced'];
+    $vol_reg->insert($data);*/
     die();
 })->setName('voluntarios_reg');
+
+

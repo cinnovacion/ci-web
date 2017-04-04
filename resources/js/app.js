@@ -48,4 +48,33 @@
         });
 
     }); // Fin de documento listo
+<<<<<<< HEAD
 })(jQuery); // fin de espacio de nombre jquery
+=======
+})(jQuery); // fin de espacio de nombre jquery
+
+
+//radio-button motivos de visitas
+function mostrarReferencia(){
+if (document.registro.tipo_visita[0].checked == true) {
+document.getElementById('motivo_interno').style.display='block';
+document.getElementById('motivo_externo').style.display='none';
+} else {
+    if (document.registro.tipo_visita[1].checked == true) {
+document.getElementById('motivo_interno').style.display='none';
+document.getElementById('motivo_externo').style.display='block';
+}
+}
+}
+function reset(){
+    document.getElementById('registro').reset();
+}
+//MODAL LOGIN
+var modal = document.getElementById('modal_login');
+window.onclick = function(event) {
+    if (event.target == modal) {
+        modal.style.display = "none";
+    }
+}
+
+>>>>>>> 480dde0bb4040d43f6bc442bf079904e263ecba2
