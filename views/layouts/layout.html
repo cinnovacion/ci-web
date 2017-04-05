@@ -22,21 +22,18 @@
 					<a class="button button-clear" href="/voluntarios/voluntarios_reg">Voluntarios</a>
     			</div>
     			<div class="column alto centrar">
-					<button onclick="document.getElementById('modal_login').style.display='block'" id="btn_admin">Administrar</button>
-					<!-- MODAL_LOGIN -->
+					<button id="btn_admin">Administrar</button>
+						<!-- MODAL_LOGIN -->
 						<div id="modal_login" class="modal">
-							<span onclick="document.getElementById('modal_login').style.display='none'"
-							class="close" title="Cerrar">&times;</span>
+							<span class="close" title="Cerrar">&times;</span>
 							<form class="modal-content animate" method="post" action="/inicio/login">
 								<div>
-									<h2>Login</h2>
+									<h2>Iniciar Sesión</h2>
 								</div>
 								<div class="container">
-									<label><b>Usuario</b></label>
 									<input type="text" placeholder="Usuario" name="user" required>
-									<label><b>Contraseña</b></label>
 									<input type="password" placeholder="Contraseña" name="pass" required>
-									<input class="button" type="submit" value="Entrar">
+									<input class="button" type="submit" value="Acceder">
 								</div>
 							</form>
 						</div>
