@@ -38,6 +38,7 @@ $app->any('/inicio/login', function ($request, $response, $args) {
     	}
     }
     echo("Usuario: ".$parsedBody['user']."</br>"."Pass: ".$parsedBody['pass']);
+    //echo("Usuario: ".$parsedBody['user']."</br>"."Pass: ".$parsedBody['pass']);
     die();
 })->setName('login');
 
