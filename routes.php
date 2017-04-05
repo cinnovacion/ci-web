@@ -11,16 +11,15 @@ $app->any('/', function ($request, $response, $args) {
 // Ruta para iniciar sesion como administrador
 $app->any('/inicio/login', function ($request, $response, $args) {
     $parsedBody = $request->getParsedBody();
-    $login=$this->db->login()->select('user');
-    $passw=$this->db->login()->select('pass');
+    $login=$this->db->admin()->select('usuario');
+    $passw=$this->db->admin()->select('password');
     echo ($parsedBody['user']);
     echo ($parsedBody['pass']);
     $contador = 0;
     $contadord = 0;
 
-    if($user=$this->db->login()->select([user:$parsedBody['user'], pass:$parsedBody['pass']])){
+    //if($user=$this->db->login()->select([user:$parsedBody['user'],pass:$parsedBody['pass']])){}
     	
-    }
 
     foreach ($login as $log) {
     	$contador++;
@@ -49,7 +48,7 @@ $app->any('/visitas/visitas_reg', function ($request, $response, $args) {
 
 $app->any('/visitas/registro', function ($request, $response, $args) {
 	$parsedBody = $request->getParsedBody();
-	$registro=$this->db->registro();
+	$visita=$this->db->visita();
 	//organizando los datos en un nuevo arreglo
 	var_dump($parsedBody);
 
@@ -68,18 +67,15 @@ $app->any('/visitas/registro', function ($request, $response, $args) {
 	{
 		$data['motivo']=$parsedBody['motivo_int'];
 	}
-	$fecha = getdate();
-	$fecha_visita=$fecha['year']."-".$fecha['mon']."-".$fecha['mday'];
-	$data['fecha']=$fecha_visita;
-
-	
-	echo "<p>hola</p>";
-	var_dump($data);
-	echo "<p>hola</p>";
-	var_dump($fecha_visita);
-	echo "<p>hola</p>";
-	var_dump($fecha);
-	$registro()->insert($data);
+	//fecha de visita
+	//formato para interpretar fechas = $fecha=date("d-m-Y", time());
+	//predeterminar la zona horaria
+	date_default_timezone_set("America/Managua");
+	$data['fecha']=time();
+	$data['hora_llegada']=time();
+	$data['hora_aprox_salida']=strtotime($parsedBody['hora_salida']);
+	//insertar en la base de datos
+	$visita()->insert($data);
 	die();	
 })->setName('visitas_reg');
 
