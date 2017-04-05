@@ -3,19 +3,27 @@
 
     	// Funcionalidad de las pestañas
     	$('#trabajadores a').on('click', function() {
-    		$(this).addClass('active');
-    		$('#voluntarios a').removeClass('active');
-
-    		$('#tab_vol').hide();
-    		$('#tab_tbj').toggle();
+            
+            var titulo = $(this).attr("class");
+           
+            if (titulo.indexOf("active") == -1) {
+                $(this).addClass('active');
+                $('#tab_tbj').toggle();
+                $('#voluntarios a').removeClass('active');
+                $('#tab_vol').hide();
+            }
     	});
 
     	$('#voluntarios a').on('click', function() {
-    		$(this).addClass('active');
-    		$('#trabajadores a').removeClass('active');
 
-    		$('#tab_tbj').hide();
-    		$('#tab_vol').toggle();
+            var titulo = $(this).attr("class");
+            
+            if (titulo.indexOf("active") == -1) {
+                $(this).addClass('active');
+                $('#tab_vol').toggle();
+                $('#trabajadores a').removeClass('active');
+                $('#tab_tbj').hide();
+            }
     	});
 
     }); // Fin de documento listo
@@ -36,4 +44,11 @@ document.getElementById('motivo_externo').style.display='block';
 }
 function reset(){
     document.getElementById('registro').reset();
+}
+//MODAL LOGIN
+var modal = document.getElementById('modal_login');
+window.onclick = function(event) {
+    if (event.target == modal) {
+        modal.style.display = "none";
+    }
 }

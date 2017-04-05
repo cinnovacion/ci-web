@@ -1,0 +1,87 @@
+{% extends "layouts/layout.html" %}
+
+{% block content %}
+<div class="panel">
+	<form action="/voluntarios/registro" method="post" name="registro_vol" id="registro_vol">
+		<fieldset>
+
+			<h2 class="centrar">Registrar Voluntarios</h2>
+			<hr>
+
+			<div class="row">
+				<div class="column column-50">
+
+					<label for="nombre">Nombre:</label>
+					<input type="text" name="nombre" id="nombre" placeholder="Ingrese su Nombre">
+
+					<label for="apellido">Apellido:</label>
+					<input type="text" name="apellido" id="apellido" placeholder="Ingrese su Apellido">
+
+					<label for="ced">No. de Cédula:</label>
+					<input type="text" name="ced" id="ced" placeholder="Ingrese su Cédula">
+
+					<label for="no_telefono">No. Telefono:</label>
+					<input type="tel" name="no_telefono" id="no_telefono" placeholder="Ingrese su número de telefono">
+
+                    <label for="direccion">Dirección:</label>
+					<input type="text" name="direccion" id="direccion" placeholder="Ingrese su Dirección">
+
+                    <div id="genero" style="display: block;">
+						<label for="genero">Género:</label>
+						<select name="genero" id="genero">
+							<option>Masculino</option>
+							<option>Femenino</option>
+						</select>
+					</div>
+				</div>
+				<div class="column column-50">
+                    <div id="orga" style="display: block;">
+                        <label for="org">Organización:</label>
+                        <select name="org" id="org">
+                            <option>Universidad Nacional de ingeniería</option>
+                            <option>Universidad de Managua</option>
+                            <option>Universidad Nacional Autónoma de Nicaragua</option>
+                        </select>
+                    </div>
+
+                    <div id="car" style="display: block;">
+                        <label for="carrera">Carrera:</label>
+                        <select name="carrera" id="carrera">
+                            <option>Ing. Sistemas</option>
+                            <option>Ing. Computación</option>
+                            <option>Ing. Industrial</option>
+                        </select>
+                    </div>
+
+                    <label for="nivel">Nivel Cursado:</label>
+					<input type="text" name="nivel" id="nivel" placeholder="Ingrese el Nivel Cursado">
+
+                    <label for="nivel">Fecha de Ingreso:</label>
+                    <input type="date" name="fecha">
+
+                    <div id="area" style="display: block;">
+                        <label for="area">Área:</label>
+                        <select name="area" id="area">
+                            <option>Centro de Innovacion</option>
+                            <option>Soporte Técnico</option>
+                        </select>
+                    </div>
+
+                    <div id="act" style="display: block;">
+                        <label for="act">Actividades:</label>
+                        <select name="actividades" id="actividades">
+                            <option >Programación</option>
+                            <option >Robótica</option>
+                            <option >Reparaión</option>
+                            <option >Mantenimiento</option>
+                        </select>
+                    </div>
+                </div>
+			</div>
+			<input class="button" type="submit" value="Aceptar" onclick="reset()">
+		</fieldset>
+	</form>
+</div>
+
+<div style="margin-top: 170px;"></div>
+{% endblock %}

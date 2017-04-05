@@ -8,6 +8,12 @@ $app->any('/', function ($request, $response, $args) {
     return $this->view->render($response, 'inicio.html');
 })->setName('inicio');
 
+$app->any('/inicio/login', function ($request, $response, $args) {
+    $parsedBody = $request->getParsedBody();
+    echo("Usuario: ".$parsedBody['user']."</br>"."Pass: ".$parsedBody['pass']);
+    die();
+})->setName('login');
+
 
 $app->any('/visitas/visitas_reg', function ($request, $response, $args) {
     return $this->view->render($response, '/visitas/visitas.html');
@@ -35,16 +41,18 @@ $app->any('/visitas/registro', function ($request, $response, $args) {
 	{
 		$data['motivo']=$parsedBody['motivo_int'];
 	}
-
 	$fecha = getdate();
-	$fecha_visita=$fecha['mday']."/".$fecha['mon']."/".$fecha['year'];
+	$fecha_visita=$fecha['year']."-".$fecha['mon']."-".$fecha['mday'];
+	$data['fecha']=$fecha_visita;
 
+	
 	echo "<p>hola</p>";
 	var_dump($data);
 	echo "<p>hola</p>";
 	var_dump($fecha_visita);
-
-	//$registro()->insert($data);
+	echo "<p>hola</p>";
+	var_dump($fecha);
+	$registro()->insert($data);
 	die();	
 })->setName('visitas_reg');
 
@@ -66,3 +74,13 @@ $app->any('/inicio/asistencia_reg', function ($request, $response, $args) {
 
 	die();
 })->setName('asistencia');
+
+$app->any('/voluntarios/voluntarios_reg', function ($request, $response, $args) {
+    return $this->view->render($response, '/voluntarios/voluntarios.html');
+})->setName('voluntarios');
+
+$app->any('/voluntarios/registro', function ($request, $response, $args) {
+    $parsedBody = $request->getParsedBody();
+    echo("Registrar Voluntarios");
+    die();
+})->setName('voluntarios_reg');
