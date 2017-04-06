@@ -19,7 +19,7 @@ $app->any('/inicio/login', function ($request, $response, $args) {
     $contadord = 0;
 
     //if($user=$this->db->login()->select([user:$parsedBody['user'],pass:$parsedBody['pass']])){}
-    	
+
 
     foreach ($login as $log) {
     	$contador++;
@@ -29,7 +29,7 @@ $app->any('/inicio/login', function ($request, $response, $args) {
 		}
     }
     foreach ($passw as $pas) {
-    	$contadord++; 
+    	$contadord++;
     	if ($contadord == $contador) {
     		if (strcmp($pas['password'], $parsedBody['pass']) == 0) {
 				echo $log['password'].' la contraseña es correcta';
@@ -76,7 +76,7 @@ $app->any('/visitas/registro', function ($request, $response, $args) {
 	$data['hora_aprox_salida']=strtotime($parsedBody['hora_salida']);
 	//insertar en la base de datos
 	$visita()->insert($data);
-	die();	
+	die();
 })->setName('visitas_reg');
 
 
@@ -85,16 +85,16 @@ $app->any('/inicio/asistencia_reg', function ($request, $response, $args) {
 	//$asistencia $this->db->asistencia->select();
 
 	if ($parsedBody["ced-vol"]) {
-		$persona = $this->db->persona()->where('cedula',$parsedBody["ced-vol"]); 
+		$persona = $this->db->persona()->where('cedula',$parsedBody["ced-vol"]);
 		$data = $persona->fetch();
 		echo $data['idpersona'];
 
 		$asistencia = $this->db->asistencia->where('persona_idpersona', $data['idpersona']);
 		if($datad = $asistencia->fetch()){
-			
+
 			echo json_encode(array(
 				'idasistecia' => $datad['idasistencia'],
-					
+
 			));
 		}
 
@@ -113,9 +113,9 @@ $app->any('/inicio/asistencia_reg', function ($request, $response, $args) {
 				'cedula' => $data['cedula'],
 				'direccion' => $data['direccion'],
 				'telefono' => $data['telefono'],
-				'correo' => $data['correo'],	
+				'correo' => $data['correo'],
 			));
-		}*/	
+		}*/
 	}elseif ($parsedBody["ced-tbj"]) {
 		$persona = $this->db->persona()->where('cedula',$parsedBody["ced-tbj"]);
 		if($data = $persona->fetch()){
@@ -126,12 +126,12 @@ $app->any('/inicio/asistencia_reg', function ($request, $response, $args) {
 				'cedula' => $data['cedula'],
 				'dirección' => $data['dirección'],
 				'teléfono' => $data['teléfono'],
-				'correo' => $data['correo'],	
+				'correo' => $data['correo'],
 			));
 		}
 	}
-	
-	
+
+
 	/*if ($parsedBody["ced-vol"]) {
 		echo "Cedula del voluntario: ".$parsedBody["ced-vol"];
 		$data['cedula'] = $parsedBody["ced-vol"];
@@ -151,14 +151,18 @@ $app->any('/voluntarios/voluntarios_reg', function ($request, $response, $args) 
 	$parsedBody = $response->getBody();
 	$org= $this->db->Universidad();
     return $this->view->render($response, '/voluntarios/voluntarios.html',['name'=>$org]);
+    $org = $this->db->Universidad();
+    $carrera = $this->db->carrera();
+    $area = $this->db->area();
+    $actividades = $this->db->actividades();
+    $item = [$org,$carrera,$area,$actividades];
+    return $this->view->render($response, '/voluntarios/voluntarios.html',['template' => $item]);
 })->setName('voluntarios');
 
 $app->any('/voluntarios/registro', function ($request, $response, $args) {
     $parsedBody = $request->getParsedBody();
-    //$vol_reg = $this->db->reg_vol();
-    var_dump($parsedBody);
-    echo ($parsedBody['nombre'] ." hello word");
-    
+
+
    /* $data['nombre']=$parsedBody['nombre'];
     $data['apellido']=$parsedBody['apellido'];
     $data['cedula']=$parsedBody['ced'];
@@ -171,5 +175,3 @@ $app->any('/voluntarios/lista', function ($request, $response, $args) {
 $lista= $this->db->persona();
 return $this->view->render($response, '/voluntarios/lista.html',['lis_vol'=>$lista]);
 })->setName('voluntarios_lista');
-
-

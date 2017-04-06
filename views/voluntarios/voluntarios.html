@@ -27,16 +27,22 @@
 					<input type="tel" name="no_telefono" id="no_telefono" placeholder="Ingrese su número de telefono">
 
                     <label for="correo">Correo:</label>
-                    <input type="text" name="correo" id="correo" placeholder="Ingrese su correo electrónico">                    
+                    <input type="text" name="correo" id="correo" placeholder="Ingrese su correo electrónico">
 
 				</div>
 				<div class="column column-50">
                     <div id="orga" style="display: block;">
                         <label for="org">Organización:</label>
                         <select name="org" id="org">
+<<<<<<< HEAD
                         {%for names in name%}
                         <option>{{names.nombre}}</option>
                         {%endfor%}
+=======
+													{% for names in template[0] %}
+    												<option>{{names.nombre}}</option>
+													{% endfor %}
+>>>>>>> 15d6826914186e44147861154d08f46c37f2551b
                         </select>
 
                         
@@ -44,7 +50,10 @@
 
                     <div id="car" style="display: block;">
                         <label for="carrera">Carrera:</label>
-                        <select name="carrera" id="carrera">            
+                        <select name="carrera" id="carrera">
+													{% for names in template[1] %}
+    												<option>{{names.nombre}}</option>
+													{% endfor %}
                         </select>
                     </div>
 
@@ -54,17 +63,23 @@
                     <div id="area" style="display: block;">
                         <label for="area">Área:</label>
                         <select name="area" id="area">
+													{% for names in template[2] %}
+    												<option>{{names.nombre}}</option>
+													{% endfor %}
                         </select>
                     </div>
 
                     <div id="act" style="display: block;">
                         <label for="act">Actividades:</label>
                         <select name="actividades" id="actividades">
+													{% for names in template[3] %}
+    												<option>{{names.nombre}}</option>
+													{% endfor %}
                         </select>
                     </div>
                 </div>
 			</div>
-			<input class="button" type="submit" value="Aceptar" onclick="reset()">
+			<input class="button" type="submit" value="Aceptar">
 		</fieldset>
 	</form>
 </div>
