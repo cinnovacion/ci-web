@@ -104,8 +104,7 @@ $app->any('/inicio/asistencia_reg', function ($request, $response, $args) {
 		//echo $data['idpersona'];
 
 		//$asistencia $this->db->asistencia->where('persona_idpersona', $data['idpersona'] and );
-
-
+		
 		/*if($data = $persona->fetch()){
 			echo json_encode(array(
 				'idpersona' => $data['idpersona'],
