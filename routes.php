@@ -45,6 +45,10 @@ $app->any('/visitas/visitas_reg', function ($request, $response, $args) {
     return $this->view->render($response, '/visitas/visitas.html');
 })->setName('visitas');
 
+$app->any('/visitas/lista', function ($request, $response, $args) {
+    return $this->view->render($response, '/visitas/lista.html');
+})->setName('visitas_lista');
+
 
 $app->any('/visitas/registro', function ($request, $response, $args) {
 	$parsedBody = $request->getParsedBody();
@@ -159,11 +163,10 @@ $app->any('/voluntarios/voluntarios_reg', function ($request, $response, $args) 
 
 $app->any('/voluntarios/registro', function ($request, $response, $args) {
     $parsedBody = $request->getParsedBody();
-
-
-   /* $data['nombre']=$parsedBody['nombre'];
+    /*$data['nombre']=$parsedBody['nombre'];
     $data['apellido']=$parsedBody['apellido'];
     $data['cedula']=$parsedBody['ced'];
+
     $vol_reg->insert($data);*/
     die();
 })->setName('voluntarios_reg');
