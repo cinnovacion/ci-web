@@ -1,0 +1,24 @@
+{% extends "layouts/layout.html" %}
+
+{% block content %}
+<div class="panel container">
+	<table>
+	  <thead>
+	    <tr>
+	      <th>Nombre</th>
+	      <th>Apellido</th>
+	      <th>Cédula</th>
+	      <th>Telefono</th>
+	    </tr>
+	    {%for datos in lis_vol%}
+	    <tr>
+	    	<th>{{datos.nombre}}</th>
+	    	<th>{{datos.apellido}}</th>
+	    	<th>{{datos.cedula}}</th>
+	    	<th>{{datos.telefono}}</th>
+	    </tr>
+	    {%endfor%}
+	  </thead>
+	 </table>
+ </div>
+{% endblock %}

@@ -23,7 +23,7 @@ USE `asscic` ;
 CREATE TABLE IF NOT EXISTS `asscic`.`area` (
   `idarea` INT NOT NULL AUTO_INCREMENT,
   `nombre` VARCHAR(45) NOT NULL,
-  `descripción` VARCHAR(100) NOT NULL,
+  `descripcion` VARCHAR(100) NOT NULL,
   PRIMARY KEY (`idarea`))
 ENGINE = InnoDB;
 
@@ -36,8 +36,8 @@ CREATE TABLE IF NOT EXISTS `asscic`.`persona` (
   `nombre` VARCHAR(50) NOT NULL,
   `apellido` VARCHAR(50) NOT NULL,
   `cedula` VARCHAR(16) NOT NULL,
-  `dirección` VARCHAR(150) NULL,
-  `teléfono` INT(9) NOT NULL,
+  `direccion` VARCHAR(150) NULL,
+  `telefono` INT(9) NOT NULL,
   `correo` VARCHAR(50) NULL,
   `area_idarea` INT NOT NULL,
   PRIMARY KEY (`idpersona`, `area_idarea`),
@@ -150,7 +150,7 @@ ENGINE = InnoDB;
 CREATE TABLE IF NOT EXISTS `asscic`.`actividades` (
   `idactividades` INT NOT NULL AUTO_INCREMENT,
   `nombre` VARCHAR(45) NOT NULL,
-  `descripción` VARCHAR(100) NULL,
+  `descripcion` VARCHAR(100) NULL,
   `area_idarea` INT NOT NULL,
   PRIMARY KEY (`idactividades`, `area_idarea`),
   INDEX `fk_actividades_area1_idx` (`area_idarea` ASC),

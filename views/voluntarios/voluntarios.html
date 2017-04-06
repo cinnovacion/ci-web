@@ -34,10 +34,18 @@
                     <div id="orga" style="display: block;">
                         <label for="org">Organización:</label>
                         <select name="org" id="org">
+<<<<<<< HEAD
+                        {%for names in name%}
+                        <option>{{names.nombre}}</option>
+                        {%endfor%}
+=======
 													{% for names in template[0] %}
     												<option>{{names.nombre}}</option>
 													{% endfor %}
+>>>>>>> 15d6826914186e44147861154d08f46c37f2551b
                         </select>
+
+                        
                     </div>
 
                     <div id="car" style="display: block;">

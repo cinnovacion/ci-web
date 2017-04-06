@@ -46,8 +46,16 @@ $app->any('/visitas/visitas_reg', function ($request, $response, $args) {
 })->setName('visitas');
 
 $app->any('/visitas/lista', function ($request, $response, $args) {
-    return $this->view->render($response, '/visitas/lista.html');
+  $lista= $this->db->visita();
+  return $this->view->render($response, '/visitas/lista.html',['lis_vis'=>$lista]);
 })->setName('visitas_lista');
+
+$app->any('/visitas/mas', function ($request, $response, $args) {
+  $parsedBody = $request->getParsedBody();
+  echo($parsedBody["cedu"]);
+  $persona = $this->db->persona()->where('cedula',$parsedBody["cedu"]);
+  return $this->view->render($response, '/visitas/mas.html',['lis_vis'=>$lista]);
+})->setName('visitas_mas');
 
 
 $app->any('/visitas/registro', function ($request, $response, $args) {
@@ -152,13 +160,15 @@ $app->any('/inicio/asistencia_reg', function ($request, $response, $args) {
 })->setName('asistencia');
 
 $app->any('/voluntarios/voluntarios_reg', function ($request, $response, $args) {
+	$parsedBody = $response->getBody();
+	$org= $this->db->Universidad();
+    return $this->view->render($response, '/voluntarios/voluntarios.html',['name'=>$org]);
     $org = $this->db->Universidad();
     $carrera = $this->db->carrera();
     $area = $this->db->area();
     $actividades = $this->db->actividades();
     $item = [$org,$carrera,$area,$actividades];
     return $this->view->render($response, '/voluntarios/voluntarios.html',['template' => $item]);
-
 })->setName('voluntarios');
 
 $app->any('/voluntarios/registro', function ($request, $response, $args) {
@@ -170,3 +180,9 @@ $app->any('/voluntarios/registro', function ($request, $response, $args) {
     $vol_reg->insert($data);*/
     die();
 })->setName('voluntarios_reg');
+
+
+$app->any('/voluntarios/lista', function ($request, $response, $args) {
+$lista= $this->db->persona();
+return $this->view->render($response, '/voluntarios/lista.html',['lis_vol'=>$lista]);
+})->setName('voluntarios_lista');
