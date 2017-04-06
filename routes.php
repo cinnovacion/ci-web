@@ -186,3 +186,18 @@ $app->any('/voluntarios/lista', function ($request, $response, $args) {
 $lista= $this->db->persona();
 return $this->view->render($response, '/voluntarios/lista.html',['lis_vol'=>$lista]);
 })->setName('voluntarios_lista');
+<<<<<<< HEAD
+=======
+
+$app->any('/voluntarios/lista/mas', function ($request, $response, $args) {
+$lista= $this->db->persona();
+$parsedBody=$this->getParsedBody();
+var_dump($parsedBody);
+})->setName('voluntarios_lista');
+
+
+$app->any('/voluntarios/lista/detalles', function ($request, $response, $args) {
+$lista= $this->db->persona();
+return $this->view->render($response, '/voluntarios/mas.html',['lis_vol'=>$lista]);
+})->setName('voluntarios_detalles');
+>>>>>>> d42f2eea94f9d9f58516a54dd6595de189a4872e

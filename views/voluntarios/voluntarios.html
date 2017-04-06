@@ -35,6 +35,7 @@
                         <label for="org">Organización:</label>
                         <select name="org" id="org">
 <<<<<<< HEAD
+<<<<<<< HEAD
                         {%for names in name%}
                         <option>{{names.nombre}}</option>
                         {%endfor%}
@@ -45,15 +46,21 @@
 >>>>>>> 15d6826914186e44147861154d08f46c37f2551b
                         </select>
 
+=======
+                        {%for names in name%}
+                        <option>{{names.nombre}}</option>
+                        {%endfor%}
+                        </select>
+>>>>>>> d42f2eea94f9d9f58516a54dd6595de189a4872e
                         
                     </div>
 
                     <div id="car" style="display: block;">
                         <label for="carrera">Carrera:</label>
                         <select name="carrera" id="carrera">
-													{% for names in template[1] %}
-    												<option>{{names.nombre}}</option>
-													{% endfor %}
+						   {% for names in template[1] %}
+                           <option>{{names.nombre}}</option>
+    					   {% endfor %}
                         </select>
                     </div>
 
