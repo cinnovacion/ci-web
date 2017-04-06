@@ -110,6 +110,9 @@ $app->any('/inicio/asistencia_reg', function ($request, $response, $args) {
 
 $app->any('/voluntarios/voluntarios_reg', function ($request, $response, $args) {
     return $this->view->render($response, '/voluntarios/voluntarios.html');
+    $parsedBody = $request->getParsedBody();
+    $org= $this->db->Universidad()->select('nombre');
+    
 })->setName('voluntarios');
 
 $app->any('/voluntarios/registro', function ($request, $response, $args) {
