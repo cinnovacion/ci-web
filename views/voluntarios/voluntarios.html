@@ -34,7 +34,12 @@
                     <div id="orga" style="display: block;">
                         <label for="org">Organización:</label>
                         <select name="org" id="org">
+                        {%for names in name%}
+                        <option>{{names.nombre}}</option>
+                        {%endfor%}
                         </select>
+
+                        
                     </div>
 
                     <div id="car" style="display: block;">

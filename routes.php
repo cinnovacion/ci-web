@@ -104,7 +104,7 @@ $app->any('/inicio/asistencia_reg', function ($request, $response, $args) {
 		//echo $data['idpersona'];
 
 		//$asistencia $this->db->asistencia->where('persona_idpersona', $data['idpersona'] and );
-		
+
 		/*if($data = $persona->fetch()){
 			echo json_encode(array(
 				'idpersona' => $data['idpersona'],
@@ -148,10 +148,9 @@ $app->any('/inicio/asistencia_reg', function ($request, $response, $args) {
 })->setName('asistencia');
 
 $app->any('/voluntarios/voluntarios_reg', function ($request, $response, $args) {
-    return $this->view->render($response, '/voluntarios/voluntarios.html');
-    $parsedBody = $request->getParsedBody();
-    $org= $this->db->Universidad()->select('nombre');
-    
+	$parsedBody = $response->getBody();
+	$org= $this->db->Universidad();
+    return $this->view->render($response, '/voluntarios/voluntarios.html',['name'=>$org]);
 })->setName('voluntarios');
 
 $app->any('/voluntarios/registro', function ($request, $response, $args) {
@@ -166,5 +165,11 @@ $app->any('/voluntarios/registro', function ($request, $response, $args) {
     $vol_reg->insert($data);*/
     die();
 })->setName('voluntarios_reg');
+
+
+$app->any('/voluntarios/lista', function ($request, $response, $args) {
+$lista= $this->db->persona();
+return $this->view->render($response, '/voluntarios/lista.html',['lis_vol'=>$lista]);
+})->setName('voluntarios_lista');
 
 
