@@ -23,16 +23,16 @@ $app->any('/inicio/login', function ($request, $response, $args) {
 
     foreach ($login as $log) {
     	$contador++;
-		if (strcmp($log['user'], $parsedBody['user']) == 0) {
-			echo $log['user'].' se encuentra en la base de datos';
+		if (strcmp($log['usuario'], $parsedBody['user']) == 0) {
+			echo $log['usuario'].' se encuentra en la base de datos';
 			break;
 		}
     }
     foreach ($passw as $pas) {
     	$contadord++; 
     	if ($contadord == $contador) {
-    		if (strcmp($pas['pass'], $parsedBody['pass']) == 0) {
-				echo $log['pass'].' la contraseña es correcta';
+    		if (strcmp($pas['password'], $parsedBody['pass']) == 0) {
+				echo $log['password'].' la contraseña es correcta';
 			}
     	}
     }
@@ -82,9 +82,18 @@ $app->any('/visitas/registro', function ($request, $response, $args) {
 
 $app->any('/inicio/asistencia_reg', function ($request, $response, $args) {
 	$parsedBody = $request->getParsedBody();
-	$asistencia = $this->db->asisprueba();
+	$asistencia = $this->db->persona()->where('cedula',$parsedBody["ced-vol"]);
 
-	if ($parsedBody["ced-vol"]) {
+	//$asistencia = $db->persona()->where('cedula',$parsedBody["ced-vol"]);
+	foreach ($asistencia as $value) {
+		echo $value;
+	}
+		/*if($asistencia->fetch()){
+
+			echo $asistencia;
+		}*/
+
+	/*if ($parsedBody["ced-vol"]) {
 		echo "Cedula del voluntario: ".$parsedBody["ced-vol"];
 		$data['cedula'] = $parsedBody["ced-vol"];
 		$row = $asistencia->insert($data);
@@ -94,7 +103,7 @@ $app->any('/inicio/asistencia_reg', function ($request, $response, $args) {
 		echo "Cedula del trabajador";
 	}else{
 		echo "El campo esta vacio".$parsedBody;
-	}
+	}*/
 
 	die();
 })->setName('asistencia');
