@@ -36,7 +36,7 @@ CREATE TABLE IF NOT EXISTS `asscic`.`persona` (
   `nombre` VARCHAR(50) NOT NULL,
   `apellido` VARCHAR(50) NOT NULL,
   `cedula` VARCHAR(16) NOT NULL,
-  `dirección` VARCHAR(150) NULL,
+  `direccion` VARCHAR(150) NULL,
   `telefono` INT(9) NOT NULL,
   `correo` VARCHAR(50) NULL,
   `area_idarea` INT NOT NULL,
