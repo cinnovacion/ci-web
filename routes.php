@@ -82,17 +82,57 @@ $app->any('/visitas/registro', function ($request, $response, $args) {
 
 $app->any('/inicio/asistencia_reg', function ($request, $response, $args) {
 	$parsedBody = $request->getParsedBody();
-	$asistencia = $this->db->persona()->where('cedula',$parsedBody["ced-vol"]);
+	//$asistencia $this->db->asistencia->select();
 
-	//$asistencia = $db->persona()->where('cedula',$parsedBody["ced-vol"]);
-	foreach ($asistencia as $value) {
-		echo $value;
+	if ($parsedBody["ced-vol"]) {
+		$persona = $this->db->persona()->where('cedula',$parsedBody["ced-vol"]); 
+		$data = $persona->fetch();
+		echo $data['idpersona'];
+
+		$asistencia = $this->db->asistencia->where('persona_idpersona', $data['idpersona']);
+		if($datad = $asistencia->fetch()){
+			
+			echo json_encode(array(
+				'idasistecia' => $datad['idasistencia'],
+					
+			));
+		}
+
+
+		//$persona = $this->db->persona()->where('cedula',$parsedBody["ced-vol"] and 'nombre', "clarence");
+		//$data = $persona->fetch();
+		//echo $data['idpersona'];
+
+		//$asistencia $this->db->asistencia->where('persona_idpersona', $data['idpersona'] and );
+
+
+		/*if($data = $persona->fetch()){
+			echo json_encode(array(
+				'idpersona' => $data['idpersona'],
+				'nombre' => $data['nombre'],
+				'apellido' => $data['apellido'],
+				'cedula' => $data['cedula'],
+				'direccion' => $data['direccion'],
+				'telefono' => $data['telefono'],
+				'correo' => $data['correo'],	
+			));
+		}*/	
+	}elseif ($parsedBody["ced-tbj"]) {
+		$persona = $this->db->persona()->where('cedula',$parsedBody["ced-tbj"]);
+		if($data = $persona->fetch()){
+			echo json_encode(array(
+				'idpersona' => $data['idpersona'],
+				'nombre' => $data['nombre'],
+				'apellido' => $data['apellido'],
+				'cedula' => $data['cedula'],
+				'dirección' => $data['dirección'],
+				'teléfono' => $data['teléfono'],
+				'correo' => $data['correo'],	
+			));
+		}
 	}
-		/*if($asistencia->fetch()){
-
-			echo $asistencia;
-		}*/
-
+	
+	
 	/*if ($parsedBody["ced-vol"]) {
 		echo "Cedula del voluntario: ".$parsedBody["ced-vol"];
 		$data['cedula'] = $parsedBody["ced-vol"];
