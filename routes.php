@@ -96,38 +96,30 @@ $app->any('/inicio/asistencia_reg', function ($request, $response, $args) {
 	$parsedBody = $request->getParsedBody();
 	//$asistencia $this->db->asistencia->select();
 
-	if ($parsedBody["ced-vol"]) {
-		$persona = $this->db->persona()->where('cedula',$parsedBody["ced-vol"]);
+	//echo time()."<br>"; 
+	//echo date("d-m-Y", time())."<br>"; die();
+	if ($parsedBody["ced-vol"]) { 
+		$persona = $this->db->persona()->where('cedula',$parsedBody["ced-vol"]); //tomamos a una persona segun cedula
 		$data = $persona->fetch();
-		echo $data['idpersona'];
+		//echo $data['idpersona']; die();
 
-		$asistencia = $this->db->asistencia->where('persona_idpersona', $data['idpersona']);
-		if($datad = $asistencia->fetch()){
+		//$asistencia = $this->db->asistencia->where('persona_idpersona = '.$data['idpersona'].' AND hora_entrada != NULL')->fetch();
+		if ($asistencia = $this->db->asistencia->where('persona_idpersona = '.$data['idpersona'].' AND hora_entrada <> NULL')->fetch()){
+			echo $asistencia;
+			echo "Encontro el ID con la FECHA de hoy, entonces vamos a anotar la hora de salida";
 
-			echo json_encode(array(
-				'idasistecia' => $datad['idasistencia'],
+		}else{
+			echo "No lo encuentra, tenemos que agregar la asistencia para ese dia";
+			$registrando_asis = $this->db->asistencia();
 
-			));
-		}
+			$datos_asis['hora_entrada'] = time();
+			$datos_asis['persona_idpersona'] = $data['idpersona'];
 
+			$registrando_asis->insert($datos_asis);
 
-		//$persona = $this->db->persona()->where('cedula',$parsedBody["ced-vol"] and 'nombre', "clarence");
-		//$data = $persona->fetch();
-		//echo $data['idpersona'];
+			echo "Se hizo el insert";
+	}
 
-		//$asistencia $this->db->asistencia->where('persona_idpersona', $data['idpersona'] and );
-
-		/*if($data = $persona->fetch()){
-			echo json_encode(array(
-				'idpersona' => $data['idpersona'],
-				'nombre' => $data['nombre'],
-				'apellido' => $data['apellido'],
-				'cedula' => $data['cedula'],
-				'direccion' => $data['direccion'],
-				'telefono' => $data['telefono'],
-				'correo' => $data['correo'],
-			));
-		}*/
 	}elseif ($parsedBody["ced-tbj"]) {
 		$persona = $this->db->persona()->where('cedula',$parsedBody["ced-tbj"]);
 		if($data = $persona->fetch()){
@@ -142,19 +134,6 @@ $app->any('/inicio/asistencia_reg', function ($request, $response, $args) {
 			));
 		}
 	}
-
-
-	/*if ($parsedBody["ced-vol"]) {
-		echo "Cedula del voluntario: ".$parsedBody["ced-vol"];
-		$data['cedula'] = $parsedBody["ced-vol"];
-		$row = $asistencia->insert($data);
-	}elseif ($parsedBody["ced-tbj"]) {
-		$data['cedula'] = $parsedBody["ced-tbj"];
-		$row = $asistencia->insert($data);
-		echo "Cedula del trabajador";
-	}else{
-		echo "El campo esta vacio".$parsedBody;
-	}*/
 
 	die();
 })->setName('asistencia');
@@ -186,8 +165,7 @@ $app->any('/voluntarios/lista', function ($request, $response, $args) {
 $lista= $this->db->persona();
 return $this->view->render($response, '/voluntarios/lista.html',['lis_vol'=>$lista]);
 })->setName('voluntarios_lista');
-<<<<<<< HEAD
-=======
+
 
 $app->any('/voluntarios/lista/mas', function ($request, $response, $args) {
 $lista= $this->db->persona();
@@ -200,4 +178,4 @@ $app->any('/voluntarios/lista/detalles', function ($request, $response, $args) {
 $lista= $this->db->persona();
 return $this->view->render($response, '/voluntarios/mas.html',['lis_vol'=>$lista]);
 })->setName('voluntarios_detalles');
->>>>>>> d42f2eea94f9d9f58516a54dd6595de189a4872e
+
