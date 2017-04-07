@@ -45,6 +45,18 @@ $app->any('/visitas/visitas_reg', function ($request, $response, $args) {
     return $this->view->render($response, '/visitas/visitas.html');
 })->setName('visitas');
 
+$app->any('/visitas/lista', function ($request, $response, $args) {
+  $lista= $this->db->visita();
+  return $this->view->render($response, '/visitas/lista.html',['lis_vis'=>$lista]);
+})->setName('visitas_lista');
+
+$app->any('/visitas/mas', function ($request, $response, $args) {
+  $parsedBody = $request->getParsedBody();
+  echo($parsedBody["cedu"]);
+  $persona = $this->db->persona()->where('cedula',$parsedBody["cedu"]);
+  return $this->view->render($response, '/visitas/mas.html',['lis_vis'=>$lista]);
+})->setName('visitas_mas');
+
 
 $app->any('/visitas/registro', function ($request, $response, $args) {
 	$parsedBody = $request->getParsedBody();
@@ -159,22 +171,51 @@ $app->any('/voluntarios/voluntarios_reg', function ($request, $response, $args) 
     return $this->view->render($response, '/voluntarios/voluntarios.html',['template' => $item]);
 })->setName('voluntarios');
 
-$app->any('/voluntarios/registro', function ($request, $response, $args) {
-    $parsedBody = $request->getParsedBody();
+$app->any('/voluntarios/registro', function ($request, $response, $args) {	 $parsedBody = $request->getParsedBody();
 
-
-   /* $data['nombre']=$parsedBody['nombre'];
+	$vol_p=$this->db->persona();
+	$vol_v=$this->db->voluntario();
+    //guardar datos en tabla persona
+    $data['nombre']=$parsedBody['nombre'];
     $data['apellido']=$parsedBody['apellido'];
     $data['cedula']=$parsedBody['ced'];
-    $vol_reg->insert($data);*/
+    $data['direccion']=$parsedBody['direccion'];
+    $data['telefono']=$parsedBody['no_telefono'];
+    $data['correo']=$parsedBody['correo'];
+    $data['area_idarea']=$parsedBody['area'];
+    $vol_p->insert($data);
+
+    //guardar datos en tabla voluntario
+    //predeterminar la zona horaria
+    date_default_timezone_set("America/Managua");
+    $data1['carnet']=time()."-".$parsedBody['ced'];
+    $data1['fecha_ingreso']=strtotime($parsedBody['fecha']);
+    $persona_id=$this->db->persona()->select('idpersona')->order('idpersona desc')->limit(1)->fetch();
+    echo json_encode($persona_id['idpersona']);
+    $data1['persona_idpersona']=$persona_id['idpersona'];
+    $data1['Universidad_idUniversidad']=$parsedBody['org'];
+    $data1['carrera_idcarrera']=$parsedBody['carrera'];
+    echo "<p>datos de voluntario</p>";
+    var_dump($data1);
+    $vol_v->insert($data1);
     die();
 })->setName('voluntarios_reg');
 
 
 $app->any('/voluntarios/lista', function ($request, $response, $args) {
-$lista= $this->db->persona();
+$lista= $this->db->voluntario()->select("voluntario.*, persona.nombre, table2.apellido");
+/*$cantidad=$this->db->voluntario()->count("*");
+for ($i=1; $i <=$cantidad ; $i++) { 
+$lista_r= $this->db->voluntario()->where('idvoluntario',$i);
+$lista_f=$lista[$i];
+}*/
+/*
+$voluntario=$this->db->voluntario()->select('persona_idpersona');
+    $cantidad=$this->db->voluntario()->count("*");
+*/
 return $this->view->render($response, '/voluntarios/lista.html',['lis_vol'=>$lista]);
 })->setName('voluntarios_lista');
+
 
 $app->any('/voluntarios/lista/mas', function ($request, $response, $args) {
 $lista= $this->db->persona();

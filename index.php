@@ -63,13 +63,20 @@ $container['logger'] = function($container) {
     return $log;
 };
 
+
 // Inicializando conexion a la base de datos con driver PDO
 $container['db'] = function ($container) {
     $db = $container['settings']['db'];
     $pdo = new PDO("mysql:host=" . $db['host'] . ";dbname=" . $db['dbname'], $db['user'], $db['pass']);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
-    $db = new NotORM($pdo);
+    $structure = new NotORM_Structure_Convention(
+        $primary = "id%s", // id_$table
+        $foreign = "id%s", // id_$table
+        $table = "%s", // {$table}s
+        $prefix = "" // wp_$table
+    );
+    $db = new NotORM($pdo, $structure);
     $db->debug = true;
     return $db;
 };

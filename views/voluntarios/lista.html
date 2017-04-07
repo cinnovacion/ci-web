@@ -1,9 +1,11 @@
 {% extends "layouts/layout.html" %}
 
 {% block content %}
+<div class="panel container">
+	<table>
 <div class="panel">
 	<table>
-	<caption><h3>LISTA DE VOLUNTARIOS</h3></caption>
+	<caption><h3><strong>LISTA DE VOLUNTARIOS</strong></h3></caption>
 	  <thead>
 	    <tr>
 	      <th>Nombre</th>
@@ -12,20 +14,19 @@
 	      <th>Telefono</th>
 	      <th>Detalles</th>
 	    </tr>
-	  </thead>
-	  <tbody>
-	  	{%for datos in lis_vol%}
+	    {%for datos in lis_vol%}
 	    <tr>
 	    	<th>{{datos.nombre}}</th>
 	    	<th>{{datos.apellido}}</th>
-	    	<form action="/voluntarios/lista/mas" method="post" name="detalles">
-	    	<th name="cedula">{{datos.cedula}}</th>
-	    	<th name="telefono">{{datos.telefono}}</th>
-	    	<th><input class="button" type="button" name="mas" value="Más"></th>
-	    	</form>
+		    <form action="/voluntarios/lista/mas" method="post" name="detalles">
+		    	<th name="cedula">{{datos.cedula}}</th>
+		    	<th name="telefono">{{datos.telefono}}</th>
+		    	<th><input class="button" type="button" name="mas" value="Más"></th>
+		    </form>
 	    </tr>
 	    {%endfor%}
-	  </tbody>
+	  </thead>
 	 </table>
  </div>
+	      
 {% endblock %} 
