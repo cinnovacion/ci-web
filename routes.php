@@ -149,8 +149,8 @@ $app->any('/inicio/asistencia_reg', function ($request, $response, $args) {
 
 $app->any('/voluntarios/voluntarios_reg', function ($request, $response, $args) {
 	$parsedBody = $response->getBody();
-	$org= $this->db->Universidad();
-    return $this->view->render($response, '/voluntarios/voluntarios.html',['name'=>$org]);
+	/*$org= $this->db->Universidad();
+    return $this->view->render($response, '/voluntarios/voluntarios.html',['name'=>$org]);*/
     $org = $this->db->Universidad();
     $carrera = $this->db->carrera();
     $area = $this->db->area();

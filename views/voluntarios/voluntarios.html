@@ -34,7 +34,7 @@
                     <div id="orga" style="display: block;">
                         <label for="org">Organización:</label>
                         <select name="org" id="org">
-                        {%for names in name%}
+                        {%for names in template[0]%}
                         <option>{{names.nombre}}</option>
                         {%endfor%}
                         </select>
@@ -56,18 +56,18 @@
                     <div id="area" style="display: block;">
                         <label for="area">Área:</label>
                         <select name="area" id="area">
-													{% for names in template[2] %}
-    												<option>{{names.nombre}}</option>
-													{% endfor %}
+						{% for names in template[2] %}
+    					<option>{{names.nombre}}</option>
+						{% endfor %}
                         </select>
                     </div>
 
                     <div id="act" style="display: block;">
                         <label for="act">Actividades:</label>
                         <select name="actividades" id="actividades">
-													{% for names in template[3] %}
-    												<option>{{names.nombre}}</option>
-													{% endfor %}
+						{% for names in template[3] %}
+    					<option>{{names.nombre}}</option>
+						{% endfor %}
                         </select>
                     </div>
                 </div>
