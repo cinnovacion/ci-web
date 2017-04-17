@@ -94,5 +94,17 @@
                 $('#modal_agr_activ').css('display', 'none');
             }
         });
+        //Agregar Actividad
+        $('#btn_agr_mot').click(function(){
+            $('#modal_agr_mot').css('display', 'block');
+        });
+        $('.close').click(function(){
+           $('#modal_agr_mot').css('display', 'none'); 
+        });
+        $(window).click(function(event){
+            if (event.target.id == $('#modal_agr_mot').attr('id')) {
+                $('#modal_agr_mot').css('display', 'none');
+            }
+        });
     }); // Fin de documento listo
 })(jQuery); // fin de espacio de nombre jquery

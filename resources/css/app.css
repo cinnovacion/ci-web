@@ -119,11 +119,7 @@ select:focus {
 
 .panel {
 	margin: 50px;
-<<<<<<< HEAD
-   	background-color: #FFFFFF;
-=======
   background-color: #FFFFFF;
->>>>>>> 64f658c4de038f542924ddbb688699071d92e09c
 }
 
 .row {
@@ -286,3 +282,6 @@ thead,caption{
   color:#448AFF;
 }
 /*Agregar Org*/
+.styled-select.slate select{
+  background-color: #448AFF;
+}
