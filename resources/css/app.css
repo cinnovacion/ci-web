@@ -119,7 +119,7 @@ select:focus {
 
 .panel {
 	margin: 50px;
-   	background-color: #FFFFFF;}
+   	background-color: #FFFFFF;
 }
 
 .row {
@@ -138,6 +138,17 @@ input.button:hover {
 	border-color: transparent;
 }
 
+.button {
+  background-color: #448AFF;
+  border-radius: 0;
+  border-color: transparent;
+}
+
+.button:focus,
+.button:hover {
+  background-color: #7fc836;
+  border-color: transparent;
+}
 /** NavBar **/
 nav {
 	background-color: #FFFFFF;
@@ -270,3 +281,4 @@ form{
 thead,caption{
   color:#448AFF;
 }
+/*Agregar Org*/

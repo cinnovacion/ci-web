@@ -1,79 +1,136 @@
 {% extends "layouts/layout.html" %}
 
 {% block content %}
+<!-- MODAL_LOGIN -->
 <div class="panel">
-	<form action="/voluntarios/registro" method="post">
-		<fieldset>
+    <div class="column">
+    	<form action="/voluntarios/registro" method="post">
+    		<fieldset>
 
-			<h2 class="centrar">Registrar Voluntarios</h2>
-			<hr>
+    			<h2 class="centrar">Registrar Voluntarios</h2>
+    			<hr>
 
-			<div class="row">
-				<div class="column column-50">
+    			<div class="row">
+    				<div class="column column-50">
 
-					<label for="nombre">Nombre:</label>
-					<input type="text" name="nombre" placeholder="Ingrese su Nombre" autofocus="on">
+    					<label for="nombre">Nombre:</label>
+    					<input type="text" name="nombre" placeholder="Ingrese su Nombre" autofocus="on">
 
-					<label for="apellido">Apellido:</label>
-					<input type="text" name="apellido" id="apellido" placeholder="Ingrese su Apellido">
+    					<label for="apellido">Apellido:</label>
+    					<input type="text" name="apellido" id="apellido" placeholder="Ingrese su Apellido">
 
-					<label for="ced">No. de Cédula:</label>
-					<input type="text" name="ced" id="ced" placeholder="Ingrese su Cédula">
+    					<label for="ced">No. de Cédula:</label>
+    					<input type="text" name="ced" id="ced" placeholder="Ingrese su Cédula">
 
-                    <label for="direccion">Dirección:</label>
-                    <input type="text" name="direccion" id="direccion" placeholder="Ingrese su Dirección">
+                        <label for="direccion">Dirección:</label>
+                        <input type="text" name="direccion" id="direccion" placeholder="Ingrese su Dirección">
 
-					<label for="no_telefono">No. Telefono:</label>
-					<input type="tel" name="no_telefono" id="no_telefono" placeholder="Ingrese su número de telefono">
+    					<label for="no_telefono">No. Telefono:</label>
+    					<input type="tel" name="no_telefono" id="no_telefono" placeholder="Ingrese su número de telefono">
 
-                    <label for="correo">Correo:</label>
-                    <input type="text" name="correo" id="correo" placeholder="Ingrese su correo electrónico">
+                        <label for="correo">Correo:</label>
+                        <input type="text" name="correo" id="correo" placeholder="Ingrese su correo electrónico">
 
-				</div>
-				<div class="column column-50">
-                    <div id="orga" style="display: block;">
-                        <label for="org">Organización:</label>
-                        <select name="org" id="org">
-    						{% for names in template[0] %}
-        					<option value="{{names.idUniversidad}}">{{names.nombre}}</option>
+    				</div>
+    				<div class="column column-50">
+                        <div id="orga" style="display: block;">
+                            <label for="org">Organización:</label>
+                            <select name="org" id="org">
+        						{% for names in template[0] %}
+            					<option value="{{names.idUniversidad}}">{{names.nombre}}</option>
+        						{% endfor %}
+                            </select>
+                        </div>
+                        <div id="car" style="display: block;">
+                            <label for="carrera">Carrera:</label>
+                            <select name="carrera" id="carrera">
+    						   {% for names in template[1] %}
+                               <option value="{{names.idcarrera}}">{{names.nombre}}</option>
+        					   {% endfor %}
+                            </select>
+                        </div>
+
+                        <label for="nivel">Fecha de Ingreso:</label>
+                        <input type="date" name="fecha">
+
+                        <div id="area" style="display: block;">
+                            <label for="area">Área:</label>
+                            <select name="area" id="area">
+    						{% for names in template[2] %}
+        					<option value="{{names.idarea}}">{{names.nombre}}</option>
     						{% endfor %}
-                        </select>
-                    </div>
-                    <div id="car" style="display: block;">
-                        <label for="carrera">Carrera:</label>
-                        <select name="carrera" id="carrera">
-						   {% for names in template[1] %}
-                           <option value="{{names.idcarrera}}">{{names.nombre}}</option>
-    					   {% endfor %}
-                        </select>
-                    </div>
+                            </select>
+                        </div>
 
-                    <label for="nivel">Fecha de Ingreso:</label>
-                    <input type="date" name="fecha">
-
-                    <div id="area" style="display: block;">
-                        <label for="area">Área:</label>
-                        <select name="area" id="area">
-						{% for names in template[2] %}
-    					<option value="{{names.idarea}}">{{names.nombre}}</option>
-						{% endfor %}
-                        </select>
+                        <div id="act" style="display: block;">
+                            <label for="act">Actividades:</label>
+                            <select name="actividades" id="actividades">
+    						{% for names in template[3] %}
+        					<option value="{{names.idactividades}}">{{names.nombre}}</option>
+    						{% endfor %}
+                            </select>
+                        </div>
                     </div>
-
-                    <div id="act" style="display: block;">
-                        <label for="act">Actividades:</label>
-                        <select name="actividades" id="actividades">
-						{% for names in template[3] %}
-    					<option value="{{names.idactividades}}">{{names.nombre}}</option>
-						{% endfor %}
-                        </select>
-                    </div>
-                </div>
-			</div>
-			<input class="button" type="submit" value="Aceptar">
-		</fieldset>
-	</form>
+    			</div>
+    			<input class="button" type="submit" value="Aceptar">
+    		</fieldset>
+    	</form>
+    </div>
+    <div class="column">
+        <button class="button" id="btn_agr_org">Agregar</button>
+        <button class="button" id="btn_agr_carr">Agregar</button>
+        <button class="button" id="btn_agr_area">Agregar</button>
+        <button class="button" id="btn_agr_activ">Agregar</button>
+    </div>
 </div>
-
+<!-- Formularios de las listas deplegables -->
+<div id="modal_agr_org" class="modal">
+    <span class="close" title="Cerrar">&times;</span>
+    <form class="modal-content animate" method="get" action="/voluntarios/agr_org">
+        <div>
+            <h4>Agregar Organización</h4>
+        </div>
+        <div class="container">
+            <input type="text" placeholder="Nombre" name="user" required>
+            <input class="button" type="submit" value="Registrar">
+        </div>
+    </form>
+</div>
+<div id="modal_agr_carr" class="modal">
+    <span class="close" title="Cerrar">&times;</span>
+    <form class="modal-content animate" method="get" action="/voluntarios/agr_org">
+        <div>
+            <h4>Agregar Carrera</h4>
+        </div>
+        <div class="container">
+            <input type="text" placeholder="Nombre" name="user" required>
+            <input class="button" type="submit" value="Registrar">
+        </div>
+    </form>
+</div>
+<div id="modal_agr_area" class="modal">
+    <span class="close" title="Cerrar">&times;</span>
+    <form class="modal-content animate" method="get" action="/voluntarios/agr_org">
+        <div>
+            <h4>Agregar Área</h4>
+        </div>
+        <div class="container">
+            <input type="text" placeholder="Nombre" name="user" required>
+            <input class="button" type="submit" value="Registrar">
+        </div>
+    </form>
+</div>
+<div id="modal_agr_activ" class="modal">
+    <span class="close" title="Cerrar">&times;</span>
+    <form class="modal-content animate" method="get" action="/voluntarios/agr_org">
+        <div>
+            <h4>Agregar Actividad</h4>
+        </div>
+        <div class="container">
+            <input type="text" placeholder="Nombre" name="user" required>
+            <input class="button" type="submit" value="Registrar">
+        </div>
+    </form>
+</div>
 <div style="margin-top: 170px;"></div>
 {% endblock %}
