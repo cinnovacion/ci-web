@@ -94,6 +94,7 @@ $app->any('/visitas/registro', function ($request, $response, $args) {
 
 $app->any('/inicio/asistencia_reg', function ($request, $response, $args) {
 	$parsedBody = $request->getParsedBody();
+	date_default_timezone_set("America/Managua");
 	//$asistencia $this->db->asistencia->select();
 
 	//echo time()."<br>"; 
@@ -101,12 +102,22 @@ $app->any('/inicio/asistencia_reg', function ($request, $response, $args) {
 	if ($parsedBody["ced-vol"]) { 
 		$persona = $this->db->persona()->where('cedula',$parsedBody["ced-vol"]); //tomamos a una persona segun cedula
 		$data = $persona->fetch();
-		//echo $data['idpersona']; die();
 
-		//$asistencia = $this->db->asistencia->where('persona_idpersona = '.$data['idpersona'].' AND hora_entrada != NULL')->fetch();
-		if ($asistencia = $this->db->asistencia->where('persona_idpersona = '.$data['idpersona'].' AND hora_entrada <> NULL')->fetch()){
-			echo $asistencia;
-			echo "Encontro el ID con la FECHA de hoy, entonces vamos a anotar la hora de salida";
+		$asistencia = $this->db->asistencia->where(array('persona_idpersona' => $data['idpersona'], 'hora_acumulada' => 0))->fetch();
+		if ($asistencia){
+			$dato = $asistencia;
+
+			$salida = time();
+			$acumuladas = time() - $dato['hora_entrada'];
+			
+			$dato['hora_salida'] = $salida;
+			$dato['hora_acumulada'] = $acumuladas; 
+			
+			$asistencia->update(
+				array("hora_acumulada" => time() - $dato['hora_entrada'],
+					  "hora_salida" => time()
+					)
+				);
 
 		}else{
 			echo "No lo encuentra, tenemos que agregar la asistencia para ese dia";
@@ -116,22 +127,35 @@ $app->any('/inicio/asistencia_reg', function ($request, $response, $args) {
 			$datos_asis['persona_idpersona'] = $data['idpersona'];
 
 			$registrando_asis->insert($datos_asis);
-
-			echo "Se hizo el insert";
-	}
-
+		}
 	}elseif ($parsedBody["ced-tbj"]) {
-		$persona = $this->db->persona()->where('cedula',$parsedBody["ced-tbj"]);
-		if($data = $persona->fetch()){
-			echo json_encode(array(
-				'idpersona' => $data['idpersona'],
-				'nombre' => $data['nombre'],
-				'apellido' => $data['apellido'],
-				'cedula' => $data['cedula'],
-				'dirección' => $data['dirección'],
-				'teléfono' => $data['teléfono'],
-				'correo' => $data['correo'],
-			));
+		$persona = $this->db->persona()->where('cedula',$parsedBody["ced-tbj"]); //tomamos a una persona segun cedula
+		$data = $persona->fetch();
+
+		$asistencia = $this->db->asistencia->where(array('persona_idpersona' => $data['idpersona'], 'hora_acumulada' => 0))->fetch();
+		if ($asistencia){
+			$dato = $asistencia;
+
+			$salida = time();
+			$acumuladas = time() - $dato['hora_entrada'];
+			
+			$dato['hora_salida'] = $salida;
+			$dato['hora_acumulada'] = $acumuladas; 
+			
+			$asistencia->update(
+				array("hora_acumulada" => time() - $dato['hora_entrada'],
+					  "hora_salida" => time()
+					)
+				);
+
+		}else{
+			echo "No lo encuentra, tenemos que agregar la asistencia para ese dia";
+			$registrando_asis = $this->db->asistencia();
+
+			$datos_asis['hora_entrada'] = time();
+			$datos_asis['persona_idpersona'] = $data['idpersona'];
+
+			$registrando_asis->insert($datos_asis);
 		}
 	}
 
