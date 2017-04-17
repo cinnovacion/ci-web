@@ -86,49 +86,57 @@
 <!-- Formularios de las listas deplegables -->
 <div id="modal_agr_org" class="modal">
     <span class="close" title="Cerrar">&times;</span>
-    <form class="modal-content animate" method="get" action="/voluntarios/agr_org">
-        <div>
+    <form class="modal-content animate" method="post" name="organizacion" action="/voluntarios/agr_org">
+        <div class="centrar">
             <h4>Agregar Organización</h4>
         </div>
         <div class="container">
-            <input type="text" placeholder="Nombre" name="user" required>
-            <input class="button" type="submit" value="Registrar">
+            <input type="text" placeholder="Nombre" name="nombre_org" required>
+            <input class="button" type="submit" value="Agregar">
         </div>
     </form>
 </div>
 <div id="modal_agr_carr" class="modal">
     <span class="close" title="Cerrar">&times;</span>
-    <form class="modal-content animate" method="get" action="/voluntarios/agr_org">
-        <div>
+    <form class="modal-content animate" method="post" name="carrera" action="/voluntarios/agr_carr">
+        <div class="centrar">
             <h4>Agregar Carrera</h4>
         </div>
         <div class="container">
-            <input type="text" placeholder="Nombre" name="user" required>
-            <input class="button" type="submit" value="Registrar">
+            <input type="text" placeholder="Nombre" name="nombre_carr" required>
+            <input class="button" type="submit" value="Agregar">
         </div>
     </form>
 </div>
 <div id="modal_agr_area" class="modal">
     <span class="close" title="Cerrar">&times;</span>
-    <form class="modal-content animate" method="get" action="/voluntarios/agr_org">
-        <div>
+    <form class="modal-content animate" method="post" name="area" action="/voluntarios/agr_area">
+        <div class="centrar">
             <h4>Agregar Área</h4>
         </div>
         <div class="container">
-            <input type="text" placeholder="Nombre" name="user" required>
-            <input class="button" type="submit" value="Registrar">
+            <input type="text" placeholder="Nombre" name="nombre_area" required>
+            <input type="text" placeholder="Descripción" name="desc_area" required>
+            <input class="button" type="submit" value="Agregar">
         </div>
     </form>
 </div>
 <div id="modal_agr_activ" class="modal">
     <span class="close" title="Cerrar">&times;</span>
-    <form class="modal-content animate" method="get" action="/voluntarios/agr_org">
-        <div>
+    <form class="modal-content animate" method="post" name="actividad" action="/voluntarios/agr_activ">
+        <div class="centrar">
             <h4>Agregar Actividad</h4>
         </div>
         <div class="container">
-            <input type="text" placeholder="Nombre" name="user" required>
-            <input class="button" type="submit" value="Registrar">
+            <input type="text" placeholder="Nombre" name="nombre_activ" required>
+            <input type="text" placeholder="Descripción" name="desc_activ" required>
+            <label for="area">Área:</label>
+            <select name="activ_area" id="area">
+            {% for names in template[2] %}
+            <option value="{{names.idarea}}">{{names.nombre}}</option>
+            {% endfor %}
+            </select>
+            <input class="button" type="submit" value="Agregar">
         </div>
     </form>
 </div>

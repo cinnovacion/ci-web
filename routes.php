@@ -44,6 +44,16 @@ $app->any('/inicio/login', function ($request, $response, $args) {
 $app->any('/visitas/visitas_reg', function ($request, $response, $args) {
     return $this->view->render($response, '/visitas/visitas.html');
 })->setName('visitas');
+//Agregar motivo visita
+/*$app->any('/voluntarios/agr_carr', function ($request, $response, $args) {
+	$parsedBody = $request->getParsedBody();
+    $carr = $this->db->();
+    $carr_i['nombre'] = $parsedBody['nombre_carr'];
+    $carr -> insert($carr_i);
+    var_dump($carr_i);
+    var_dump($parsedBody);
+    die();
+})->setName('agr_carr');*/
 //Mostrar lista de visitas
 $app->any('/visitas/lista', function ($request, $response, $args) {
   $lista= $this->db->visita();
@@ -147,8 +157,51 @@ $app->any('/voluntarios/voluntarios_reg', function ($request, $response, $args) 
     $item = [$org,$carrera,$area,$actividades];
     return $this->view->render($response, '/voluntarios/voluntarios.html',['template' => $item]);
 })->setName('voluntarios');
+//Agregar datos a listas deplegables
+$app->any('/voluntarios/agr_org', function ($request, $response, $args) {
+	$parsedBody = $request->getParsedBody();
+    $org = $this->db->Universidad();
+    $org_i['nombre'] = $parsedBody['nombre_org'];
+    $org -> insert($org_i);
+    var_dump($org_i);
+    var_dump($parsedBody);
+})->setName('agr_org');
 
-$app->post('/voluntarios/registro', function ($request, $response, $args) {	 $parsedBody = $request->getParsedBody();
+$app->any('/voluntarios/agr_carr', function ($request, $response, $args) {
+	$parsedBody = $request->getParsedBody();
+    $carr = $this->db->carrera();
+    $carr_i['nombre'] = $parsedBody['nombre_carr'];
+    $carr -> insert($carr_i);
+    var_dump($carr_i);
+    var_dump($parsedBody);
+    die();
+})->setName('agr_carr');
+
+$app->any('/voluntarios/agr_area', function ($request, $response, $args) {
+	$parsedBody = $request->getParsedBody();
+    $area = $this->db->area();
+    $area_i['nombre'] = $parsedBody['nombre_area'];
+    $area_i['descripcion'] = $parsedBody['desc_area'];
+    $area -> insert($area_i);
+    var_dump($area_i);
+    var_dump($parsedBody);
+    die();
+})->setName('agr_area');
+
+$app->any('/voluntarios/agr_activ', function ($request, $response, $args) {
+	$parsedBody = $request->getParsedBody();
+    $activ = $this->db->actividades();
+    $activ_i['nombre'] = $parsedBody['nombre_activ'];
+    $activ_i['descripcion'] = $parsedBody['desc_activ'];
+    $activ_i['area_idarea'] = $parsedBody['activ_area'];
+    $activ -> insert($activ_i);
+    var_dump($activ_i);
+    var_dump($parsedBody);
+    die();
+})->setName('agr_activ');
+
+$app->any('/voluntarios/registro', function ($request, $response, $args) {	 
+	$parsedBody = $request->getParsedBody();
 
 	$vol_p=$this->db->persona();
 	$vol_v=$this->db->voluntario();
@@ -179,16 +232,9 @@ $app->post('/voluntarios/registro', function ($request, $response, $args) {	 $pa
 })->setName('voluntarios_reg');
 
 $app->any('/voluntarios/lista', function ($request, $response, $args) {
-$lista= $this->db->voluntario()->select("voluntario.*, persona.nombre, table2.apellido");
-/*$cantidad=$this->db->voluntario()->count("*");
-for ($i=1; $i <=$cantidad ; $i++) { 
-$lista_r= $this->db->voluntario()->where('idvoluntario',$i);
-$lista_f=$lista[$i];
-}*/
-/*
+$parsedBody = $response->getBody();
 $voluntario=$this->db->voluntario()->select('persona_idpersona');
-    $cantidad=$this->db->voluntario()->count("*");
-*/
+$lista=$this->db->persona()->where('idpersona',$voluntario);
 return $this->view->render($response, '/voluntarios/lista.html',['lis_vol'=>$lista]);
 })->setName('voluntarios_lista');
 
