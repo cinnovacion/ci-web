@@ -40,16 +40,16 @@ $app->any('/inicio/login', function ($request, $response, $args) {
     //echo("Usuario: ".$parsedBody['user']."</br>"."Pass: ".$parsedBody['pass']);
     die();
 })->setName('login');
-
+//Mostrar pagina de visitas
 $app->any('/visitas/visitas_reg', function ($request, $response, $args) {
     return $this->view->render($response, '/visitas/visitas.html');
 })->setName('visitas');
-
+//Mostrar lista de visitas
 $app->any('/visitas/lista', function ($request, $response, $args) {
   $lista= $this->db->visita();
   return $this->view->render($response, '/visitas/lista.html',['lis_vis'=>$lista]);
 })->setName('visitas_lista');
-
+//Mostrar mas detalles de una visita
 $app->any('/visitas/mas', function ($request, $response, $args) {
   $parsedBody = $request->getParsedBody();
   echo($parsedBody["cedu"]);
@@ -57,7 +57,7 @@ $app->any('/visitas/mas', function ($request, $response, $args) {
   return $this->view->render($response, '/visitas/mas.html',['lis_vis'=>$lista]);
 })->setName('visitas_mas');
 
-
+//Realizar registro de una visita
 $app->any('/visitas/registro', function ($request, $response, $args) {
 	$parsedBody = $request->getParsedBody();
 	$visita=$this->db->visita();
@@ -85,7 +85,7 @@ $app->any('/visitas/registro', function ($request, $response, $args) {
 	date_default_timezone_set("America/Managua");
 	$data['fecha']=time();
 	$data['hora_llegada']=time();
-	$data['hora_aprox_salida']=strtotime($parsedBody['hora_salida']);
+	$data['hora_salida']=strtotime($parsedBody['hora_salida']);
 	//insertar en la base de datos
 	$visita()->insert($data);
 	die();
@@ -164,8 +164,6 @@ $app->any('/inicio/asistencia_reg', function ($request, $response, $args) {
 
 $app->any('/voluntarios/voluntarios_reg', function ($request, $response, $args) {
 	$parsedBody = $response->getBody();
-	/*$org= $this->db->Universidad();
-    return $this->view->render($response, '/voluntarios/voluntarios.html',['name'=>$org]);*/
     $org = $this->db->Universidad();
     $carrera = $this->db->carrera();
     $area = $this->db->area();
@@ -174,7 +172,7 @@ $app->any('/voluntarios/voluntarios_reg', function ($request, $response, $args) 
     return $this->view->render($response, '/voluntarios/voluntarios.html',['template' => $item]);
 })->setName('voluntarios');
 
-$app->any('/voluntarios/registro', function ($request, $response, $args) {	 $parsedBody = $request->getParsedBody();
+$app->post('/voluntarios/registro', function ($request, $response, $args) {	 $parsedBody = $request->getParsedBody();
 
 	$vol_p=$this->db->persona();
 	$vol_v=$this->db->voluntario();
@@ -203,7 +201,6 @@ $app->any('/voluntarios/registro', function ($request, $response, $args) {	 $par
     $vol_v->insert($data1);
     die();
 })->setName('voluntarios_reg');
-
 
 $app->any('/voluntarios/lista', function ($request, $response, $args) {
 $lista= $this->db->voluntario()->select("voluntario.*, persona.nombre, table2.apellido");
