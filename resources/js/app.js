@@ -2,7 +2,7 @@
     $(function(){
         // posicion de formulacio de asistencia
         var login_alto = $('.login').height();
-        var pantalla_alto = $( window ).height();
+        var pantalla_alto = $(window).height();
         var nav = $('nav').height();
         var margen = ((pantalla_alto / 2) - (login_alto / 2)) - nav;
         $('.login').css('margin-top', margen);
@@ -27,6 +27,7 @@
                 $('#tab_tbj').hide();
             }
     	});
+        
         //MODAL LOGIN
         $('#btn_admin').click(function(){
             $('#modal_login').css('display', 'block');
@@ -39,6 +40,7 @@
                 $('#modal_login').css('display', 'none');
             }
         });
+
         //radio-button motivos de visitas
         $('#tipo_visita_0').click(function(){
             if ($(this).is(':checked')) {
@@ -52,6 +54,7 @@
                 $('#motivo_externo').css('display', 'block');
             }
         });
+
         //Agregar Org
         $('#btn_agr_org').click(function(){
             $('#modal_agr_org').css('display', 'block');
@@ -64,6 +67,7 @@
                 $('#modal_agr_org').css('display', 'none');
             }
         });
+
         //Agregar Carrera
         $('#btn_agr_carr').click(function(){
             $('#modal_agr_carr').css('display', 'block');
@@ -76,6 +80,7 @@
                 $('#modal_agr_carr').css('display', 'none');
             }
         });
+
         //Agregar Área
         $('#btn_agr_area').click(function(){
             $('#modal_agr_area').css('display', 'block');
@@ -88,6 +93,7 @@
                 $('#modal_agr_area').css('display', 'none');
             }
         });
+
         //Agregar Actividad
         $('#btn_agr_activ').click(function(){
             $('#modal_agr_activ').css('display', 'block');
@@ -100,6 +106,7 @@
                 $('#modal_agr_activ').css('display', 'none');
             }
         });
+
         //Agregar Actividad
         $('#btn_agr_mot').click(function(){
             $('#modal_agr_mot').css('display', 'block');
