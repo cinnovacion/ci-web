@@ -1,6 +1,13 @@
 (function($){
     $(function(){
 
+        var login_alto = $('.login').height();
+        console.log(login_alto);
+        var pantalla_alto = $( window ).height();
+        console.log(pantalla_alto);
+        $('.login').css('margin-top', ((pantalla_alto - 120) / 2) - (login_alto / 2));
+        console.log((pantalla_alto / 2) - (login_alto / 2));
+
     	// Funcionalidad de las pestañas
     	$('#trabajadores a').on('click', function() {
             var titulo = $(this).attr("class");
@@ -26,7 +33,7 @@
             $('#modal_login').css('display', 'block');
         });
         $('.close').click(function(){
-           $('#modal_login').css('display', 'none'); 
+           $('#modal_login').css('display', 'none');
         });
         $(window).click(function(event){
             if (event.target.id == $('#modal_login').attr('id')) {
@@ -51,7 +58,7 @@
             $('#modal_agr_org').css('display', 'block');
         });
         $('.close').click(function(){
-           $('#modal_agr_org').css('display', 'none'); 
+           $('#modal_agr_org').css('display', 'none');
         });
         $(window).click(function(event){
             if (event.target.id == $('#modal_agr_org').attr('id')) {
@@ -63,7 +70,7 @@
             $('#modal_agr_carr').css('display', 'block');
         });
         $('.close').click(function(){
-           $('#modal_agr_carr').css('display', 'none'); 
+           $('#modal_agr_carr').css('display', 'none');
         });
         $(window).click(function(event){
             if (event.target.id == $('#modal_agr_carr').attr('id')) {
@@ -75,7 +82,7 @@
             $('#modal_agr_area').css('display', 'block');
         });
         $('.close').click(function(){
-           $('#modal_agr_area').css('display', 'none'); 
+           $('#modal_agr_area').css('display', 'none');
         });
         $(window).click(function(event){
             if (event.target.id == $('#modal_agr_area').attr('id')) {
@@ -87,7 +94,7 @@
             $('#modal_agr_activ').css('display', 'block');
         });
         $('.close').click(function(){
-           $('#modal_agr_activ').css('display', 'none'); 
+           $('#modal_agr_activ').css('display', 'none');
         });
         $(window).click(function(event){
             if (event.target.id == $('#modal_agr_activ').attr('id')) {
@@ -99,12 +106,14 @@
             $('#modal_agr_mot').css('display', 'block');
         });
         $('.close').click(function(){
-           $('#modal_agr_mot').css('display', 'none'); 
+           $('#modal_agr_mot').css('display', 'none');
         });
         $(window).click(function(event){
             if (event.target.id == $('#modal_agr_mot').attr('id')) {
                 $('#modal_agr_mot').css('display', 'none');
             }
         });
+
+
     }); // Fin de documento listo
 })(jQuery); // fin de espacio de nombre jquery
