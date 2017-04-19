@@ -101,71 +101,69 @@ $app->any('/visitas/registro', function ($request, $response, $args) {
 	die();
 })->setName('visitas_reg');
 
-
+// Registro de asistencia -- Voluntarios y Trabajadores --
 $app->any('/inicio/asistencia_reg', function ($request, $response, $args) {
 	$parsedBody = $request->getParsedBody();
 	date_default_timezone_set("America/Managua");
-	//$asistencia $this->db->asistencia->select();
 
-	//echo time()."<br>"; 
-	//echo date("d-m-Y", time())."<br>"; die();
-	if ($parsedBody["ced-vol"]) { 
-		$persona = $this->db->persona()->where('cedula',$parsedBody["ced-vol"]); //tomamos a una persona segun cedula
-		$data = $persona->fetch();
+	if ($parsedBody["ced-vol"]) {
+		//tomamos a una persona segun cedula
+		$persona = $this->db->persona()->where('cedula',$parsedBody["ced-vol"])->fetch(); 
+		if ($persona) {
+			$asistencia = $this->db->asistencia->where(array('persona_idpersona' => $persona['idpersona'], 'hora_acumulada' => 0))->fetch();
+			if ($asistencia){
 
-		$asistencia = $this->db->asistencia->where(array('persona_idpersona' => $data['idpersona'], 'hora_acumulada' => 0))->fetch();
-		if ($asistencia){
-			$dato = $asistencia;
+				$salida = time();
+				$acumuladas = $salida - $asistencia['hora_entrada'];
+				
+				$asistencia->update(
+					array("hora_acumulada" => $acumuladas,
+						  "hora_salida" => $salida
+						)
+					);
+			}else{
+				echo "No lo encuentra, tenemos que agregar la asistencia para ese dia";
+				$registrando_asis = $this->db->asistencia();
 
-			$salida = time();
-			$acumuladas = time() - $dato['hora_entrada'];
-			
-			$dato['hora_salida'] = $salida;
-			$dato['hora_acumulada'] = $acumuladas; 
-			
-			$asistencia->update(
-				array("hora_acumulada" => time() - $dato['hora_entrada'],
-					  "hora_salida" => time()
-					)
-				);
+				$datos_asis['hora_entrada'] = time();
+				$datos_asis['persona_idpersona'] = $persona['idpersona'];
 
+				$registrando_asis->insert($datos_asis);
+			}
 		}else{
-			echo "No lo encuentra, tenemos que agregar la asistencia para ese dia";
-			$registrando_asis = $this->db->asistencia();
+			echo "No lo encuentra";
+			// Se le debe decir al usuario que la cedula que ingreso no se encuentra registrada
+			// para que escriba una correcta.
+		}		
 
-			$datos_asis['hora_entrada'] = time();
-			$datos_asis['persona_idpersona'] = $data['idpersona'];
 
-			$registrando_asis->insert($datos_asis);
-		}
 	}elseif ($parsedBody["ced-tbj"]) {
-		$persona = $this->db->persona()->where('cedula',$parsedBody["ced-tbj"]); //tomamos a una persona segun cedula
-		$data = $persona->fetch();
+		$persona = $this->db->persona()->where('cedula',$parsedBody["ced-tbj"])->fetch(); //tomamos a una persona segun cedula
+		if ($persona) {
+				$asistencia = $this->db->asistencia->where(array('persona_idpersona' => $persona['idpersona'], 'hora_acumulada' => 0))->fetch();
+			if ($asistencia){
 
-		$asistencia = $this->db->asistencia->where(array('persona_idpersona' => $data['idpersona'], 'hora_acumulada' => 0))->fetch();
-		if ($asistencia){
-			$dato = $asistencia;
+				$salida = time();
+				$acumuladas = $salida - $asistencia['hora_entrada'];
+				
+				$asistencia->update(
+					array("hora_acumulada" => $acumuladas,
+						  "hora_salida" => $salida
+						)
+					);
+			}else{
+				echo "No lo encuentra, tenemos que agregar la asistencia para ese dia";
+				$registrando_asis = $this->db->asistencia();
 
-			$salida = time();
-			$acumuladas = time() - $dato['hora_entrada'];
-			
-			$dato['hora_salida'] = $salida;
-			$dato['hora_acumulada'] = $acumuladas; 
-			
-			$asistencia->update(
-				array("hora_acumulada" => time() - $dato['hora_entrada'],
-					  "hora_salida" => time()
-					)
-				);
+				$datos_asis['hora_entrada'] = time();
+				$datos_asis['persona_idpersona'] = $persona['idpersona'];
 
+				$registrando_asis->insert($datos_asis);
+			}
 		}else{
-			echo "No lo encuentra, tenemos que agregar la asistencia para ese dia";
-			$registrando_asis = $this->db->asistencia();
-
-			$datos_asis['hora_entrada'] = time();
-			$datos_asis['persona_idpersona'] = $data['idpersona'];
-
-			$registrando_asis->insert($datos_asis);
+			echo "No lo encuentra";
+			// Se le debe decir al usuario que la cedula que ingreso no se encuentra registrada
+			// para que escriba una correcta.
 		}
 	}
 
