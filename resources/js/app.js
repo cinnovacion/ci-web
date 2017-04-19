@@ -1,12 +1,11 @@
 (function($){
     $(function(){
-
+        // posicion de formulacio de asistencia
         var login_alto = $('.login').height();
-        console.log(login_alto);
         var pantalla_alto = $( window ).height();
-        console.log(pantalla_alto);
-        $('.login').css('margin-top', ((pantalla_alto - 120) / 2) - (login_alto / 2));
-        console.log((pantalla_alto / 2) - (login_alto / 2));
+        var nav = $('nav').height();
+        var margen = ((pantalla_alto / 2) - (login_alto / 2)) - nav;
+        $('.login').css('margin-top', margen);
 
     	// Funcionalidad de las pestañas
     	$('#trabajadores a').on('click', function() {
