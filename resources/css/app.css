@@ -56,7 +56,7 @@ a {
 }
 
 a:hover {
-  color: #7fc836 !important; 
+  color: #7fc836 !important;
 }
 
 a.button {
@@ -149,6 +149,7 @@ input.button:hover {
   background-color: #7fc836;
   border-color: transparent;
 }
+
 /** NavBar **/
 nav {
 	background-color: #FFFFFF;
@@ -278,13 +279,22 @@ form{
     from {transform: scale(0)}
     to {transform: scale(1)}
 }
-thead,caption{
+
+thead, caption {
   color:#448AFF;
 }
 /*Agregar Org*/
-.styled-select.slate select{
+.styled-select.slate select {
   background-color: #448AFF;
 }
 table{
   margin-bottom: 180px;
 }
+/* Larger than mobile screen */
+@media (min-width: 40.0rem) {}
+
+/* Larger than tablet screen */
+@media (min-width: 80.0rem) {}
+
+/* Larger than desktop screen */
+@media (min-width: 120.0rem) { }

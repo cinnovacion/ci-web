@@ -11,39 +11,32 @@ $app->any('/', function ($request, $response, $args) {
 // Ruta para iniciar sesion como administrador
 $app->any('/inicio/login', function ($request, $response, $args) {
     $parsedBody = $request->getParsedBody();
-    $login=$this->db->admin()->select('usuario');
-    $passw=$this->db->admin()->select('password');
-    echo ($parsedBody['user']);
-    echo ($parsedBody['pass']);
-    $contador = 0;
-    $contadord = 0;
+    $user    = $parsedBody['user'];
+    $contra  = $parsedBody['pass'];
 
-    //if($user=$this->db->login()->select([user:$parsedBody['user'],pass:$parsedBody['pass']])){}
+    //verificando si el usuario y cedula existen
+    //$prueba = $this->db->admin->where(array('usuario' => $user, 'password' =>$contra))->fetch();
 
-
-    foreach ($login as $log) {
-    	$contador++;
-		if (strcmp($log['usuario'], $parsedBody['user']) == 0) {
-			echo $log['usuario'].' se encuentra en la base de datos';
-			break;
-		}
-    }
-    foreach ($passw as $pas) {
-    	$contadord++;
-    	if ($contadord == $contador) {
-    		if (strcmp($pas['password'], $parsedBody['pass']) == 0) {
-				echo $log['password'].' la contraseña es correcta';
-			}
+    //verificando usuario y si es correcto verificar contraseña
+    $prueba = $this->db->admin->select('password')->where('usuario', $user)->fetch();
+    if ($prueba) {
+    	echo "El usuario es correcto";
+    	if (strcmp($prueba['password'], $contra) == 0) {
+    		echo "La contraseña tambien es correcta";
+    	}else{
+    		echo "La contraseña no es correcta";
     	}
+    }else{
+    	echo "El usuario es incorrecto";
     }
-    echo("Usuario: ".$parsedBody['user']."</br>"."Pass: ".$parsedBody['pass']);
-    //echo("Usuario: ".$parsedBody['user']."</br>"."Pass: ".$parsedBody['pass']);
-    die();
+
 })->setName('login');
+
 //Mostrar pagina de visitas
 $app->any('/visitas/visitas_reg', function ($request, $response, $args) {
     return $this->view->render($response, '/visitas/visitas.html');
 })->setName('visitas');
+
 //Agregar motivo visita
 /*$app->any('/voluntarios/agr_carr', function ($request, $response, $args) {
 	$parsedBody = $request->getParsedBody();
@@ -54,11 +47,13 @@ $app->any('/visitas/visitas_reg', function ($request, $response, $args) {
     var_dump($parsedBody);
     die();
 })->setName('agr_carr');*/
+
 //Mostrar lista de visitas
 $app->any('/visitas/lista', function ($request, $response, $args) {
   $lista= $this->db->visita();
   return $this->view->render($response, '/visitas/lista.html',['lis_vis'=>$lista]);
 })->setName('visitas_lista');
+
 //Mostrar mas detalles de una visita
 $app->any('/visitas/mas/{id}', function ($request, $response, $args) {
   $id = $request->getAttribute('id');
@@ -103,47 +98,69 @@ $app->any('/visitas/registro', function ($request, $response, $args) {
 	die();
 })->setName('visitas_reg');
 
-
+// Registro de asistencia -- Voluntarios y Trabajadores --
 $app->any('/inicio/asistencia_reg', function ($request, $response, $args) {
 	$parsedBody = $request->getParsedBody();
-	//$asistencia $this->db->asistencia->select();
+	date_default_timezone_set("America/Managua");
 
-	//echo time()."<br>"; 
-	//echo date("d-m-Y", time())."<br>"; die();
-	if ($parsedBody["ced-vol"]) { 
-		$persona = $this->db->persona()->where('cedula',$parsedBody["ced-vol"]); //tomamos a una persona segun cedula
-		$data = $persona->fetch();
-		//echo $data['idpersona']; die();
+	if ($parsedBody["ced-vol"]) {
+		//tomamos a una persona segun cedula
+		$persona = $this->db->persona()->where('cedula',$parsedBody["ced-vol"])->fetch(); 
+		if ($persona) {
+			$asistencia = $this->db->asistencia->where(array('persona_idpersona' => $persona['idpersona'], 'hora_acumulada' => 0))->fetch();
+			if ($asistencia){
 
-		//$asistencia = $this->db->asistencia->where('persona_idpersona = '.$data['idpersona'].' AND hora_entrada != NULL')->fetch();
-		if ($asistencia = $this->db->asistencia->where('persona_idpersona = '.$data['idpersona'].' AND hora_entrada <> NULL')->fetch()){
-			echo $asistencia;
-			echo "Encontro el ID con la FECHA de hoy, entonces vamos a anotar la hora de salida";
+				$salida = time();
+				$acumuladas = $salida - $asistencia['hora_entrada'];
+				
+				$asistencia->update(
+					array("hora_acumulada" => $acumuladas,
+						  "hora_salida" => $salida
+						)
+					);
+			}else{
+				echo "No lo encuentra, tenemos que agregar la asistencia para ese dia";
+				$registrando_asis = $this->db->asistencia();
 
+				$datos_asis['hora_entrada'] = time();
+				$datos_asis['persona_idpersona'] = $persona['idpersona'];
+
+				$registrando_asis->insert($datos_asis);
+			}
 		}else{
-			echo "No lo encuentra, tenemos que agregar la asistencia para ese dia";
-			$registrando_asis = $this->db->asistencia();
+			echo "No lo encuentra";
+			// Se le debe decir al usuario que la cedula que ingreso no se encuentra registrada
+			// para que escriba una correcta.
+		}		
 
-			$datos_asis['hora_entrada'] = time();
-			$datos_asis['persona_idpersona'] = $data['idpersona'];
-
-			$registrando_asis->insert($datos_asis);
-
-			echo "Se hizo el insert";
-	}
 
 	}elseif ($parsedBody["ced-tbj"]) {
-		$persona = $this->db->persona()->where('cedula',$parsedBody["ced-tbj"]);
-		if($data = $persona->fetch()){
-			echo json_encode(array(
-				'idpersona' => $data['idpersona'],
-				'nombre' => $data['nombre'],
-				'apellido' => $data['apellido'],
-				'cedula' => $data['cedula'],
-				'dirección' => $data['dirección'],
-				'teléfono' => $data['teléfono'],
-				'correo' => $data['correo'],
-			));
+		$persona = $this->db->persona()->where('cedula',$parsedBody["ced-tbj"])->fetch(); //tomamos a una persona segun cedula
+		if ($persona) {
+				$asistencia = $this->db->asistencia->where(array('persona_idpersona' => $persona['idpersona'], 'hora_acumulada' => 0))->fetch();
+			if ($asistencia){
+
+				$salida = time();
+				$acumuladas = $salida - $asistencia['hora_entrada'];
+				
+				$asistencia->update(
+					array("hora_acumulada" => $acumuladas,
+						  "hora_salida" => $salida
+						)
+					);
+			}else{
+				echo "No lo encuentra, tenemos que agregar la asistencia para ese dia";
+				$registrando_asis = $this->db->asistencia();
+
+				$datos_asis['hora_entrada'] = time();
+				$datos_asis['persona_idpersona'] = $persona['idpersona'];
+
+				$registrando_asis->insert($datos_asis);
+			}
+		}else{
+			echo "No lo encuentra";
+			// Se le debe decir al usuario que la cedula que ingreso no se encuentra registrada
+			// para que escriba una correcta.
 		}
 	}
 
@@ -152,13 +169,15 @@ $app->any('/inicio/asistencia_reg', function ($request, $response, $args) {
 
 $app->any('/voluntarios/voluntarios_reg', function ($request, $response, $args) {
 	$parsedBody = $response->getBody();
-    $org = $this->db->Universidad();
-    $carrera = $this->db->carrera();
-    $area = $this->db->area();
+    $org         = $this->db->Universidad();
+    $carrera     = $this->db->carrera();
+    $area        = $this->db->area();
     $actividades = $this->db->actividades();
     $item = [$org,$carrera,$area,$actividades];
     return $this->view->render($response, '/voluntarios/voluntarios.html',['template' => $item]);
+
 })->setName('voluntarios');
+
 //Agregar datos a listas deplegables
 $app->any('/voluntarios/agr_org', function ($request, $response, $args) {
 	$parsedBody = $request->getParsedBody();
