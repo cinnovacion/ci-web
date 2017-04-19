@@ -285,3 +285,6 @@ thead,caption{
 .styled-select.slate select{
   background-color: #448AFF;
 }
+table{
+  margin-bottom: 180px;
+}

@@ -60,11 +60,13 @@ $app->any('/visitas/lista', function ($request, $response, $args) {
   return $this->view->render($response, '/visitas/lista.html',['lis_vis'=>$lista]);
 })->setName('visitas_lista');
 //Mostrar mas detalles de una visita
-$app->any('/visitas/mas', function ($request, $response, $args) {
-  $parsedBody = $request->getParsedBody();
-  echo($parsedBody["cedu"]);
-  $persona = $this->db->persona()->where('cedula',$parsedBody["cedu"]);
-  return $this->view->render($response, '/visitas/mas.html',['lis_vis'=>$lista]);
+$app->any('/visitas/mas/{id}', function ($request, $response, $args) {
+  $id = $request->getAttribute('id');
+  $visita = $this->db->visita()->where('idvisita',$id);
+  $fecha['fecha'] = $visita['fecha'];
+  $fecha['llegada'] = 
+  $fecha['salida'] = 
+  return $this->view->render($response, '/visitas/mas.html',['lis_vis'=>$visita]);
 })->setName('visitas_mas');
 
 //Realizar registro de una visita
@@ -230,15 +232,15 @@ $app->any('/voluntarios/registro', function ($request, $response, $args) {
     $vol_v->insert($data1);
     die();
 })->setName('voluntarios_reg');
-
+//Mostrar lista de voluntarios registrados
 $app->any('/voluntarios/lista', function ($request, $response, $args) {
 $parsedBody = $response->getBody();
 $voluntario=$this->db->voluntario()->select('persona_idpersona');
-$lista=$this->db->persona()->where('idpersona',$voluntario);
+$lista=$this->db->persona()->where('idpersona',$voluntario)->limit(20);
 return $this->view->render($response, '/voluntarios/lista.html',['lis_vol'=>$lista]);
 })->setName('voluntarios_lista');
 
-
+//Mostrar detalles de un voluntario
 $app->any('/voluntarios/lista/mas', function ($request, $response, $args) {
 $lista= $this->db->persona();
 $parsedBody=$this->getParsedBody();

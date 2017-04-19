@@ -3,20 +3,22 @@
 {% block content %}
 <div class="row panel">
   <div class="olumn column-50">
-    <label for="nombre">Nombre:</label>
-    <label for="nombre">Apellido:</label>
-    <label for="nombre">Cedula:</label>
-    <label for="nombre">Placa:</label>
-    <label for="nombre">Organizacion:</label>
+    {%for datos in lis_vis%}
+    <label for="nombre">Nombre: {{datos.nombre}}</label>
+    <label for="nombre">Apellido: {{datos.apellido}}</label>
+    <label for="nombre">Cedula: {{datos.cedula}}</label>    
+    <label for="nombre">Placa: {{datos.placa}}</label>
+    <label for="nombre">Organizacion: {{datos.org}}</label>
+    
   </div>
 
   <div class="column column-50">
-    <label for="nombre">Tipo de visita:</label>
-    <label for="nombre">Motivo</label>
-    <label for="nombre">Fecha:</label>
-    <label for="nombre">Hora de llegada:</label>
-    <label for="nombre">Hora de salida:</label>
+    <label for="nombre">Tipo de visita: {{datos.tipo_visita}}</label>
+    <label for="nombre">Motivo: {{datos.motivo}}</label>
+    <label for="nombre">Fecha: {{datos.fecha}}</label>
+    <label for="nombre">Hora de llegada: {{datos.hora_llegada}}</label>
+    <label for="nombre">Hora de salida: {{datos.hora_salida}}</label>
   </div>
-
+  {%endfor%}
 </div>
 {% endblock %}
