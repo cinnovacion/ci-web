@@ -11,39 +11,32 @@ $app->any('/', function ($request, $response, $args) {
 // Ruta para iniciar sesion como administrador
 $app->any('/inicio/login', function ($request, $response, $args) {
     $parsedBody = $request->getParsedBody();
-    $login=$this->db->admin()->select('usuario');
-    $passw=$this->db->admin()->select('password');
-    echo ($parsedBody['user']);
-    echo ($parsedBody['pass']);
-    $contador = 0;
-    $contadord = 0;
+    $user    = $parsedBody['user'];
+    $contra  = $parsedBody['pass'];
 
-    //if($user=$this->db->login()->select([user:$parsedBody['user'],pass:$parsedBody['pass']])){}
+    //verificando si el usuario y cedula existen
+    //$prueba = $this->db->admin->where(array('usuario' => $user, 'password' =>$contra))->fetch();
 
-
-    foreach ($login as $log) {
-    	$contador++;
-		if (strcmp($log['usuario'], $parsedBody['user']) == 0) {
-			echo $log['usuario'].' se encuentra en la base de datos';
-			break;
-		}
-    }
-    foreach ($passw as $pas) {
-    	$contadord++;
-    	if ($contadord == $contador) {
-    		if (strcmp($pas['password'], $parsedBody['pass']) == 0) {
-				echo $log['password'].' la contraseña es correcta';
-			}
+    //verificando usuario y si es correcto verificar contraseña
+    $prueba = $this->db->admin->select('password')->where('usuario', $user)->fetch();
+    if ($prueba) {
+    	echo "El usuario es correcto";
+    	if (strcmp($prueba['password'], $contra) == 0) {
+    		echo "La contraseña tambien es correcta";
+    	}else{
+    		echo "La contraseña no es correcta";
     	}
+    }else{
+    	echo "El usuario es incorrecto";
     }
-    echo("Usuario: ".$parsedBody['user']."</br>"."Pass: ".$parsedBody['pass']);
-    //echo("Usuario: ".$parsedBody['user']."</br>"."Pass: ".$parsedBody['pass']);
-    die();
+
 })->setName('login');
+
 //Mostrar pagina de visitas
 $app->any('/visitas/visitas_reg', function ($request, $response, $args) {
     return $this->view->render($response, '/visitas/visitas.html');
 })->setName('visitas');
+
 //Agregar motivo visita
 /*$app->any('/voluntarios/agr_carr', function ($request, $response, $args) {
 	$parsedBody = $request->getParsedBody();
@@ -54,11 +47,13 @@ $app->any('/visitas/visitas_reg', function ($request, $response, $args) {
     var_dump($parsedBody);
     die();
 })->setName('agr_carr');*/
+
 //Mostrar lista de visitas
 $app->any('/visitas/lista', function ($request, $response, $args) {
   $lista= $this->db->visita();
   return $this->view->render($response, '/visitas/lista.html',['lis_vis'=>$lista]);
 })->setName('visitas_lista');
+
 //Mostrar mas detalles de una visita
 $app->any('/visitas/mas', function ($request, $response, $args) {
   $parsedBody = $request->getParsedBody();
@@ -172,13 +167,15 @@ $app->any('/inicio/asistencia_reg', function ($request, $response, $args) {
 
 $app->any('/voluntarios/voluntarios_reg', function ($request, $response, $args) {
 	$parsedBody = $response->getBody();
-    $org = $this->db->Universidad();
-    $carrera = $this->db->carrera();
-    $area = $this->db->area();
+    $org         = $this->db->Universidad();
+    $carrera     = $this->db->carrera();
+    $area        = $this->db->area();
     $actividades = $this->db->actividades();
     $item = [$org,$carrera,$area,$actividades];
     return $this->view->render($response, '/voluntarios/voluntarios.html',['template' => $item]);
+
 })->setName('voluntarios');
+
 //Agregar datos a listas deplegables
 $app->any('/voluntarios/agr_org', function ($request, $response, $args) {
 	$parsedBody = $request->getParsedBody();
@@ -259,7 +256,6 @@ $voluntario=$this->db->voluntario()->select('persona_idpersona');
 $lista=$this->db->persona()->where('idpersona',$voluntario);
 return $this->view->render($response, '/voluntarios/lista.html',['lis_vol'=>$lista]);
 })->setName('voluntarios_lista');
-
 
 $app->any('/voluntarios/lista/mas', function ($request, $response, $args) {
 $lista= $this->db->persona();
