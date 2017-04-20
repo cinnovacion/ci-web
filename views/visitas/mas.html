@@ -3,17 +3,16 @@
 {% block content %}
 <div class="row panel">
   <div class="olumn column-50">
-    {%for datos in template%}
+    {%for datos in visita[0]%}
     <label>Nombre: {{datos.nombre}}</label>
     <label>Apellido: {{datos.apellido}}</label>
     <label>Cedula: {{datos.cedula}}</label>    
     <label>Placa: {{datos.placa}}</label>
     <label>Organizacion: {{datos.org}}</label>
-    
-  </div>
-  <div class="column column-50">
     <label>Tipo de visita: {{datos.tipo_visita}}</label>
     <label>Motivo: {{datos.motivo}}</label>
+    {%endfor%}
+    {%for datos in visita[1]%}
     <label>Fecha: {{datos.fecha}}</label>
     <label>Hora de llegada: {{datos.hora_llegada}}</label>
     <label>Hora de salida: {{datos.hora_salida}}</label>
