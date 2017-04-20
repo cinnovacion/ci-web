@@ -1,5 +1,11 @@
 (function($){
     $(function(){
+        // posicion de formulacio de asistencia
+        var login_alto = $('.login').height();
+        var pantalla_alto = $(window).height();
+        var nav = $('nav').height();
+        var margen = ((pantalla_alto / 2) - (login_alto / 2)) - nav;
+        $('.login').css('margin-top', margen);
 
     	// Funcionalidad de las pestañas
     	$('#trabajadores a').on('click', function() {
@@ -21,18 +27,20 @@
                 $('#tab_tbj').hide();
             }
     	});
+        
         //MODAL LOGIN
         $('#btn_admin').click(function(){
             $('#modal_login').css('display', 'block');
         });
         $('.close').click(function(){
-           $('#modal_login').css('display', 'none'); 
+           $('#modal_login').css('display', 'none');
         });
         $(window).click(function(event){
             if (event.target.id == $('#modal_login').attr('id')) {
                 $('#modal_login').css('display', 'none');
             }
         });
+
         //radio-button motivos de visitas
         $('#tipo_visita_0').click(function(){
             if ($(this).is(':checked')) {
@@ -46,65 +54,72 @@
                 $('#motivo_externo').css('display', 'block');
             }
         });
+
         //Agregar Org
         $('#btn_agr_org').click(function(){
             $('#modal_agr_org').css('display', 'block');
         });
         $('.close').click(function(){
-           $('#modal_agr_org').css('display', 'none'); 
+           $('#modal_agr_org').css('display', 'none');
         });
         $(window).click(function(event){
             if (event.target.id == $('#modal_agr_org').attr('id')) {
                 $('#modal_agr_org').css('display', 'none');
             }
         });
+
         //Agregar Carrera
         $('#btn_agr_carr').click(function(){
             $('#modal_agr_carr').css('display', 'block');
         });
         $('.close').click(function(){
-           $('#modal_agr_carr').css('display', 'none'); 
+           $('#modal_agr_carr').css('display', 'none');
         });
         $(window).click(function(event){
             if (event.target.id == $('#modal_agr_carr').attr('id')) {
                 $('#modal_agr_carr').css('display', 'none');
             }
         });
+
         //Agregar Área
         $('#btn_agr_area').click(function(){
             $('#modal_agr_area').css('display', 'block');
         });
         $('.close').click(function(){
-           $('#modal_agr_area').css('display', 'none'); 
+           $('#modal_agr_area').css('display', 'none');
         });
         $(window).click(function(event){
             if (event.target.id == $('#modal_agr_area').attr('id')) {
                 $('#modal_agr_area').css('display', 'none');
             }
         });
+
         //Agregar Actividad
         $('#btn_agr_activ').click(function(){
             $('#modal_agr_activ').css('display', 'block');
         });
         $('.close').click(function(){
-           $('#modal_agr_activ').css('display', 'none'); 
+           $('#modal_agr_activ').css('display', 'none');
         });
         $(window).click(function(event){
             if (event.target.id == $('#modal_agr_activ').attr('id')) {
                 $('#modal_agr_activ').css('display', 'none');
             }
         });
+
         //Agregar Actividad
         $('#btn_agr_mot').click(function(){
             $('#modal_agr_mot').css('display', 'block');
         });
         $('.close').click(function(){
-           $('#modal_agr_mot').css('display', 'none'); 
+           $('#modal_agr_mot').css('display', 'none');
         });
         $(window).click(function(event){
             if (event.target.id == $('#modal_agr_mot').attr('id')) {
                 $('#modal_agr_mot').css('display', 'none');
             }
         });
+
+
     }); // Fin de documento listo
 })(jQuery); // fin de espacio de nombre jquery

@@ -2,31 +2,33 @@
 
 {% block content %}
 <div class="centrar panel">
-	<table>
 <div class="panel">
 	<table>
 	<caption><h3><strong>LISTA DE VOLUNTARIOS</strong></h3></caption>
 	  <thead>
-	    <tr>
-	      <th>Nombre</th>
-	      <th>Apellido</th>
-	      <th>Cédula</th>
-	      <th>Telefono</th>
-	      <th>Detalles</th>
-	    </tr>
-	    {%for datos in lis_vol%}
-	    <tr>
-	    	<th>{{datos.nombre}}</th>
-	    	<th>{{datos.apellido}}</th>
-		    <form action="/voluntarios/lista/mas" method="post" name="detalles">
-		    	<th name="cedula">{{datos.cedula}}</th>
-		    	<th name="telefono">{{datos.telefono}}</th>
-		    	<th><input class="button" type="button" name="mas" value="Más"></th>
-		    </form>
-	    </tr>
-	    {%endfor%}
-	  </thead>
+			<tr>
+			  <th>Nombre</th>
+			  <th>Apellido</th>
+			  <th>Cédula</th>
+			  <th>Telefono</th>
+			  <th>Detalles</th>
+			</tr>
+	   </thead>
+	   <tbody>
+		    {%for datos in lis_vol%}
+		    <tr>
+		    	<th>{{datos.nombre}}</th>
+		    	<th>{{datos.apellido}}</th>
+
+			    	<th name="cedula">{{datos.cedula}}</th>
+			    	<th name="telefono">{{datos.telefono}}</th>
+			    	<th><a href="/voluntarios/detalles/{{datos.idpersona}}">Mas</a></th>
+
+		    </tr>
+		    {%endfor%}
+	    </tbody>
 	 </table>
- </div>
-	      
-{% endblock %} 
+</div>
+</div>
+
+{% endblock %}
