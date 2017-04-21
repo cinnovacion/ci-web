@@ -27,7 +27,7 @@
                 $('#tab_tbj').hide();
             }
     	});
-        
+
         //MODAL LOGIN
         $('#btn_admin').click(function(){
             $('#modal_login').css('display', 'block');
@@ -120,6 +120,33 @@
             }
         });
 
+        // ALERT DISPLAY
+        $('.closebtn').click(function(){
+            $(this).parent().css('display', 'none');
+        });
+
+        $('#submit').click(function(event){
+            event.preventDefault();
+            $.ajax({
+                url: "/ajax/cedula",
+                data: { cedula : $('#cedula').val() },
+                type: 'POST',
+                success: function(result){
+                    if(result != ' ') {
+                        var html = $('.container').html();
+                        var persona = result;
+                        var validar = '<div class="column column-50 column-offset-25 alto"><div class="centrar"><h3 style="margin-top:20px; color:white;">Tu eres '+persona+'?</h3><button style="background-color:#7fc836;">Si</button><button style="background-color:#7fc836;">No</button></div></div></div>';
+                        $('body').css('background-color', '#448AFF');
+
+                        $('.container').html(validar);
+                    }
+                    else {
+                        $('#cedula').css('border-color', 'red');
+                        $('.alert').css('display', 'block');
+                    }
+                }
+            });
+        });
 
     }); // Fin de documento listo
 })(jQuery); // fin de espacio de nombre jquery

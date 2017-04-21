@@ -266,5 +266,12 @@ $app->group('/voluntarios', function () {
 });
 
 $app->group('/ajax', function () {
-
+    // Verificar si la cedula le pertenece a una persona
+    $this->any('/cedula', function ($request, $response, $args) {
+        $parsedBody = $request->getParsedBody();
+         //tomamos a una persona segun cedula
+        $persona = $this->db->persona()->where('cedula', $parsedBody['cedula'])->fetch();
+        echo $persona['nombre'] . ' ' . $persona['apellido'];
+        return TRUE;
+    });
 });
