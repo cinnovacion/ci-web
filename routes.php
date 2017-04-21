@@ -57,18 +57,14 @@ $app->any('/visitas/lista', function ($request, $response, $args) {
 //Mostrar mas detalles de una visita
 $app->any('/visitas/mas/{id}', function ($request, $response, $args) {
   $id = $request->getAttribute('id');
-<<<<<<< HEAD
   $visita = $this->db->visita()->where('idvisita',$id);
   $fecha['fecha'] = $visita['fecha'];
-  return $this->view->render($response, '/visitas/mas.html',['lis_vis'=>$visita]);
-=======
   $visita = $this->db->visita()->where('idvisita',$id)->fetch();
   $fecha['fecha'] = date("d-m-Y",$visita['fecha']);
   $fecha['llegada'] = date("H:i:s",$visita['hora_llegada']);
   $fecha['salida'] = date("H:i:s",$visita['hora_salida']);
   $item = [$visita,$fecha];
-  return $this->view->render($response, '/visitas/mas.html',['template' => $visita]);
->>>>>>> d0ea37df06eaf2f75f50e913577caaf5568aa81c
+  return $this->view->render($response, '/visitas/mas.html',['template' => $item]);
 })->setName('visitas_mas');
 
 //Realizar registro de una visita
