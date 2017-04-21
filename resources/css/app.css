@@ -51,16 +51,23 @@ body {
 }
 
 a {
-	color: #448AFF !important;
+	background-color: : #448AFF !important;
 	font-size: 1.3rem;
 }
 
 a:hover {
-  color: #7fc836 !important;
+  background-color: : #7fc836 !important;
 }
 
 a.button {
 	font-size: 1.3rem;
+}
+
+a.layout_items{
+  color : #448AFF !important;
+}
+a.layout_items : hover{
+  color: #7fc836 !important;
 }
 
 button {
