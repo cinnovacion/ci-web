@@ -2,7 +2,6 @@
 
 {% block content %}
 <div class="centrar panel">
-<<<<<<< HEAD
 	<table>
 	  <thead>
         <tr>
@@ -24,33 +23,4 @@
      </thead>
     </table>
  </div>
-{% endblock %}
-=======
-  <div class="panel">
-    	<table>
-        <caption><h3><strong>LISTA DE VISITAS</strong></h3></caption>
-    	  <thead>
-            <tr>
-              <th>Nombre</th>
-              <th>Apellido</th>
-              <th>Cédula</th>
-              <th>Detalles</th>
-           </tr>
-        </thead>
-        <tbody>
-           {%for datos in lis_vis%}
-           <tr>
-              <th>{{datos.nombre}}</th>
-              <th>{{datos.apellido}}</th>
-              <th>{{datos.cedula}}</th>
-              <th>
-                 <a href="/visitas/mas/{{datos.idvisita}}">Más</a>
-              </th>
-            </tr>
-           {%endfor%}
-         </tbody>
-        </table>
-  </div>
-</div>
-{% endblock %}
->>>>>>> c913208155235489675d729ae7a4152fb5438a0f
+ {% endblock %}
