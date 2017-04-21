@@ -15,7 +15,7 @@ $ su -c "dnf -y install php php-pdo php-pdo_mysql mariadb-server"
 > Ubuntu / Debian
 
 ``` bashscript
-$ sudo apt-get install php mariadb-server
+$ sudo apt-get install php php7.0-mysql mariadb-server
 ```
 
 > Mageia
@@ -69,10 +69,32 @@ Descargar las dependencias del framework.
 $ cd civ
 $ composer install
 ```
+## Configurar la Base de Datos
+
+1. Iniciar el servidor de bases de datos.
+
+``` bashscript
+$ systemctl start mariadb
+```
+
+2. Configuraciones generales.
+
+``` bashscript
+$ mysql_secure_installation
+```
+
+3. Crear y restaurar la base de datos.
+
+``` bashscript
+$ mysql -u root -p
+> CREATE DATABASE asscic;
+> QUIT
+$ mysql -u root -p asscic < db/asscic_db.sql
+```
 
 ## Iniciar el servidor
 
-Inciar el servidor local.
+Inciar el servidor web local.
 
 > Fedora
 
