@@ -2,24 +2,23 @@
 
 {% block content %}
 <div class="row panel">
-
-  <div class="olumn column-50">
+    <div class="column column-50">
     {%for datos in lis_vol[0]%}
     <label for="nombre">Nombre: {{datos.nombre}}</label>
-    <label for="nombre">Apellido: {{datos.apellido}}</label>
-    <label for="nombre">Cedula: {{datos.cedula}}</label>
-    <label for="nombre">Telefono: {{datos.telefono}}</label>
-    <label for="nombre">Correo: {{datos.correo}}</label>
-    <label for="nombre">Direccion: {{datos.direccion}}</label>
+    <label for="apellido">Apellido: {{datos.apellido}}</label>
+    <label for="cedula">Cedula: {{datos.cedula}}</label>
+    <label for="telefono">Telefono: {{datos.telefono}}</label>
+    <label for="correo">Correo: {{datos.correo}}</label>
+    <label for="direccion">Direccion: {{datos.direccion}}</label>
     {%endfor%}
+    <a class="button">Borrar</a>
   </div>
 
   <div class="column column-50">
     {%for datos in lis_vol[1]%}
-    <label for="nombre">Carnet: {{datos.carnet}}</label>
-    <label for="nombre">Fecha de Ingreso: {{datos.fecha_ingreso}}</label>
+    <label for="carnet">Carnet: {{datos.carnet}}</label>
+    <label for="F_I">Fecha de Ingreso: {{datos.fecha_ingreso}}</label>
     {%endfor%}
   </div>
-
 </div>
 {% endblock %}

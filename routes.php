@@ -1,4 +1,4 @@
-<?php
+  <?php
 // Archivo de rutas de la aplicacion y controlador con api's
 
 use \Psr\Http\Message\ServerRequestInterface as Request;
@@ -271,6 +271,12 @@ $app->any('/voluntarios/detalles/{id}', function ($request, $response, $args) {
   $id = $request->getAttribute('id');
   $persona = $this->db->persona()->where('idpersona',$id);
   $volun = $this->db->voluntario()->where('persona_idpersona',$id);
+  foreach ($volun as $value) {
+      $get_date = $value['fecha_ingreso'];
+      $date = date('d-m-Y', $get_date);
+      $volun['fecha_ingreso'] = $date;
+  }
   $items = [$persona,$volun];
+ // var_dump ($items[1]['fecha_ingreso']); Die();
   return $this->view->render($response, '/voluntarios/detalles.html',['lis_vol'=>$items]);
 })->setName('voluntarios_detalles');

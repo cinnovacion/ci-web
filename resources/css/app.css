@@ -63,10 +63,10 @@ a.button {
 	font-size: 1.3rem;
 }
 
-a.layout_items{
+.layout_items{
   color : #448AFF !important;
 }
-a.layout_items : hover{
+.layout_items:hover{
   color: #7fc836 !important;
 }
 
