@@ -153,8 +153,22 @@ input.button:hover {
 
 .button:focus,
 .button:hover {
-    background-color: #7fc836;
+    background-color: #7FC836;
     border-color: transparent;
+}
+
+.inverso {
+	background-color: #7FC836;
+	border-radius: 0;
+	border-color: transparent;
+	font-size: 1.3rem;
+}
+
+.inverso:focus,
+.inverso:hover {
+	background-color: #FFF;
+    color: #448AFF;
+	border-color: transparent;
 }
 
 /** NavBar **/

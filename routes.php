@@ -161,6 +161,10 @@ $app->group('/visitas', function () {
         $visita()->insert($data);
         die();
     })->setName('visitas_reg');
+
+    $this->any('/conf', function ($request, $response, $args) {
+        return $this->view->render($response, '/visitas/conf.html');
+    })->setName('visitas');
 });
 
 $app->group('/voluntarios', function () {
@@ -270,8 +274,22 @@ $app->group('/ajax', function () {
     $this->any('/cedula', function ($request, $response, $args) {
         $parsedBody = $request->getParsedBody();
          //tomamos a una persona segun cedula
-        $persona = $this->db->persona()->where('cedula', $parsedBody['cedula'])->fetch();
-        echo $persona['nombre'] . ' ' . $persona['apellido'];
+        if($persona = $this->db->persona()->where('cedula', $parsedBody['cedula'])->fetch())
+            echo '<div class="row">
+                <div class="column column-50 column-offset-25 alto">
+                    <div class="centrar">
+                        <div id="vald">
+                            <h3 style="margin-top:5em; color:white;">Tu eres ' . $persona['nombre'] . ' ' . $persona['apellido'] . '?</h3>
+                            <form method="POST" action="/inicio/asistencia_reg">
+                                <button class="inverso" type="submit">Si</button>
+                                <a class="button inverso" href="/" style="margin-left:50px;">No</a>
+                                <input type="Hidden" name="idpersona" value="' . $persona['idpersona'] . '">
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>';
+        else echo ' ';
         return TRUE;
     });
 });

@@ -1,0 +1,18 @@
+{% extends "layouts/layout.html" %}
+
+{% block content %}
+<div class="row">
+	<div class="column column-50 column-offset-25 alto">
+        <div class="centrar">
+            <div id="vald">
+                <h3 style="margin-top:20px; color:white;">Tu eres Samuel Gutierrez?</h3>
+                <form method="POST" action="/inicio/asistencia_reg">
+                    <button class="inverso" type="submit">Si</button>
+                    <a class="button inverso" href="/" style="margin-left:50px;">No</a>
+                    <input type="Hidden" name="persona_id">
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
