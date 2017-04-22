@@ -1,11 +1,17 @@
 (function($){
     $(function(){
+
+        function centrar(elemento) {
+            var el_alto = $(elemento).height();
+            var pantalla_alto = $(window).height();
+            var nav = $('nav').height();
+            var margen = ((pantalla_alto / 2) - (el_alto / 2)) - nav;
+            $(elemento).css('margin-top', margen);
+        }
+
         // posicion de formulacio de asistencia
-        var login_alto = $('.login').height();
-        var pantalla_alto = $(window).height();
-        var nav = $('nav').height();
-        var margen = ((pantalla_alto / 2) - (login_alto / 2)) - nav;
-        $('.login').css('margin-top', margen);
+        centrar('.login');
+        centrar('#vald');
 
     	// Funcionalidad de las pestañas
     	$('#trabajadores a').on('click', function() {
@@ -27,7 +33,7 @@
                 $('#tab_tbj').hide();
             }
     	});
-        
+
         //MODAL LOGIN
         $('#btn_admin').click(function(){
             $('#modal_login').css('display', 'block');
@@ -120,6 +126,30 @@
             }
         });
 
+        // ALERT DISPLAY
+        $('.closebtn').click(function(){
+            $(this).parent().css('display', 'none');
+        });
+
+        $('#submit').click(function(event){
+            event.preventDefault();
+            $.ajax({
+                url: "/ajax/cedula",
+                data: { cedula : $('#cedula').val() },
+                type: 'POST',
+                dataType: 'html',
+                success: function(html){
+                    if(html != ' ') {
+                        $('body').css('background-color', '#448AFF');
+                        $('.container').html(html);
+                    }
+                    else {
+                        $('#cedula').css('border-color', 'red');
+                        $('.alert').css('display', 'block');
+                    }
+                }
+            });
+        });
 
     }); // Fin de documento listo
 })(jQuery); // fin de espacio de nombre jquery

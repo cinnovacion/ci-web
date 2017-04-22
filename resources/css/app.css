@@ -1,48 +1,48 @@
 /** Tipografia **/
 @font-face {
-  font-family: "Roboto";
-  src: local(Roboto Thin), url("../fonts/roboto/Roboto-Thin.eot");
-  src: url("../fonts/Roboto-Thin.eot?#iefix") format("embedded-opentype"), url("../fonts/Roboto-Thin.woff2") format("woff2"), url("../fonts/roboto/Roboto-Thin.woff") format("woff"), url("../fonts/roboto/Roboto-Thin.ttf") format("truetype");
-  font-weight: 200;
+    font-family: "Roboto";
+    src: local(Roboto Thin), url("../fonts/roboto/Roboto-Thin.eot");
+    src: url("../fonts/Roboto-Thin.eot?#iefix") format("embedded-opentype"), url("../fonts/Roboto-Thin.woff2") format("woff2"), url("../fonts/roboto/Roboto-Thin.woff") format("woff"), url("../fonts/roboto/Roboto-Thin.ttf") format("truetype");
+    font-weight: 200;
 }
 
 @font-face {
-  font-family: "Roboto";
-  src: local(Roboto Light), url("../fonts/roboto/Roboto-Light.eot");
-  src: url("../fonts/Roboto-Light.eot?#iefix") format("embedded-opentype"), url("../fonts/Roboto-Light.woff2") format("woff2"), url("../fonts/roboto/Roboto-Light.woff") format("woff"), url("../fonts/roboto/Roboto-Light.ttf") format("truetype");
-  font-weight: 300;
+    font-family: "Roboto";
+    src: local(Roboto Light), url("../fonts/roboto/Roboto-Light.eot");
+    src: url("../fonts/Roboto-Light.eot?#iefix") format("embedded-opentype"), url("../fonts/Roboto-Light.woff2") format("woff2"), url("../fonts/roboto/Roboto-Light.woff") format("woff"), url("../fonts/roboto/Roboto-Light.ttf") format("truetype");
+    font-weight: 300;
 }
 
 @font-face {
-  font-family: "Roboto";
-  src: local(Roboto Regular), url("../fonts/roboto/Roboto-Regular.eot");
-  src: url("../fonts/Roboto-Regular.eot?#iefix") format("embedded-opentype"), url("../fonts/Roboto-Regular.woff2") format("woff2"), url("../fonts/roboto/Roboto-Regular.woff") format("woff"), url("../fonts/roboto/Roboto-Regular.ttf") format("truetype");
-  font-weight: 400;
+    font-family: "Roboto";
+    src: local(Roboto Regular), url("../fonts/roboto/Roboto-Regular.eot");
+    src: url("../fonts/Roboto-Regular.eot?#iefix") format("embedded-opentype"), url("../fonts/Roboto-Regular.woff2") format("woff2"), url("../fonts/roboto/Roboto-Regular.woff") format("woff"), url("../fonts/roboto/Roboto-Regular.ttf") format("truetype");
+    font-weight: 400;
 }
 
 @font-face {
-  font-family: "Roboto";
-  src: url("../fonts/Roboto-Medium.eot");
-  src: url("../fonts/Roboto-Medium.eot?#iefix") format("embedded-opentype"), url("../fonts/Roboto-Medium.woff2") format("woff2"), url("../fonts/roboto/Roboto-Medium.woff") format("woff"), url("../fonts/roboto/Roboto-Medium.ttf") format("truetype");
-  font-weight: 500;
+    font-family: "Roboto";
+    src: url("../fonts/Roboto-Medium.eot");
+    src: url("../fonts/Roboto-Medium.eot?#iefix") format("embedded-opentype"), url("../fonts/Roboto-Medium.woff2") format("woff2"), url("../fonts/roboto/Roboto-Medium.woff") format("woff"), url("../fonts/roboto/Roboto-Medium.ttf") format("truetype");
+    font-weight: 500;
 }
 
 @font-face {
-  font-family: "Roboto";
-  src: url("../fonts/Roboto-Bold.eot");
-  src: url("../fonts/Roboto-Bold.eot?#iefix") format("embedded-opentype"), url("../fonts/Roboto-Bold.woff2") format("woff2"), url("../fonts/roboto/Roboto-Bold.woff") format("woff"), url("../fonts/roboto/Roboto-Bold.ttf") format("truetype");
-  font-weight: 700;
+    font-family: "Roboto";
+    src: url("../fonts/Roboto-Bold.eot");
+    src: url("../fonts/Roboto-Bold.eot?#iefix") format("embedded-opentype"), url("../fonts/Roboto-Bold.woff2") format("woff2"), url("../fonts/roboto/Roboto-Bold.woff") format("woff"), url("../fonts/roboto/Roboto-Bold.ttf") format("truetype");
+    font-weight: 700;
 }
 
 /** Estilos globales **/
 html {
-  line-height: 1.5;
-  font-family: "Roboto", sans-serif;
-  font-weight: normal;
-  color: rgba(0, 0, 0, 0.87);
-  position: relative;
-  min-height: 100%;
-  width: 100%;
+    line-height: 1.5;
+    font-family: "Roboto", sans-serif;
+    font-weight: normal;
+    color: rgba(0, 0, 0, 0.87);
+    position: relative;
+    min-height: 100%;
+      width: 100%;
 }
 
 body {
@@ -56,18 +56,26 @@ a {
 }
 
 a:hover {
-  background-color: : #7fc836 !important;
+    background-color: : #7fc836 !important;
 }
 
 a.button {
 	font-size: 1.3rem;
 }
 
+<<<<<<< HEAD
 .layout_items{
   color : #448AFF !important;
 }
 .layout_items:hover{
   color: #7fc836 !important;
+=======
+a.layout_items{
+    color : #448AFF !important;
+}
+a.layout_items : hover{
+    color: #7fc836 !important;
+>>>>>>> 3954cffe5394873389dafc826afb2e06f17b4b12
 }
 
 button {
@@ -79,7 +87,7 @@ button {
 
 button:focus,
 button:hover {
-	background-color: #1FD111;
+	background-color: #7FC836;
 	border-color: transparent;
 }
 
@@ -126,7 +134,7 @@ select:focus {
 
 .panel {
 	margin: 50px;
-  background-color: #FFFFFF;
+    background-color: #FFFFFF;
 }
 
 .row {
@@ -146,15 +154,29 @@ input.button:hover {
 }
 
 .button {
-  background-color: #448AFF;
-  border-radius: 0;
-  border-color: transparent;
+    background-color: #448AFF;
+    border-radius: 0;
+    border-color: transparent;
 }
 
 .button:focus,
 .button:hover {
-  background-color: #7fc836;
-  border-color: transparent;
+    background-color: #7FC836;
+    border-color: transparent;
+}
+
+.inverso {
+	background-color: #7FC836;
+	border-radius: 0;
+	border-color: transparent;
+	font-size: 1.3rem;
+}
+
+.inverso:focus,
+.inverso:hover {
+	background-color: #FFF;
+    color: #448AFF;
+	border-color: transparent;
 }
 
 /** NavBar **/
@@ -180,7 +202,7 @@ nav button#btn_admin:hover {
 
 /** Footer **/
 footer {
-	  color: #448AFF;
+	color: #448AFF;
    	position: absolute;
    	bottom: 0;
    	width: 100%;
@@ -277,6 +299,47 @@ form{
     animation: animatezoom 0.6s
 }
 
+/* The alert message box */
+.alert {
+    padding: 20px;
+    background-color: #f44336; /* Red */
+    color: white;
+    margin-bottom: 15px;
+}
+
+/* The close button */
+.closebtn {
+    margin-left: 15px;
+    color: white;
+    font-weight: bold;
+    float: right;
+    font-size: 22px;
+    line-height: 20px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+/* When moving the mouse over the close button */
+.closebtn:hover {
+    color: black;
+}
+
+/* Typies of alerts */
+.success {background-color: #4CAF50;} /* Green */
+.success:hover {background-color: #46a049;}
+
+.info {background-color: #2196F3;} /* Blue */
+.info:hover {background: #0b7dda;}
+
+.warning {background-color: #ff9800;} /* Orange */
+.warning:hover {background: #e68a00;}
+
+.danger {background-color: #f44336;} /* Red */
+.danger:hover {background: #da190b;}
+
+.default {background-color: #e7e7e7; color: black;} /* Gray */
+.default:hover {background: #ddd;}
+
 @-webkit-keyframes animatezoom {
     from {-webkit-transform: scale(0)}
     to {-webkit-transform: scale(1)}
@@ -288,14 +351,14 @@ form{
 }
 
 thead, caption {
-  color:#448AFF;
+    color:#448AFF;
 }
 /*Agregar Org*/
 .styled-select.slate select {
-  background-color: #448AFF;
+    background-color: #448AFF;
 }
 table{
-  margin-bottom: 180px;
+    margin-bottom: 180px;
 }
 /* Larger than mobile screen */
 @media (min-width: 40.0rem) {}

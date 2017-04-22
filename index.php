@@ -34,7 +34,7 @@ $config = [
         'db' => [
         	'host' 	 => '127.0.0.1',
         	'user' 	 => 'root',
-        	'pass' 	 => '',
+        	'pass' 	 => 'root',
         	'dbname' => 'asscic',
         ],
         /**
@@ -62,7 +62,6 @@ $container['logger'] = function($container) {
     $log->pushHandler($file_handler);
     return $log;
 };
-
 
 // Inicializando conexion a la base de datos con driver PDO
 $container['db'] = function ($container) {
