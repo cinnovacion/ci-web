@@ -17,7 +17,8 @@
   <div class="column column-50">
     {%for datos in lis_vol[1]%}
     <label for="carnet">Carnet: {{datos.carnet}}</label>
-    <label for="F_I">Fecha de Ingreso: {{datos.fecha_ingreso}}</label>
+    <label for="F_I">Fecha de Ingreso: {{datos.fecha_ingreso|date("d/m/Y")}}</label>
+    <label for="F_I">Ultima Fecha: {{datos.fecha_ultima|date("d/m/Y")}}</label>
     {%endfor%}
   </div>
 </div>

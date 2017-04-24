@@ -63,19 +63,12 @@ a.button {
 	font-size: 1.3rem;
 }
 
-<<<<<<< HEAD
 .layout_items{
   color : #448AFF !important;
 }
 .layout_items:hover{
   color: #7fc836 !important;
-=======
-a.layout_items{
-    color : #448AFF !important;
-}
-a.layout_items : hover{
-    color: #7fc836 !important;
->>>>>>> 3954cffe5394873389dafc826afb2e06f17b4b12
+
 }
 
 button {
