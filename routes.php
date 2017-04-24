@@ -57,16 +57,29 @@ $app->any('/visitas/lista', function ($request, $response, $args) {
 //Mostrar mas detalles de una visita
 $app->any('/visitas/mas/{id}', function ($request, $response, $args) {
   $id = $request->getAttribute('id');
-  $visita = $this->db->visita()->where('idvisita',$id)->fetch();
-  
-  $vis_1 = $visita['fecha'];
-  $fecha['fecha'] = date("d-m-Y",$vis_1);
-  $vis_2 = $visita['hora_llegada'];
-  $fecha['llegada'] = date("H:i:s",$vis_2);
-  $vis_3 = $visita['hora_salida'];
-  $fecha['salida'] = date("H:i:s",$vis_3);
-  $item = [$visita,$fecha];
-  return $this->view->render($response, '/visitas/mas.html',['visita' => $item]);
+  $vis = $this->db->visita()->where('idvisita',$id);
+  $visita = $vis->fetch();
+  //echo json_encode($vis);
+  /*$vis['nombre']=$visita['nombre'];
+  $vis['apellido']=$visita['apellido'];
+  $vis['cedula']=$visita['cedula'];
+  $vis['placa']=$visita['placa'];
+  $vis['org']=$visita['org'];
+  $vis['tipo_visita']=$visita['tipo_visita'];
+  $vis['motivo']=$visita['motivo'];
+  $vis['fecha']=$visita['fecha'];
+  $vis['hora_llegada']=$visita['hora_llegada'];
+  $vis['hora_salida']=$visita['hora_salida'];*/
+  $visita = $this->db->visita()->where('idvisita',$id)->limit(1)->fetch();
+  //echo json_encode($visita);
+  $hola1= $visita['fecha'];
+  $fecha['fecha'] = date('d-m-Y',$hola1);
+  $hola2= $visita['hora_llegada'];
+  $fecha['hora_llegada'] = date('H:i:s',$hola2);
+  $hola3= $visita['hora_salida'];
+  $fecha['hora_salida'] = date('H:i:s',$hola3);
+  $template=[$vis,$fecha];
+  return $this->view->render($response, '/visitas/mas.html',['visita' => $template]);
 })->setName('visitas_mas');
 
 //Realizar registro de una visita
@@ -111,14 +124,14 @@ $app->any('/inicio/asistencia_reg', function ($request, $response, $args) {
 
 	if ($parsedBody["ced-vol"]) {
 		//tomamos a una persona segun cedula
-		$persona = $this->db->persona()->where('cedula',$parsedBody["ced-vol"])->fetch(); 
+		$persona = $this->db->persona()->where('cedula',$parsedBody["ced-vol"])->fetch();
 		if ($persona) {
 			$asistencia = $this->db->asistencia->where(array('persona_idpersona' => $persona['idpersona'], 'hora_acumulada' => 0))->fetch();
 			if ($asistencia){
 
 				$salida = time();
 				$acumuladas = $salida - $asistencia['hora_entrada'];
-				
+
 				$asistencia->update(
 					array("hora_acumulada" => $acumuladas,
 						  "hora_salida" => $salida
@@ -137,7 +150,7 @@ $app->any('/inicio/asistencia_reg', function ($request, $response, $args) {
 			echo "No lo encuentra";
 			// Se le debe decir al usuario que la cedula que ingreso no se encuentra registrada
 			// para que escriba una correcta.
-		}		
+		}
 
 
 	}elseif ($parsedBody["ced-tbj"]) {
@@ -148,7 +161,7 @@ $app->any('/inicio/asistencia_reg', function ($request, $response, $args) {
 
 				$salida = time();
 				$acumuladas = $salida - $asistencia['hora_entrada'];
-				
+
 				$asistencia->update(
 					array("hora_acumulada" => $acumuladas,
 						  "hora_salida" => $salida
@@ -227,7 +240,7 @@ $app->any('/voluntarios/agr_activ', function ($request, $response, $args) {
     die();
 })->setName('agr_activ');
 
-$app->any('/voluntarios/registro', function ($request, $response, $args) {	 
+$app->any('/voluntarios/registro', function ($request, $response, $args) {
 	$parsedBody = $request->getParsedBody();
 
 	$vol_p=$this->db->persona();
@@ -257,23 +270,18 @@ $app->any('/voluntarios/registro', function ($request, $response, $args) {
     $vol_v->insert($data1);
     die();
 })->setName('voluntarios_reg');
-//Mostrar lista de voluntarios registrados
+  //Mostrar lista de voluntarios registrados
 $app->any('/voluntarios/lista', function ($request, $response, $args) {
-$parsedBody = $response->getBody();
-$voluntario=$this->db->voluntario()->select('persona_idpersona');
-$lista=$this->db->persona()->where('idpersona',$voluntario)->limit(20);
-return $this->view->render($response, '/voluntarios/lista.html',['lis_vol'=>$lista]);
+  $voluntario=$this->db->voluntario()->select('persona_idpersona');
+  $lista=$this->db->persona()->where('idpersona',$voluntario)->limit(20);
+  return $this->view->render($response, '/voluntarios/lista.html',['lis_vol'=>$lista]);
 })->setName('voluntarios_lista');
 
 //Mostrar detalles de un voluntario
-$app->any('/voluntarios/lista/mas', function ($request, $response, $args) {
-$lista= $this->db->persona();
-$parsedBody=$this->getParsedBody();
-var_dump($parsedBody);
-})->setName('voluntarios_lista');
-
-
-$app->any('/voluntarios/lista/detalles', function ($request, $response, $args) {
-$lista= $this->db->persona();
-return $this->view->render($response, '/voluntarios/mas.html',['lis_vol'=>$lista]);
+$app->any('/voluntarios/detalles/{id}', function ($request, $response, $args) {
+  $id = $request->getAttribute('id');
+  $persona = $this->db->persona()->where('idpersona',$id);
+  $volun = $this->db->voluntario()->where('persona_idpersona',$id);
+  $items = [$persona,$volun];
+  return $this->view->render($response, '/voluntarios/detalles.html',['lis_vol'=>$items]);
 })->setName('voluntarios_detalles');

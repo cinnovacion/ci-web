@@ -19,11 +19,11 @@
 		    <tr>
 		    	<th>{{datos.nombre}}</th>
 		    	<th>{{datos.apellido}}</th>
-			    <form action="/voluntarios/lista/mas" method="post" name="detalles">
+
 			    	<th name="cedula">{{datos.cedula}}</th>
 			    	<th name="telefono">{{datos.telefono}}</th>
-			    	<th><input class="button" type="button" name="mas" value="Más"></th>
-			    </form>
+			    	<th><a href="/voluntarios/detalles/{{datos.idpersona}}">Mas</a></th>
+
 		    </tr>
 		    {%endfor%}
 	    </tbody>
@@ -31,4 +31,4 @@
 </div>
 </div>
 
-{% endblock %} 
+{% endblock %}
