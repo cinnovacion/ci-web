@@ -97,7 +97,7 @@ $app->group('/inicio', function () {
         die();
     })->setName('asistencia');
 });
-
+//Mostrar pagina de visitas
 $app->group('/visitas', function () {
     //
     $this->any('/visitas_reg', function ($request, $response, $args) {
@@ -113,18 +113,8 @@ $app->group('/visitas', function () {
     //Mostrar mas detalles de una visita
     $this->any('/mas/{id}', function ($request, $response, $args) {
         $id = $request->getAttribute('id');
-
         $visita = $this->db->visita()->where('idvisita',$id);
-        $fecha['fecha'] = $visita['fecha'];
-        return $this->view->render($response, '/visitas/mas.html',['lis_vis'=>$visita]);
-
-        $visita = $this->db->visita()->where('idvisita',$id)->fetch();
-        $fecha['fecha'] = date("d-m-Y",$visita['fecha']);
-        $fecha['llegada'] = date("H:i:s",$visita['hora_llegada']);
-        $fecha['salida'] = date("H:i:s",$visita['hora_salida']);
-        $item = [$visita,$fecha];
-        return $this->view->render($response, '/visitas/mas.html',['template' => $visita]);
-
+        return $this->view->render($response, '/visitas/mas.html',['visita' => $visita]);
     })->setName('visitas_mas');
 
     //Realizar registro de una visita
@@ -166,7 +156,7 @@ $app->group('/visitas', function () {
         return $this->view->render($response, '/visitas/conf.html');
     })->setName('visitas');
 });
-
+//Grupo de rutas de Voluntarios
 $app->group('/voluntarios', function () {
     $this->any('/voluntarios_reg', function ($request, $response, $args) {
         $parsedBody  = $response->getBody();
@@ -184,8 +174,7 @@ $app->group('/voluntarios', function () {
         $org = $this->db->Universidad();
         $org_i['nombre'] = $parsedBody['nombre_org'];
         $org -> insert($org_i);
-        var_dump($org_i);
-        var_dump($parsedBody);
+        return $response->withRedirect('/voluntarios/voluntarios_reg');
     })->setName('agr_org');
 
     $this->any('/agr_carr', function ($request, $response, $args) {
@@ -193,8 +182,7 @@ $app->group('/voluntarios', function () {
         $carr = $this->db->carrera();
         $carr_i['nombre'] = $parsedBody['nombre_carr'];
         $carr -> insert($carr_i);
-        var_dump($carr_i);
-        var_dump($parsedBody);
+        return $response->withRedirect('/voluntarios/voluntarios_reg');
         die();
     })->setName('agr_carr');
 
@@ -204,8 +192,7 @@ $app->group('/voluntarios', function () {
         $area_i['nombre'] = $parsedBody['nombre_area'];
         $area_i['descripcion'] = $parsedBody['desc_area'];
         $area -> insert($area_i);
-        var_dump($area_i);
-        var_dump($parsedBody);
+       return $response->withRedirect('/voluntarios/voluntarios_reg');
         die();
     })->setName('agr_area');
 
@@ -216,8 +203,7 @@ $app->group('/voluntarios', function () {
         $activ_i['descripcion'] = $parsedBody['desc_activ'];
         $activ_i['area_idarea'] = $parsedBody['activ_area'];
         $activ -> insert($activ_i);
-        var_dump($activ_i);
-        var_dump($parsedBody);
+        return $response->withRedirect('/voluntarios/voluntarios_reg');
         die();
     })->setName('agr_activ');
 
