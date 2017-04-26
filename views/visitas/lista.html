@@ -1,8 +1,14 @@
-{% extends "layouts/layout.html" %}
+{% extends "layouts/layout_admin.html" %}
 
 {% block content %}
+<!--<div class="centrar panel">
+	<div class="panel">
+		<br>
+		<a href="/voluntarios/voluntarios_reg" class="button">Registrar Nuevo</a>
+	</div>
+</div>-->
 <div class="centrar panel">
-  <div class="panel">
+	<div class="panel">
     	<table>
         <caption><h3><strong>LISTA DE VISITAS</strong></h3></caption>
     	  <thead>
@@ -20,7 +26,7 @@
               <th>{{datos.apellido}}</th>
               <th>{{datos.cedula}}</th>
               <th>
-                 <a href="/visitas/mas/{{datos.idvisita}}">Más</a>
+                 <a class='button' href="/visitas/mas/{{datos.idvisita}}">Más</a>
               </th>
             </tr>
            {%endfor%}

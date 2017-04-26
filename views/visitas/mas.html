@@ -1,4 +1,4 @@
-{% extends "layouts/layout.html" %}
+{% extends "layouts/layout_admin.html" %}
 
 {% block content %}
 <div class="row panel">
@@ -6,7 +6,7 @@
     {%for datos in visita[0]%}
     <label>Nombre:  {{datos.nombre}}</label>
     <label>Apellido:  {{datos.apellido}}</label>
-    <label>Cedula:  {{datos.cedula}}</label>    
+    <label>Cedula:  {{datos.cedula}}</label>
     <label>Placa: {{datos.placa}}</label>
     <label>Organizacion:  {{datos.org}}</label>
     <label>Tipo de visita:  {{datos.tipo_visita}}</label>

@@ -63,7 +63,6 @@ $container['logger'] = function($container) {
     return $log;
 };
 
-
 // Inicializando conexion a la base de datos con driver PDO
 $container['db'] = function ($container) {
     $db = $container['settings']['db'];
