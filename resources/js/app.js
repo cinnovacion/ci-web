@@ -139,7 +139,7 @@
                 type: 'POST',
                 dataType: 'html',
                 success: function(html){
-                    if(html != ' ') {
+                    if(html.length>2) {
                         $('body').css('background-color', '#448AFF');
                         $('.container').html(html);
                     }

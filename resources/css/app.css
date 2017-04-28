@@ -361,3 +361,25 @@ table{
 
 /* Larger than desktop screen */
 @media (min-width: 120.0rem) { }
+
+#vol_cmd{
+  position: absolute;
+  top: 0.2rem;
+  left: 8.75rem;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+#vol_s{
+  width: 20rem;
+  position: absolute;
+  top: 0.2rem;
+  right: 20.5rem;
+}
+#cmd_s{
+  position: absolute;
+  top: 0.2rem;
+  right: 8.75rem;
+}
+.p_detalles{
+  margin-bottom: 1rem;
+}
