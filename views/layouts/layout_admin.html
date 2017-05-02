@@ -18,7 +18,7 @@
 				</div>
     			<div class="column alto centrar">
     				<a class="button button-clear layout_items" href="/">Asistencia</a>
-					<a class="button button-clear layout_items" href="/visitas/visitas_reg">Visitas</a>
+					<a class="button button-clear layout_items" href="/visitas/lista">Visitas</a>
 					<a class="button button-clear layout_items" href="/voluntarios/lista">Voluntarios</a>
     			</div>
     			<div class="column alto centrar">
@@ -27,15 +27,13 @@
 						<div id="modal_login" class="modal">
 							<span class="close" title="Cerrar">&times;</span>
 							<form class="modal-content animate" method="post" action="/inicio/login">
-								<div class="panel">
+								<div>
 									<h2>Iniciar Sesión</h2>
-								<div class="container">
-									<input type="text" placeholder="Usuario" name="user" required autofocus="on">
-									<br>
-									<input type="password" placeholder="Contraseña" name="pass" required>
-									<br>
-									<input class="button" type="submit" value="Acceder">
 								</div>
+								<div class="container">
+									<input type="text" placeholder="Usuario" name="user" required>
+									<input type="password" placeholder="Contraseña" name="pass" required>
+									<input class="button" type="submit" value="Acceder">
 								</div>
 							</form>
 						</div>

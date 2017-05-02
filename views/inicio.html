@@ -5,18 +5,32 @@
     <div class="column column-50 column-offset-25 alto">
 		<div class="login centrar panel">
 
-			<div class="row tabs">
+			<!-- div class="row tabs">
     			<div id="voluntarios" class="column">
 					<a class="button button-clear tablinks active">Voluntario</a>
 				</div>
 				<div id="trabajadores" class="column">
 					<a class="button button-clear tablinks">Trabajador</a>
 				</div>
+			</div -->
+
+      <div class="row tabs">
+        <div class="column">
+            <h3 style="margin-top:20px; color:#448AFF;">Ingrese su Cedula</h3>
+        </div>
 			</div>
-
-
 			<div class="tabcontent">
-				<div id="tab_vol">
+        <form  method="POST" action="">
+            <div>
+		            <input id="cedula" type="text" name="cedula" placeholder="Cedula" autocomplete="off" autofocus="">
+                <div class="alert danger" style="display:none;">
+                    <span class="closebtn">&times;</span>
+                    <p>Esta cedula no esta registrada.</p>
+                </div>
+            </div>
+            <button id="submit">Aceptar</button>
+        </form>
+				<!-- div id="tab_vol">
 					<form method="POST" action="/inicio/asistencia_reg">
 						<input type="text" name="ced-vol" placeholder="Cedula Voluntario" autocomplete="off">
 						<input class="button" type="submit" value="Aceptar">
@@ -27,7 +41,7 @@
 						<input type="text" name="ced-tbj" placeholder="Cedula Trabajador" autocomplete="off">
 						<input class="button" type="submit" value="Aceptar">
 					</form>
-				</div>
+				</div -->
 			</div>
 		</div>
 	</div>

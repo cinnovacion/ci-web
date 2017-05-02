@@ -1,34 +1,40 @@
 {% extends "layouts/layout.html" %}
 
 {% block content %}
+<!--<div>
+	<form class="panel" method="POST" action="">
+	<input class="buscar" type="text" name="buscar" placeholder="Cédula" class="izquierda">
+	<button type="button" name="button" style="background-image: url(/resources/img/search.png);"></button>
+	</form>
+</div>-->
 <div class="centrar panel">
-<div class="panel">
-	<table>
-	<caption><h3><strong>LISTA DE VOLUNTARIOS</strong></h3></caption>
-	  <thead>
-			<tr>
-			  <th>Nombre</th>
-			  <th>Apellido</th>
-			  <th>Cédula</th>
-			  <th>Telefono</th>
-			  <th>Detalles</th>
-			</tr>
-	   </thead>
-	   <tbody>
-		    {%for datos in lis_vol%}
-		    <tr>
-		    	<th>{{datos.nombre}}</th>
-		    	<th>{{datos.apellido}}</th>
-
-			    	<th name="cedula">{{datos.cedula}}</th>
-			    	<th name="telefono">{{datos.telefono}}</th>
-			    	<th><a href="/voluntarios/detalles/{{datos.idpersona}}">Mas</a></th>
-
-		    </tr>
-		    {%endfor%}
-	    </tbody>
-	 </table>
-</div>
+	<div class="panel">
+			<!--<input class="buscar" type="text" name="buscar" placeholder="Cédula" class="izquierda">
+			<button type="button" name="button"></button>-->
+		<table>
+			<caption><h3><strong>LISTA DE VOLUNTARIOS</strong></h3></caption>
+			<thead>
+				<tr>
+					<th>Nombre</th>
+					<th>Apellido</th>
+					<th>Cédula</th>
+					<th>Telefono</th>
+					<th>Detalles</th>
+				</tr>
+			</thead>
+			<tbody>
+				{%for datos in lis_vol%}
+				<tr>
+					<th>{{datos.nombre}}</th>
+					<th>{{datos.apellido}}</th>
+					<th>{{datos.cedula}}</th>
+					<th>{{datos.telefono}}</th>
+					<th><a class='button' href="/voluntarios/detalles/{{datos.idpersona}}">Mas</a></th>
+				</tr>
+				{%endfor%}
+			</tbody>
+		</table>
+	</div>
 </div>
 
 {% endblock %}
