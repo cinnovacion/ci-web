@@ -24,6 +24,7 @@ $app->group('/inicio', function () {
             echo "El usuario es correcto";
             if (strcmp($prueba['password'], $contra) == 0) {
                 echo "La contraseña tambien es correcta";
+                return $response->withRedirect('/voluntarios/lista');
 
             }else{
                 echo "La contraseña no es correcta";
@@ -202,20 +203,23 @@ $app->group('/voluntarios', function () {
         echo "<p>datos de voluntario</p>";
         var_dump($data1);
         $vol_v->insert($data1);
+        return $response->withRedirect('/voluntarios/lista');
         die();
     })->setName('voluntarios_reg');
 
     //Mostrar lista de voluntarios registrados
     $this->any('/lista', function ($request, $response, $args) {
         $voluntario=$this->db->voluntario()->select('persona_idpersona');
-        $lista=$this->db->persona()->where('idpersona',$voluntario)->limit(20);
-        return $this->view->render($response, '/voluntarios/lista.html',['lis_vol'=>$lista]);
+        $lista['persona']=$this->db->persona()->where('idpersona',$voluntario)->limit(20);
+        $lista['voluntario']=$this->db->voluntario()->where('persona_idpersona',$voluntario)->limit(20);
+        return $this->view->render($response, '/voluntarios/lista.html',$lista);
     })->setName('voluntarios_lista');
 
     //Busqueda de un Voluntario
     $this->any('/busqueda', function($request,$response,$args){
       $parsedBody = $request->getParsedBody();
-      $buscar = $this->db->persona()->where('cedula',$parsedBody['buscar']);
+      $voluntario=$this->db->voluntario()->select('persona_idpersona');
+      $buscar = $this->db->persona()->where(array('idpersona'=>$voluntario, 'nombre LIKE ?'=>'%'.$parsedBody['buscar'].'%'));
       return $this->view->render($response, '/voluntarios/lista.html',['lis_vol'=>$buscar]);
     })->setName('voluntarios_buscar');
 
@@ -225,7 +229,8 @@ $app->group('/voluntarios', function () {
         $persona = $this->db->persona()->where('idpersona',$id);
         $volun = $this->db->voluntario()->where('persona_idpersona',$id);
         $asis = $this->db->asistencia()->where('persona_idpersona',$id);
-        $items = [$persona,$volun,$asis];
+        $acum = $this->db->asistencia()->where('persona_idpersona',$id)->sum('hora_acumulada');
+        $items = [$persona,$volun,$asis,$acum];
         return $this->view->render($response, '/voluntarios/detalles.html',['lis_vol'=>$items]);
     })->setName('voluntarios_detalles');
 
@@ -238,15 +243,16 @@ $app->group('/voluntarios', function () {
         $data['carrera'] = $this->db->carrera();
         $data['area'] = $this->db->area();
         $data['actividades'] = $this->db->actividades();
-        return $this->view->render($response, '/voluntarios/editar.html', $data,$org);
+        return $this->view->render($response, '/voluntarios/editar.html', $data);
     })->setName('voluntario_editar');
 
     //Actualizar Voluntario
-    $this->any('/actualizar', function ($request, $response, $args) {
+    $this->any('/actualizar/{id}', function ($request, $response, $args) {
+        $id = $request->getAttribute('id');
         $parsedBody = $request->getParsedBody();
 
-        $vol_p=$this->db->persona();
-        $vol_v=$this->db->voluntario();
+        $vol_p=$this->db->persona()->where('idpersona',$id)->fetch();
+        $vol_v=$this->db->voluntario()->where('persona_idpersona',$id)->fetch();
         //guardar datos en tabla persona
         $data['nombre']=$parsedBody['nombre'];
         $data['apellido']=$parsedBody['apellido'];
@@ -255,30 +261,143 @@ $app->group('/voluntarios', function () {
         $data['telefono']=$parsedBody['no_telefono'];
         $data['correo']=$parsedBody['correo'];
         $data['area_idarea']=$parsedBody['area'];
-        $vol_p->insert($data);
+        $vol_p->update($data);
 
         //guardar datos en tabla voluntario
         //predeterminar la zona horaria
         date_default_timezone_set("America/Managua");
-        $data1['carnet']=time()."-".$parsedBody['ced'];
+        //$data1['carnet']=time()."-".$parsedBody['ced'];
         $data1['fecha_ingreso']=strtotime($parsedBody['fecha']);
-        $persona_id=$this->db->persona()->select('idpersona')->order('idpersona desc')->limit(1)->fetch();
-        echo json_encode($persona_id['idpersona']);
-        $data1['persona_idpersona']=$persona_id['idpersona'];
+        //$persona_id=$this->db->persona()->select('idpersona')->order('idpersona desc')->limit(1)->fetch();
+        //$data1['persona_idpersona']=$persona_id['idpersona'];
         $data1['Universidad_idUniversidad']=$parsedBody['org'];
         $data1['carrera_idcarrera']=$parsedBody['carrera'];
-        echo "<p>datos de voluntario</p>";
-        var_dump($data1);
-        $vol_v->insert($data1);
+        $vol_v->update($data1);
         die();
-    })->setName('voluntarios_reg');
+    })->setName('voluntarios_up');
+});
+
+$app->group('/trabajador', function (){
+
+  //Vista de Registro de Trabajador
+  $this->any('/trabajador_reg', function ($request, $response, $args) {
+      $parsedBody  = $response->getBody();
+      $org         = $this->db->Universidad();
+      $carrera     = $this->db->carrera();
+      $area        = $this->db->area();
+      $actividades = $this->db->actividades();
+      $item = [$org,$carrera,$area,$actividades];
+      return $this->view->render($response, '/trabajador/trabajador.html',['template' => $item]);
+  })->setName('trabajador');
+
+  //Agregar Area
+  $this->any('/agr_area_t', function ($request, $response, $args) {
+      $parsedBody = $request->getParsedBody();
+      $area = $this->db->area();
+      $area_i['nombre'] = $parsedBody['nombre_area'];
+      $area_i['descripcion'] = $parsedBody['desc_area'];
+      $area -> insert($area_i);
+      return $response->withRedirect('/trabajador/trabajador_reg');
+      die();
+  })->setName('agr_area_t');
+
+  //Registrar Trabajador
+  $this->any('/registro', function ($request, $response, $args) {
+    $parsedBody = $request->getParsedBody();
+
+            $trab_p=$this->db->persona();
+            $trab_t=$this->db->trabajador();
+            //guardar datos en tabla persona
+            $data['nombre']=$parsedBody['nombre'];
+            $data['apellido']=$parsedBody['apellido'];
+            $data['cedula']=$parsedBody['ced'];
+            $data['direccion']=$parsedBody['direccion'];
+            $data['telefono']=$parsedBody['no_telefono'];
+            $data['correo']=$parsedBody['correo'];
+            $data['area_idarea']=$parsedBody['area'];
+            $trab_p->insert($data);
+
+            //guardar datos en tabla trabajador
+            //predeterminar la zona horaria
+            //date_default_timezone_set("America/Managua");
+            $data1['carnet'] = $parsedBody['carnet'];
+            $data1['cargo']=$parsedBody['cargo'];
+            $persona_id=$this->db->persona()->select('idpersona')->order('idpersona desc')->limit(1)->fetch();
+            $data1['persona_idpersona']=$persona_id['idpersona'];
+            $trab_t->insert($data1);
+            return $response->withRedirect('/trabajador/lista');
+            die();
+  })->setName('trabajador_reg');
+
+  //Lista de Trabajadores
+  $this->any('/lista', function ($request, $response, $args) {
+      $trabajador=$this->db->trabajador()->select('persona_idpersona');
+      $lista=$this->db->persona()->where('idpersona',$trabajador)->limit(20);
+      return $this->view->render($response, '/trabajador/lista.html',['lis_trab'=>$lista]);
+  })->setName('trabajador_lista');
+
+  //Busqueda de un Trabjador
+  $this->any('/busqueda', function($request,$response,$args){
+    $parsedBody = $request->getParsedBody();
+    $trabajador=$this->db->trabajador()->select('persona_idpersona');
+    $buscar = $this->db->persona()->where(array('idpersona'=>$trabajador, 'nombre LIKE ?'=>'%'.$parsedBody['buscar'].'%'));
+    return $this->view->render($response, '/trabajador/lista.html',['lis_trab'=>$buscar]);
+  })->setName('trabajador_buscar');
+
+  //Mostrar detalles de un trabajador
+  $this->any('/detalles/{id}', function ($request, $response, $args) {
+      $id = $request->getAttribute('id');
+      $persona = $this->db->persona()->where('idpersona',$id);
+      $trab = $this->db->trabajador()->where('persona_idpersona',$id);
+      $asis = $this->db->asistencia()->where('persona_idpersona',$id);
+      $items = [$persona,$trab,$asis];
+      return $this->view->render($response, '/trabajador/detalles.html',['lis_trab'=>$items]);
+  })->setName('trabajador_detalles');
+
+  //Editar un trabajador
+  $this->any('/editar/{id}', function ($request, $response, $args) {
+      $id = $request->getAttribute('id');
+      $data['persona'] = $this->db->persona()->where('idpersona',$id)->fetch();
+      $data['trabajador'] = $this->db->trabajador()->where('persona_idpersona',$id)->fetch();
+      $data['area'] = $this->db->area();
+      return $this->view->render($response, '/trabajador/editar.html', $data);
+  })->setName('trabajador_editar');
+
+  $this->any('/actualizar/{id}', function ($request, $response, $args) {
+    $id = $request->getAttribute('id');
+    $parsedBody = $request->getParsedBody();
+
+            $trab_p=$this->db->persona()->where('idpersona',$id)->fetch();
+            $trab_t=$this->db->trabajador()->where('persona_idpersona',$id)->fetch();
+            //guardar datos en tabla persona
+            $data['nombre']=$parsedBody['nombre'];
+            $data['apellido']=$parsedBody['apellido'];
+            $data['cedula']=$parsedBody['ced'];
+            $data['direccion']=$parsedBody['direccion'];
+            $data['telefono']=$parsedBody['no_telefono'];
+            $data['correo']=$parsedBody['correo'];
+            $data['area_idarea']=$parsedBody['area'];
+            $trab_p->update($data);
+
+            //guardar datos en tabla trabajador
+            //predeterminar la zona horaria
+            //date_default_timezone_set("America/Managua");
+            $data1['carnet'] = $parsedBody['carnet'];
+            $data1['cargo']=$parsedBody['cargo'];
+            $persona_id=$this->db->persona()->select('idpersona')->order('idpersona desc')->limit(1)->fetch();
+            //$data1['persona_idpersona']=$persona_id['idpersona'];
+            $trab_t->update($data1);
+            return $response->withRedirect('/trabajador/lista');
+            die();
+  })->setName('actualizar_trab');
+
 });
 
 $app->group('/ajax', function () {
     // Verificar si la cedula le pertenece a una persona
     $this->any('/cedula', function ($request, $response, $args) {
         $parsedBody = $request->getParsedBody();
-         //tomamos a una persona segun cedula
+         //tomamos a una persona según cedula
         if($persona = $this->db->persona()->where('cedula', $parsedBody['cedula'])->fetch())
             echo '<div class="row">
                 <div class="column column-50 column-offset-25 alto">
