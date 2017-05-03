@@ -1,10 +1,10 @@
-{% extends "layouts/layout.html" %}
+{% extends "layouts/layout_admin.html" %}
 
 {% block content %}
 <!-- MODAL_LOGIN -->
 <div class="panel">
   <div class="column">
-    <form action="/voluntarios/actualizar" method="post">
+    <form action="/voluntarios/actualizar/{{persona['idpersona']}}" method="post">
       <fieldset>
         <h2 class="centrar">Editar Voluntario</h2>
         <hr>
@@ -50,7 +50,7 @@
             </div>
 
             <label for="nivel">Fecha de Ingreso:</label>
-            <input type="date" name="fecha" value="">
+            <input type="date" name="fecha" value="{{voluntario['fecha_ingreso']|date('Y-m-d')}}">
 
             <div id="area" style="display: block;">
               <label for="area">Área:</label>

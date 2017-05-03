@@ -2,31 +2,23 @@
 
 {% block content %}
 <div class="panel" style="margin-right:0px;">
-  <div class="row panel" style="margin-left:0px; margin-bottom:0px;">
+  <div class="row panel" style="margin-left:0px;  margin-bottom:0px;">
         <div class="column column-50">
 
-        <a href="/voluntarios/lista" class="button" style="margin-top:5px;">◄ Atrás</a>
-        {%for datos in lis_vol[0]%}
+        <a href="/trabajador/lista" class="button" style="margin-top:5px;">◄ Atrás</a>
+        {%for datos in lis_trab[0]%}
         <p class="p_detalles"><b>Nombre:</b> {{datos.nombre}} {{datos.apellido}}</p>
         <p class="p_detalles"><b>Cedula:</b> {{datos.cedula}}</p>
         <p class="p_detalles"><b>Telefono:</b> {{datos.telefono}}</p>
         <p class="p_detalles"><b>Correo:</b> {{datos.correo}}</p>
         <p class="p_detalles"><b>Dirección:</b> {{datos.direccion}}</p>
-        <a class="button" href="/voluntarios/editar/{{datos.idpersona}}">Editar</a>
         {%endfor%}
-      </div>
-      <div class="column column-50">
-        <a href="" class="button" style="margin-top:5px;">Imprimir Carnet</a>
-        <a href="" class="button" style="margin-top:5px;">Imprimir Constancia</a>
-        {%for datos in lis_vol[1]%}
+        <!--<a href="" class="button" style="margin-top:5px;">Imprimir Carnet</a>-->
+        <!--<a href="" class="button" style="margin-top:5px;">Imprimir Constancia</a>-->
+        {%for datos in lis_trab[1]%}
         <p class="p_detalles"><b>Carnet:</b> {{datos.carnet}}</p>
-        {%endfor%}
-        {%for datos in lis_vol[3]%}
-        <p class="p_detalles"><b>Horas Acumuladas:</b> {{datos.hora_acumulada|date("H")}} </p>
-        {%endfor%}
-        {%for datos in lis_vol[1]%}
-        <p class="p_detalles"><b>Fecha de Ingreso:</b> {{datos.fecha_ingreso|date("d/m/Y")}}</p>
-        <p class="p_detalles"><b>Ultima Fecha:</b> {{datos.fecha_ultima|date("d/m/Y")}}</p>
+        <p class="p_detalles"><b>Cargo:</b> {{datos.cargo}}</p>
+        <a class="button" href="/trabajador/editar/{{datos.persona_idpersona}}">Editar</a>
         {%endfor%}
       </div>
   </div>
@@ -43,7 +35,7 @@
           </tr>
         </thead>
         <tbody>
-          {%for datos in lis_vol[2]%}
+          {%for datos in lis_trab[2]%}
           <tr>
             <th>{{datos.fecha}}</th>
             <th>{{datos.hora_entrada}}</th>

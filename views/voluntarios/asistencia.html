@@ -32,13 +32,13 @@
 				</tr>
 			</thead>
 			<tbody>
-				{%for datos in persona%}
+				{%for datos in lis_vol%}
 				<tr>
-					<th>{{datos['nombre']}}</th>
-					<th>{{datos['apellido']}}</th>
-					<th>{{datos['cedula']}}</th>
-					<th>{{datos['telefono']}}</th>
-					<th><a class='button' href="/voluntarios/detalles/{{datos.idpersona}}">Más</a></th>
+					<th>{{datos.nombre}}</th>
+					<th>{{datos.apellido}}</th>
+					<th>{{datos.cedula}}</th>
+					<th>{{datos.telefono}}</th>
+					<th><a class='button' href="/voluntarios/detalles/{{datos.idpersona}}">Mas</a></th>
 				</tr>
 				{%endfor%}
 			</tbody>

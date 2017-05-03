@@ -1,20 +1,29 @@
 {% extends "layouts/layout_admin.html" %}
 
 {% block content %}
-<div class="row panel">
-  <div class="column column-50">
-    {%for datos in visita%}
-    <label>Nombre:  {{datos.nombre}}</label>
-    <label>Apellido:  {{datos.apellido}}</label>
-    <label>Cedula:  {{datos.cedula}}</label>
-    <label>Placa: {{datos.placa}}</label>
-    <label>Organizacion:  {{datos.org}}</label>
-    <label>Tipo de visita:  {{datos.tipo_visita}}</label>
-    <label>Motivo:  {{datos.motivo}}</label>
-    <label>Fecha: {{datos.fecha|date("d/m/Y")}}</label>
-    <label>Hora de llegada: {{datos.hora_llegada|date("H:i:s")}}</label>
-    <label>Hora de salida:  {{datos.hora_salida|date("H:i:s")}}</label>
-    {%endfor%}
+<div class="panel">
+  <div class="column">
+    <div class="row panel">
+        {%for datos in visita%}
+        <div class="column column-50">
+          <a href="/visita/lista" class="button" style="margin-top:5px;">◄ Atrás</a>
+          <p class="p_detalles"><b>Nombre:</b>  {{datos.nombre}}</label>
+          <p class="p_detalles"><b>Apellido:</b>  {{datos.apellido}}</label>
+          <p class="p_detalles"><b>Cedula:</b>  {{datos.cedula}}</label>
+          <p class="p_detalles"><b>Placa:</b> {{datos.placa}}</p>
+          <p class="p_detalles"><b>Organizacion:</b>  {{datos.org}}</p>
+        </div>
+        <div class="column column-50">
+          <br>
+          <br>
+          <p class="p_detalles"><b>Tipo de visita:</b>  {{datos.tipo_visita}}</p>
+          <p class="p_detalles"><b>Motivo:</b>  {{datos.motivo}}</p>
+          <p class="p_detalles"><b>Fecha:</b> {{datos.fecha|date("d/m/Y")}}</p>
+          <p class="p_detalles"><b>Hora de llegada:</b> {{datos.hora_llegada|date("H:i:s")}}</p>
+          <p class="p_detalles"><b>Hora de salida:</b>  {{datos.hora_salida|date("H:i:s")}}</p>
+       </div>
+       {%endfor%}
+    </div>
   </div>
 </div>
 {% endblock %}

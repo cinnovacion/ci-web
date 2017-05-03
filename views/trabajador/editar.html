@@ -1,0 +1,74 @@
+{% extends "layouts/layout.html" %}
+
+{% block content %}
+<!-- MODAL_LOGIN -->
+<div class="panel">
+  <div class="column">
+    <form action="/trabajador/actualizar/{{persona['idpersona']}}" method="post">
+      <fieldset>
+        <h2 class="centrar">Editar Empleado</h2>
+        <hr>
+        <div class="row">
+          <div class="column column-50">
+
+            <label for="nombre">Nombre:</label>
+            <input type="text" name="nombre" placeholder="Ingrese su Nombre" autofocus="on" value="{{persona['nombre']}}">
+
+            <label for="apellido">Apellido:</label>
+            <input type="text" name="apellido" id="apellido" placeholder="Ingrese su Apellido" value="{{persona['apellido']}}">
+
+            <label for="ced">No. de Cédula:</label>
+            <input type="text" name="ced" id="ced" placeholder="Ingrese su Cédula" value="{{persona['cedula']}}">
+
+            <label for="direccion">Dirección:</label>
+            <input type="text" name="direccion" id="direccion" placeholder="Ingrese su Dirección" value="{{persona['direccion']}}">
+
+            <label for="no_telefono">No. Telefono:</label>
+            <input type="tel" name="no_telefono" id="no_telefono" placeholder="Ingrese su número de telefono" value="{{persona['telefono']}}">
+
+            <label for="correo">Correo:</label>
+            <input type="text" name="correo" id="correo" placeholder="Ingrese su correo electrónico" value="{{persona['correo']}}">
+          </div>
+
+          <div class="column column-50">
+
+            <label for="carnet">Carnet:</label>
+            <input type="text" name="carnet" id="carnet" placeholder="Ingrese su carnet" value="{{trabajador['carnet']}}">
+
+            <label for="cargo">Cargo:</label>
+            <input type="text" name="cargo" id="cargo" placeholder="Ingrese su cargo" value="{{trabajador['cargo']}}">
+
+            <div id="area" style="display: block;">
+              <label for="area">Área:</label>
+              <select name="area" id="area">
+                {% for names in area %}
+                  <option value="{{names.idarea}}" {{(persona['area_idarea']==names.idarea)?'selected="selected"':' '}}>{{names.nombre}}</option>
+                {% endfor %}
+              </select>
+              <a class="button" id="btn_agr_area">Agregar</a>
+            </div>
+          </div>
+        </div>
+        <input class="button" type="submit" value="Terminar Edición">
+      </fieldset>
+    </form>
+  </div>
+  <div class="column">
+  </div>
+</div>
+<!-- Formularios de las listas deplegables -->
+<div id="modal_agr_area" class="modal">
+<span class="close" title="Cerrar">&times;</span>
+<form class="modal-content animate" method="post" name="area" action="/voluntarios/agr_area">
+  <div class="centrar">
+    <h4>Agregar Área</h4>
+  </div>
+  <div class="container">
+    <input type="text" placeholder="Nombre" name="nombre_area" required>
+    <input type="text" placeholder="Descripción" name="desc_area" required>
+    <input class="button" type="submit" value="Agregar">
+  </div>
+  </form>
+</div>
+<div style="margin-top: 170px;"></div>
+{% endblock %}

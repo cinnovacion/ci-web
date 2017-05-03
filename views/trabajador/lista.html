@@ -13,8 +13,8 @@
 			<button type="button" name="button"></button>-->
 		<table>
 			<caption>
-				<a class="button" id="vol_cmd" href="/voluntarios/voluntarios_reg">Nuevo Voluntario</a>
-				<form id="frm_s" class="" action="/voluntarios/busqueda" method="post">
+				<a class="button" id="vol_cmd" href="/trabajador/trabajador_reg">Nuevo Empleado</a>
+				<form id="frm_s" class="" action="/trabajador/busqueda" method="post">
 					<input id="cmd_s" class="button" type="submit" name="cmd_buscar">
 					<input id="vol_s" type="text" name="buscar" placeholder="Nombre">
 					<input id="cmd_s" class="button" type="submit" name="cmd_buscar" value="Buscar">
@@ -32,17 +32,17 @@
 				</tr>
 			</thead>
 			<tbody>
-				{%for datos in persona%}
+				{%for datos in lis_trab%}
 				<tr>
-					<th>{{datos['nombre']}}</th>
-					<th>{{datos['apellido']}}</th>
-					<th>{{datos['cedula']}}</th>
-					<th>{{datos['telefono']}}</th>
-					<th><a class='button' href="/voluntarios/detalles/{{datos.idpersona}}">Más</a></th>
+					<th>{{datos.nombre}}</th>
+					<th>{{datos.apellido}}</th>
+					<th>{{datos.cedula}}</th>
+					<th>{{datos.telefono}}</th>
+					<th><a class='button' href="/trabajador/detalles/{{datos.idpersona}}">Mas</a></th>
 				</tr>
 				{%endfor%}
+			</table>
 			</tbody>
-		</table>
 	</div>
 </div>
 
