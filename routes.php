@@ -37,64 +37,30 @@ $app->group('/inicio', function () {
     // Registro de asistencia -- Voluntarios y Trabajadores --
     $this->any('/asistencia_reg', function ($request, $response, $args) {
         $parsedBody = $request->getParsedBody();
-        date_default_timezone_set("America/Managua");
+        date_default_timezone_set("America/Managua"); 
+        $idpersona = $parsedBody['idpersona'];
 
-        if ($parsedBody["ced-vol"]) {
-            //tomamos a una persona segun cedula
-            $persona = $this->db->persona()->where('cedula',$parsedBody["ced-vol"])->fetch();
-            if ($persona) {
-                $asistencia = $this->db->asistencia->where(array('persona_idpersona' => $persona['idpersona'], 'hora_acumulada' => 0))->fetch();
-                if ($asistencia){
-                    $salida = time();
-                    $acumuladas = $salida - $asistencia['hora_entrada'];
-                    $asistencia->update(
-                        array("hora_acumulada" => $acumuladas,
-                        "hora_salida" => $salida
-                    ));
-                }else{
-                    echo "No lo encuentra, tenemos que agregar la asistencia para ese dia";
-                    $registrando_asis = $this->db->asistencia();
+        $asistencia = $this->db->asistencia->where(array('persona_idpersona' => $idpersona, 'hora_acumulada' => 0))->fetch();
+        /*echo $asistencia;
+        $asistencia->fetch();*/
+        if ($asistencia){
+            echo "Entramos a agregar salida";
+            $salida = time();
+            $acumuladas = $salida - $asistencia['hora_entrada'];
+            $asistencia->update(
+                array("hora_acumulada" => $acumuladas,
+                "hora_salida" => $salida
+            ));
+        }else{
+            echo "No lo encuentra, tenemos que agregar la asistencia para ese dia";
+            $registrando_asis = $this->db->asistencia();
 
-                    $datos_asis['hora_entrada'] = time();
-                    $datos_asis['persona_idpersona'] = $persona['idpersona'];
+            $datos_asis['hora_entrada'] = time();
+            $datos_asis['persona_idpersona'] = $idpersona;
 
-                    $registrando_asis->insert($datos_asis);
-                }
-            }else{
-                echo "No lo encuentra";
-                // Se le debe decir al usuario que la cedula que ingreso no se encuentra registrada
-                // para que escriba una correcta.
-            }
-        }elseif ($parsedBody["ced-tbj"]) {
-            $persona = $this->db->persona()->where('cedula',$parsedBody["ced-tbj"])->fetch(); //tomamos a una persona segun cedula
-            if ($persona) {
-                $asistencia = $this->db->asistencia->where(array('persona_idpersona' => $persona['idpersona'], 'hora_acumulada' => 0))->fetch();
-                if ($asistencia){
+            $registrando_asis->insert($datos_asis);
+        }  
 
-                    $salida = time();
-                    $acumuladas = $salida - $asistencia['hora_entrada'];
-
-                    $asistencia->update(
-                        array("hora_acumulada" => $acumuladas,
-                        "hora_salida" => $salida
-                    ));
-                }else{
-                    echo "No lo encuentra, tenemos que agregar la asistencia para ese dia";
-                    $registrando_asis = $this->db->asistencia();
-
-                    $datos_asis['hora_entrada'] = time();
-                    $datos_asis['persona_idpersona'] = $persona['idpersona'];
-
-                    $registrando_asis->insert($datos_asis);
-                }
-            }else{
-                echo "No lo encuentra";
-                // Se le debe decir al usuario que la cedula que ingreso no se encuentra registrada
-                // para que escriba una correcta.
-            }
-        }
-
-        die();
     })->setName('asistencia');
 });
 //Mostrar pagina de visitas
@@ -158,6 +124,7 @@ $app->group('/visitas', function () {
 });
 //Grupo de rutas de Voluntarios
 $app->group('/voluntarios', function () {
+    //Formulario de Registro
     $this->any('/voluntarios_reg', function ($request, $response, $args) {
         $parsedBody  = $response->getBody();
         $org         = $this->db->Universidad();
@@ -206,7 +173,7 @@ $app->group('/voluntarios', function () {
         return $response->withRedirect('/voluntarios/voluntarios_reg');
         die();
     })->setName('agr_activ');
-
+    //Registrar Voluntarios
     $this->any('/registro', function ($request, $response, $args) {
         $parsedBody = $request->getParsedBody();
 
@@ -245,14 +212,66 @@ $app->group('/voluntarios', function () {
         return $this->view->render($response, '/voluntarios/lista.html',['lis_vol'=>$lista]);
     })->setName('voluntarios_lista');
 
+    //Busqueda de un Voluntario
+    $this->any('/busqueda', function($request,$response,$args){
+      $parsedBody = $request->getParsedBody();
+      $buscar = $this->db->persona()->where('cedula',$parsedBody['buscar']);
+      return $this->view->render($response, '/voluntarios/lista.html',['lis_vol'=>$buscar]);
+    })->setName('voluntarios_buscar');
+
     //Mostrar detalles de un voluntario
     $this->any('/detalles/{id}', function ($request, $response, $args) {
         $id = $request->getAttribute('id');
         $persona = $this->db->persona()->where('idpersona',$id);
         $volun = $this->db->voluntario()->where('persona_idpersona',$id);
-        $items = [$persona,$volun];
+        $asis = $this->db->asistencia()->where('persona_idpersona',$id);
+        $items = [$persona,$volun,$asis];
         return $this->view->render($response, '/voluntarios/detalles.html',['lis_vol'=>$items]);
     })->setName('voluntarios_detalles');
+
+    //Editar un voluntario
+    $this->any('/editar/{id}', function ($request, $response, $args) {
+        $id = $request->getAttribute('id');
+        $data['persona'] = $this->db->persona()->where('idpersona',$id)->fetch();
+        $data['voluntario'] = $this->db->voluntario()->where('persona_idpersona',$id)->fetch();
+        $data['org'] = $this->db->Universidad();
+        $data['carrera'] = $this->db->carrera();
+        $data['area'] = $this->db->area();
+        $data['actividades'] = $this->db->actividades();
+        return $this->view->render($response, '/voluntarios/editar.html', $data,$org);
+    })->setName('voluntario_editar');
+
+    //Actualizar Voluntario
+    $this->any('/actualizar', function ($request, $response, $args) {
+        $parsedBody = $request->getParsedBody();
+
+        $vol_p=$this->db->persona();
+        $vol_v=$this->db->voluntario();
+        //guardar datos en tabla persona
+        $data['nombre']=$parsedBody['nombre'];
+        $data['apellido']=$parsedBody['apellido'];
+        $data['cedula']=$parsedBody['ced'];
+        $data['direccion']=$parsedBody['direccion'];
+        $data['telefono']=$parsedBody['no_telefono'];
+        $data['correo']=$parsedBody['correo'];
+        $data['area_idarea']=$parsedBody['area'];
+        $vol_p->insert($data);
+
+        //guardar datos en tabla voluntario
+        //predeterminar la zona horaria
+        date_default_timezone_set("America/Managua");
+        $data1['carnet']=time()."-".$parsedBody['ced'];
+        $data1['fecha_ingreso']=strtotime($parsedBody['fecha']);
+        $persona_id=$this->db->persona()->select('idpersona')->order('idpersona desc')->limit(1)->fetch();
+        echo json_encode($persona_id['idpersona']);
+        $data1['persona_idpersona']=$persona_id['idpersona'];
+        $data1['Universidad_idUniversidad']=$parsedBody['org'];
+        $data1['carrera_idcarrera']=$parsedBody['carrera'];
+        echo "<p>datos de voluntario</p>";
+        var_dump($data1);
+        $vol_v->insert($data1);
+        die();
+    })->setName('voluntarios_reg');
 });
 
 $app->group('/ajax', function () {
@@ -266,7 +285,7 @@ $app->group('/ajax', function () {
                     <div class="centrar">
                         <div id="vald">
                             <h3 style="margin-top:5em; color:white;">Tu eres ' . $persona['nombre'] . ' ' . $persona['apellido'] . '?</h3>
-                            <form method="POST" action="/inicio/asistencia_reg">
+                                <form method="POST" action="/inicio/asistencia_reg">
                                 <button class="inverso" type="submit">Si</button>
                                 <a class="button inverso" href="/" style="margin-left:50px;">No</a>
                                 <input type="Hidden" name="idpersona" value="' . $persona['idpersona'] . '">
