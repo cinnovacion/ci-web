@@ -129,7 +129,6 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `asscic`.`asistencia` (
   `idasistencia` INT NOT NULL AUTO_INCREMENT,
-  `fecha` INT(11) NOT NULL,
   `hora_entrada` INT(11) NOT NULL,
   `hora_salida` INT(11) NOT NULL,
   `hora_acumulada` INT(11) NOT NULL,

@@ -37,10 +37,10 @@
         <tbody>
           {%for datos in lis_trab[2]%}
           <tr>
-            <th>{{datos.fecha}}</th>
-            <th>{{datos.hora_entrada}}</th>
-            <th>{{datos.hora_salida}}</th>
-            <th>{{datos.hora_acumulada}}</th>
+            <th>{{datos.hora_entrada|date('d/m/Y')}}</th>
+            <th>{{datos.hora_entrada|date('H:i:s')}}</th>
+            <th>{{datos.hora_salida|date('H:i:s')}}</th>
+            <th>{{datos.hora_acumulada|date('H')}}</th>
             <th><a href="" class="button">Editar</a></th>
           </tr>
           {%endfor%}
