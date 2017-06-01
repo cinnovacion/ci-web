@@ -27,7 +27,7 @@ $app->group('/inicio', function () {
             echo "El usuario es correcto";
             if (strcmp($prueba['password'], $contra) == 0) {
                 echo "La contraseña tambien es correcta";
-                return $response->withRedirect('/voluntarios/lista');
+                return $response->withRedirect('/voluntarios/asis_dia');
 
             }else{
                 echo "La contraseña no es correcta";
@@ -68,7 +68,8 @@ $app->group('/inicio', function () {
             $datos_asis['hora_acumulada']=0;
 
             $registrando_asis->insert($datos_asis);
-        }    
+        }
+        return $response->withRedirect('/');
     })->setName('asistencia');
 });
 //Mostrar pagina de visitas
@@ -570,8 +571,8 @@ $app->group('/ajax', function () {
 
     $this->any('/f_step', function ($request, $response, $args) {
         $parsedBody = $request->getParsedBody();
-        $persona = $this->db->persona()->where('idpersona',$parsedBody['idpersona']);
-        $asistencia = $this->db->asistencia()->select('hora_entrada')->where('persona_idpersona',$parsedBody['idpersona']);
+        $persona = $this->db->persona->where('idpersona',$parsedBody['idpersona']);
+        $asistencia = $this->db->asistencia->select('hora_entrada')->where('persona_idpersona', $persona);
          //tomamos a una persona según cedula
             echo '<div class="row">
                 <div class="column column-50 column-offset-25 alto">
