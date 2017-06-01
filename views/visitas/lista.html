@@ -11,7 +11,7 @@
 	<div class="panel">
     	<table>
         <caption>
-					<a class="button" id="vol_cmd" href="/visitas/visitass_reg">Nueva Visita</a>
+					<a class="button" id="vol_cmd" href="/visitas/visitas_reg">Nueva Visita</a>
 					<h3><strong>LISTA DE VISITAS</strong></h3>
 				</caption>
     	  <thead>
@@ -23,11 +23,13 @@
            </tr>
         </thead>
         <tbody>
-           {%for datos in lis_vis%}
+           {%for datos in persona%}
            <tr>
               <th>{{datos.nombre}}</th>
               <th>{{datos.apellido}}</th>
               <th>{{datos.cedula}}</th>
+					 {%endfor%}
+					 {%for datos in visita%}
               <th>
                  <a class='button' href="/visitas/mas/{{datos.idvisita}}">Más</a>
               </th>

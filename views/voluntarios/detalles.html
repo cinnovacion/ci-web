@@ -3,31 +3,41 @@
 {% block content %}
 <div class="panel" style="margin-right:0px;">
   <div class="row panel" style="margin-left:0px; margin-bottom:0px;">
-        <div class="column column-50">
-
+      <div class="column column-50">
         <a href="/voluntarios/lista" class="button" style="margin-top:5px;">◄ Atrás</a>
-        {%for datos in lis_vol[0]%}
+        {%for datos in persona%}
+        <a class="button" href="/voluntarios/editar/{{datos.idpersona}}">Editar</a>
         <p class="p_detalles"><b>Nombre:</b> {{datos.nombre}} {{datos.apellido}}</p>
         <p class="p_detalles"><b>Cedula:</b> {{datos.cedula}}</p>
         <p class="p_detalles"><b>Telefono:</b> {{datos.telefono}}</p>
         <p class="p_detalles"><b>Correo:</b> {{datos.correo}}</p>
         <p class="p_detalles"><b>Dirección:</b> {{datos.direccion}}</p>
-        <a class="button" href="/voluntarios/editar/{{datos.idpersona}}">Editar</a>
+        {%endfor%}
+        {%for datos in volun%}
+        <p class="p_detalles"><b>Area:</b> {{datos.area}}</p>
+        <p class="p_detalles"><b>Carnet:</b> {{datos.carnet}}</p>
+        {%endfor%}
+        {%for datos in persona%}
+        <a class="button" id="btn_agr_activ">Añadir Actividad Extra</a>
+        <a class="button" id="btn_agr_hora">Añadir Horas</a>
         {%endfor%}
       </div>
       <div class="column column-50">
         <a href="" class="button" style="margin-top:5px;">Imprimir Carnet</a>
         <a href="" class="button" style="margin-top:5px;">Imprimir Constancia</a>
-        {%for datos in lis_vol[1]%}
-        <p class="p_detalles"><b>Carnet:</b> {{datos.carnet}}</p>
-        {%endfor%}
-        {%for datos in lis_vol[3]%}
-        <p class="p_detalles"><b>Horas Acumuladas:</b> {{datos.hora_acumulada|date("H")}} </p>
-        {%endfor%}
-        {%for datos in lis_vol[1]%}
+        <p class="p_detalles"><b>Horas Acumuladas:</b> {{acum}} </p>
+        {%for datos in volun%}
         <p class="p_detalles"><b>Fecha de Ingreso:</b> {{datos.fecha_ingreso|date("d/m/Y")}}</p>
-        <p class="p_detalles"><b>Ultima Fecha:</b> {{datos.fecha_ultima|date("d/m/Y")}}</p>
         {%endfor%}
+        {%for datos in ultima%}
+        <p class="p_detalles"><b>Ultima Fecha:</b> {{datos.hora_entrada|date("d/m/Y")}}</p>
+        {%endfor%}
+        <p class="p_detalles" style="margin-bottom:0;"><b>Actividades realizadas: </b></p>
+          <ol>
+            {%for datos in area%}
+              <li style="margin-bottom:0; display:inline;">►{{datos.nombre}}</li>
+            {%endfor%}
+          </ol>
       </div>
   </div>
   <div class="column">
@@ -43,18 +53,56 @@
           </tr>
         </thead>
         <tbody>
-          {%for datos in lis_vol[2]%}
+          {%for datos in asis%}
           <tr>
             <th>{{datos.hora_entrada|date('d/m/Y')}}</th>
             <th>{{datos.hora_entrada|date('H:i:s')}}</th>
             <th>{{datos.hora_salida|date('H:i:s')}}</th>
-            <th>{{datos.hora_acumulada|date('H')}}</th>
-            <th><a href="" class="button">Editar</a></th>
+            <th>{{datos.hora_acumulada}}</th>
+            <th><a href="/voluntarios/editar_h/{{datos.idasistencia}}" class="button">Editar</a></th>
           </tr>
           {%endfor%}
         </tbody>
       </table>
     </div>
   </div>
+</div>
+
+<div id="modal_agr_hora" class="modal">
+<span class="close" title="Cerrar">&times;</span>
+<form class="modal-content animate" method="post" name="horas" action="/voluntarios/hora">
+  <div class="centrar">
+    <h4>Agregar Horas</h4>
+  </div>
+  <div class="container centrar">
+    {%for datos in volun%}
+    <input type="text" style="display:none;" name="id" value="{{datos.persona_idpersona}}">
+    {%endfor%}
+    <label for="Fecha">Ingrese Fecha:</label>
+    <input type="date" id=Fecha name="fecha" value="" required>
+    <label for="entrada">Hora de Entrada:</label>
+    <input type="time" id="entrada" name="entrada" value="" required>
+    <label for="salida">Hora de Salida:</label>
+    <input type="time" id="salida" name="salida" value="" required>
+    <br>
+    <input type="submit" class="button" name="" value="Agregar">
+  </div>
+  </form>
+</div>
+<div id="modal_agr_activ" class="modal">
+<span class="close" title="Cerrar">&times;</span>
+<form class="modal-content animate" method="post" name="horas" action="/voluntarios/agr_activ">
+  <div class="centrar">
+    <h4>Agregar Actividad Extra</h4>
+  </div>
+  <div class="container centrar">
+    {%for datos in volun%}
+    <input type="text" style="display:none;" name="id_vol" value="{{datos.idvoluntario}}">
+    {%endfor%}
+    <input type="text" name="nombre_activ" value="" placeholder="Nombre">
+    <br>
+    <input type="submit" class="button" name="" value="Agregar">
+  </div>
+  </form>
 </div>
 {% endblock %}

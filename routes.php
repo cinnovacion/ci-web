@@ -3,6 +3,7 @@
 
 use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;
+date_default_timezone_set("America/Managua");
 
 $app->any('/', function ($request, $response, $args) {
     return $this->view->render($response, 'inicio.html');
@@ -38,30 +39,35 @@ $app->group('/inicio', function () {
     // Registro de asistencia -- Voluntarios y Trabajadores --
     $this->any('/asistencia_reg', function ($request, $response, $args) {
         $parsedBody = $request->getParsedBody();
-        date_default_timezone_set("America/Managua"); 
+        date_default_timezone_set("America/Managua");
+
         $idpersona = $parsedBody['idpersona'];
 
-        $asistencia = $this->db->asistencia->where(array('persona_idpersona' => $idpersona, 'hora_acumulada' => 0))->fetch();
-        /*echo $asistencia;
-        $asistencia->fetch();*/
-        if ($asistencia){
-            echo "Entramos a agregar salida";
-            $salida = time();
-            $acumuladas = $salida - $asistencia['hora_entrada'];
-            $asistencia->update(
-                array("hora_acumulada" => $acumuladas,
-                "hora_salida" => $salida
-            ));
-        }else{
-            echo "No lo encuentra, tenemos que agregar la asistencia para ese dia";
-            $registrando_asis = $this->db->asistencia();
+         $asistencia = $this->db->asistencia->where(array('persona_idpersona' => $idpersona, 'hora_acumulada' => 0))->fetch();
+         /*echo $asistencia;
+         $asistencia->fetch();*/
+         if ($asistencia){
+             echo "Entramos a agregar salida";
+             $salida = time();
+             $acumuladas = date('H.is',$salida) - date('H.is',$asistencia['hora_entrada']);
+             if (date('H.is',$salida)>12 && $acumuladas>1)
+             {
+               $data['hora_acumulada'] = $data['hora_acumulada']-1;
+             }
+             $asistencia->update(
+                 array("hora_acumulada" => $acumuladas,
+                 "hora_salida" => $salida
+             ));
+         }else{
+             echo "No lo encuentra, tenemos que agregar la asistencia para ese dia";
+             $registrando_asis = $this->db->asistencia();
+             $datos_asis['hora_entrada'] = time();
+             $datos_asis['persona_idpersona'] = $idpersona;
 
-            $datos_asis['hora_entrada'] = time();
-            $datos_asis['persona_idpersona'] = $idpersona;
+             $registrando_asis->insert($datos_asis);
+         }
 
-            $registrando_asis->insert($datos_asis);
-        }  
-
+        die();
     })->setName('asistencia');
 });
 //Mostrar pagina de visitas
@@ -73,73 +79,76 @@ $app->group('/visitas', function () {
 
     //Mostrar lista de visitas
     $this->any('/lista', function ($request, $response, $args) {
-        $lista= $this->db->visita();
-        return $this->view->render($response, '/visitas/lista.html',['lis_vis'=>$lista]);
+        $lista['visita']= $this->db->visita();
+        $id=$this->db->visita()->select('persona_idpersona')->fetch();
+        $lista['persona']=$this->db->persona()->where('idpersona',$id['persona_idpersona']);
+        return $this->view->render($response, '/visitas/lista.html',$lista);
     })->setName('visitas_lista');
 
     //Mostrar mas detalles de una visita
     $this->any('/mas/{id}', function ($request, $response, $args) {
         $id = $request->getAttribute('id');
-        $visita = $this->db->visita()->where('idvisita',$id);
-        return $this->view->render($response, '/visitas/mas.html',['visita' => $visita]);
+        $idpersona=$this->db->visita()->select('persona_idpersona')->where('idvisita',$id)->fetch();
+        $mas['persona']=$this->db->persona()->where('idpersona',$idpersona['persona_idpersona']);
+        $mas['visita'] = $this->db->visita()->where('idvisita',$id);
+        return $this->view->render($response, '/visitas/mas.html',$mas);
     })->setName('visitas_mas');
 
     //Realizar registro de una visita
     $this->any('/registro', function ($request, $response, $args) {
         $parsedBody = $request->getParsedBody();
         $visita=$this->db->visita();
+        $persona=$this->db->persona();
         //organizando los datos en un nuevo arreglo
         var_dump($parsedBody);
 
         $data['nombre']=$parsedBody['nombre'];
         $data['apellido']=$parsedBody['apellido'];
         $data['cedula']=$parsedBody['ced'];
-        $data['placa']=$parsedBody['no_placa'];
-        $data['org']=$parsedBody['org_vi'];
-        $data['tipo_visita']=$parsedBody['tipo_visita'];
+        $persona->insert($data);
+        $data1['placa']=$parsedBody['no_placa'];
+        $data1['org']=$parsedBody['org_vi'];
+        $data1['tipo_visita']=$parsedBody['tipo_visita'];
 
         /*Condicion para almacenar correctamente el motivo segun el tipo de visita*/
         if ($parsedBody['tipo_visita']=='Externa'){
-            $data['motivo']=$parsedBody['motivo_ext'];
+            $data1['motivo']=$parsedBody['motivo_ext'];
         }
         else if ($parsedBody['tipo_visita']=='Interna')
         {
-            $data['motivo']=$parsedBody['motivo_int'];
+            $data1['motivo']=$parsedBody['motivo_int'];
         }
         //fecha de visita
         //formato para interpretar fechas = $fecha=date("d-m-Y", time());
         //predeterminar la zona horaria
         date_default_timezone_set("America/Managua");
-        $data['fecha']=time();
-        $data['hora_llegada']=time();
-        $data['hora_salida']=strtotime($parsedBody['hora_salida']);
+        $data1['fecha']=time();
+        $data1['hora_llegada']=time();
+        $data1['hora_salida']=strtotime($parsedBody['hora_salida']);
+        $persona_id=$this->db->persona()->select('idpersona')->order('idpersona desc')->limit(1)->fetch();
+        $data1['persona_idpersona']=$persona_id['idpersona'];
         //insertar en la base de datos
         var_dump($fecha);
-        $visita()->insert($data);
+        $visita()->insert($data1);
         die();
     })->setName('visitas_reg');
-
-    $this->any('/conf', function ($request, $response, $args) {
-        return $this->view->render($response, '/visitas/conf.html');
-    })->setName('visitas');
 });
 //Grupo de rutas de Voluntarios
 $app->group('/voluntarios', function () {
     //Formulario de Registro
     $this->any('/voluntarios_reg', function ($request, $response, $args) {
         $parsedBody  = $response->getBody();
-        $org         = $this->db->Universidad();
+        $org         = $this->db->institucion();
         $carrera     = $this->db->carrera();
-        $area        = $this->db->area();
         $actividades = $this->db->actividades();
-        $item = [$org,$carrera,$area,$actividades];
+        $item = [$org,$carrera,$actividades];
         return $this->view->render($response, '/voluntarios/voluntarios.html',['template' => $item]);
     })->setName('voluntarios');
 
     //Agregar datos a listas deplegables
     $this->any('/agr_org', function ($request, $response, $args) {
         $parsedBody = $request->getParsedBody();
-        $org = $this->db->Universidad();
+        $org = $this->db->institucion();
         $org_i['nombre'] = $parsedBody['nombre_org'];
         $org -> insert($org_i);
         return $response->withRedirect('/voluntarios/voluntarios_reg');
@@ -154,32 +163,13 @@ $app->group('/voluntarios', function () {
         die();
     })->setName('agr_carr');
 
-    $this->any('/agr_area', function ($request, $response, $args) {
-        $parsedBody = $request->getParsedBody();
-        $area = $this->db->area();
-        $area_i['nombre'] = $parsedBody['nombre_area'];
-        $area_i['descripcion'] = $parsedBody['desc_area'];
-        $area -> insert($area_i);
-       return $response->withRedirect('/voluntarios/voluntarios_reg');
-        die();
-    })->setName('agr_area');
-
-    $this->any('/agr_activ', function ($request, $response, $args) {
-        $parsedBody = $request->getParsedBody();
-        $activ = $this->db->actividades();
-        $activ_i['nombre'] = $parsedBody['nombre_activ'];
-        $activ_i['descripcion'] = $parsedBody['desc_activ'];
-        $activ_i['area_idarea'] = $parsedBody['activ_area'];
-        $activ -> insert($activ_i);
-        return $response->withRedirect('/voluntarios/voluntarios_reg');
-        die();
-    })->setName('agr_activ');
     //Registrar Voluntarios
     $this->any('/registro', function ($request, $response, $args) {
         $parsedBody = $request->getParsedBody();
 
         $vol_p=$this->db->persona();
         $vol_v=$this->db->voluntario();
+        $vol_a=$this->db->voluntario_has_actividades();
         //guardar datos en tabla persona
         $data['nombre']=$parsedBody['nombre'];
         $data['apellido']=$parsedBody['apellido'];
@@ -187,22 +177,27 @@ $app->group('/voluntarios', function () {
         $data['direccion']=$parsedBody['direccion'];
         $data['telefono']=$parsedBody['no_telefono'];
         $data['correo']=$parsedBody['correo'];
-        $data['area_idarea']=$parsedBody['area'];
         $vol_p->insert($data);
 
         //guardar datos en tabla voluntario
         //predeterminar la zona horaria
         date_default_timezone_set("America/Managua");
         $data1['carnet']=time()."-".$parsedBody['ced'];
+        $data1['area'] = $parsedBody['area'];
         $data1['fecha_ingreso']=strtotime($parsedBody['fecha']);
         $persona_id=$this->db->persona()->select('idpersona')->order('idpersona desc')->limit(1)->fetch();
-        echo json_encode($persona_id['idpersona']);
         $data1['persona_idpersona']=$persona_id['idpersona'];
-        $data1['Universidad_idUniversidad']=$parsedBody['org'];
+        $data1['institucion_idinstitucion']=$parsedBody['org'];
         $data1['carrera_idcarrera']=$parsedBody['carrera'];
-        echo "<p>datos de voluntario</p>";
-        var_dump($data1);
         $vol_v->insert($data1);
+
+        $voluntario_id=$this->db->voluntario()->select('idvoluntario')->order('idvoluntario desc')->limit(1)->fetch();
+        $actividades_id=$this->db->actividades()->select('idactividades')->where('area',$parsedBody['area']);
+        for ($i=1; $i <= count($actividades_id) ; $i++) {
+          $data2['voluntario_idvoluntario']=$voluntario_id['idvoluntario'];
+          $data2['actividades_idactividades'] = $actividades_id[$i]['idactividades'];
+          $vol_a->insert($data2);
+        }
         return $response->withRedirect('/voluntarios/lista');
         die();
     })->setName('voluntarios_reg');
@@ -219,19 +214,27 @@ $app->group('/voluntarios', function () {
     $this->any('/busqueda', function($request,$response,$args){
       $parsedBody = $request->getParsedBody();
       $voluntario=$this->db->voluntario()->select('persona_idpersona');
-      $buscar = $this->db->persona()->where(array('idpersona'=>$voluntario, 'nombre LIKE ?'=>'%'.$parsedBody['buscar'].'%'));
-      return $this->view->render($response, '/voluntarios/lista.html',['lis_vol'=>$buscar]);
+      $buscar['persona'] = $this->db->persona()->where(array('idpersona'=>$voluntario, 'nombre LIKE ?'=>'%'.$parsedBody['buscar'].'%'));
+      return $this->view->render($response, '/voluntarios/lista.html',$buscar);
     })->setName('voluntarios_buscar');
 
     //Mostrar detalles de un voluntario
     $this->any('/detalles/{id}', function ($request, $response, $args) {
         $id = $request->getAttribute('id');
-        $persona = $this->db->persona()->where('idpersona',$id);
-        $volun = $this->db->voluntario()->where('persona_idpersona',$id);
-        $asis = $this->db->asistencia()->where('persona_idpersona',$id);
-        $acum = $this->db->asistencia()->where('persona_idpersona',$id)->sum('hora_acumulada');
-        $items = [$persona,$volun,$asis,$acum];
-        return $this->view->render($response, '/voluntarios/detalles.html',['lis_vol'=>$items]);
+        $lista['persona'] = $this->db->persona()->where('idpersona',$id);
+        $lista['volun'] = $this->db->voluntario()->where('persona_idpersona',$id);
+        $id_vol = $this->db->voluntario()->select('idvoluntario')->where('persona_idpersona',$id)->fetch();
+        $lista['asis'] = $this->db->asistencia()->where('persona_idpersona',$id);
+        $lista['acum'] = $this->db->asistencia()->where('persona_idpersona',$id)->sum('hora_acumulada');
+        $act_id = $this->db->voluntario_has_actividades()->select('actividades_idactividades')->where('voluntario_idvoluntario',$id_vol);
+        for ($i=0; $i <count($act_id) ; $i++) {
+          $idactiv[$i] = $act_id[$i]['actividades_idactividades'];
+        }
+        $lista['area'] = $this->db->actividades()->where('idactividades',$idactiv);
+        /*echo json_encode($lista['area']); die();*/
+        $lista['ultima'] = $this->db->asistencia()->where('persona_idpersona',$id)->select('hora_entrada')->order('hora_entrada desc')->limit(1);
+        //die();
+        return $this->view->render($response, '/voluntarios/detalles.html',$lista);
     })->setName('voluntarios_detalles');
 
     //Editar un voluntario
@@ -239,10 +242,8 @@ $app->group('/voluntarios', function () {
         $id = $request->getAttribute('id');
         $data['persona'] = $this->db->persona()->where('idpersona',$id)->fetch();
         $data['voluntario'] = $this->db->voluntario()->where('persona_idpersona',$id)->fetch();
-        $data['org'] = $this->db->Universidad();
+        $data['org'] = $this->db->institucion();
         $data['carrera'] = $this->db->carrera();
-        $data['area'] = $this->db->area();
-        $data['actividades'] = $this->db->actividades();
         return $this->view->render($response, '/voluntarios/editar.html', $data);
     })->setName('voluntario_editar');
 
@@ -253,6 +254,7 @@ $app->group('/voluntarios', function () {
 
         $vol_p=$this->db->persona()->where('idpersona',$id)->fetch();
         $vol_v=$this->db->voluntario()->where('persona_idpersona',$id)->fetch();
+        $vol_a=$this->db->voluntario_has_actividades()->where('voluntario_idvoluntario',$vol_v['idvoluntario'])->fetch();
         //guardar datos en tabla persona
         $data['nombre']=$parsedBody['nombre'];
         $data['apellido']=$parsedBody['apellido'];
@@ -260,7 +262,6 @@ $app->group('/voluntarios', function () {
         $data['direccion']=$parsedBody['direccion'];
         $data['telefono']=$parsedBody['no_telefono'];
         $data['correo']=$parsedBody['correo'];
-        $data['area_idarea']=$parsedBody['area'];
         $vol_p->update($data);
 
         //guardar datos en tabla voluntario
@@ -270,36 +271,86 @@ $app->group('/voluntarios', function () {
         $data1['fecha_ingreso']=strtotime($parsedBody['fecha']);
         //$persona_id=$this->db->persona()->select('idpersona')->order('idpersona desc')->limit(1)->fetch();
         //$data1['persona_idpersona']=$persona_id['idpersona'];
-        $data1['Universidad_idUniversidad']=$parsedBody['org'];
+        $data1['institucion_idinstitucion']=$parsedBody['org'];
         $data1['carrera_idcarrera']=$parsedBody['carrera'];
         $vol_v->update($data1);
+
+        /*
+        $voluntario_id=$this->db->voluntario()->select('idvoluntario')->order('idvoluntario desc')->limit(1)->fetch();
+        $actividades_id=$this->db->actividades()->select('idactividades')->where('area',$parsedBody['area']);
+        for ($i=1; $i <= count($actividades_id) ; $i++) {
+          $data2['voluntario_idvoluntario']=$voluntario_id['idvoluntario'];
+          $data2['actividades_idactividades'] = $actividades_id[$i]['idactividades'];
+          $vol_a->insert($data2);
+        }
+        */
+        $actividades_id=$this->db->actividades()->select('idactividades')->where('')->limit(1)->fetch();
+        $data2['actividades_idactividades']=$actividades_id['idactividades'];
+        $vol_a->update($data2);
         die();
+
     })->setName('voluntarios_up');
+
+    //Agregar Horas
+    $this->any('/hora', function ($request, $response, $args) {
+        $parsedBody=$request->getParsedBody();
+        $asis = $this->db->asistencia();
+        $data['hora_entrada']=strtotime(''.$parsedBody['fecha'].' '.$parsedBody['entrada'].'');
+        $data['hora_salida']=strtotime(''.$parsedBody['fecha'].' '.$parsedBody['salida']);
+        $data['hora_acumulada']= date('H.is',$data['hora_salida'])- date('H.is',$data['hora_entrada']);
+        if (date('H.is',$data['hora_salida'])>12 && $data['hora_acumulada']>1)
+        {
+          $data['hora_acumulada'] = $data['hora_acumulada']-1;
+        }
+        $data['persona_idpersona']=$parsedBody['id'];
+        $asis->insert($data);
+    })->setName('agregar_hora');
+
+    //Editar horas
+    $this->any('/editar_h/{id}',function($request,$response,$args){
+      $id = $request->getAttribute('id');
+      $asistencia = $this->db->asistencia()->where('idasistencia',$id)->fetch();
+      $data['asistencia'] = $asistencia;
+      return $this->view->render($response, '/voluntarios/editar_hora.html', $data);
+    })->setName('editar_hora');
+
+    //Actualizar_horas
+    $this->any('/actualizar_h',function($request,$response,$args){
+      $parsedBody = $request->getParsedBody();
+      $asistencia = $this->db->asistencia()->where('idasistencia',$parsedBody['id']);
+      $data['hora_entrada'] = strtotime(''.$parsedBody['fecha'].' '.$parsedBody['h_entrada']);
+      $data['hora_salida'] = strtotime(''.$parsedBody['fecha'].' '.$parsedBody['h_salida']);
+      $data['hora_acumulada'] = date('H.is',$data['hora_salida']) - date('H.is',$data['hora_entrada']);
+      if (date('H.is',$data['hora_salida'])>12 && $data['hora_acumulada']>1)
+      {
+        $data['hora_acumulada'] = $data['hora_acumulada']-1;
+      }
+      $asistencia->update(array("hora_entrada" => $data['hora_entrada'],"hora_salida" => $data['hora_salida'],"hora_acumulada" => $data['hora_acumulada']));
+      return $response->withRedirect('/voluntarios/lista');
+    })->setName('actualizar_hora');
+
+    $this->any('/agr_activ',function($request,$response,$args){
+      $parsedBody = $request->getParsedBody();
+      $activ = $this->db->voluntario_has_actividades();
+      $activ_n = $this->db->actividades();
+      $data['nombre'] = $parsedBody['nombre_activ'];
+      $activ_n->insert($data);
+      $activ_id = $this->db->actividades()->select('idactividades')->where('nombre',$parsedBody['nombre_activ'])->fetch();
+      $data1['voluntario_idvoluntario']= $parsedBody['id_vol'];
+      $data1['actividades_idactividades']=$activ_id;
+      $activ->insert($data1);
+      return $response->withRedirect('/voluntarios/lista');
+    })->setName('actualizar_hora');
+
 });
 
+//Grupo de Trabajador
 $app->group('/trabajador', function (){
 
   //Vista de Registro de Trabajador
   $this->any('/trabajador_reg', function ($request, $response, $args) {
-      $parsedBody  = $response->getBody();
-      $org         = $this->db->Universidad();
-      $carrera     = $this->db->carrera();
-      $area        = $this->db->area();
-      $actividades = $this->db->actividades();
-      $item = [$org,$carrera,$area,$actividades];
-      return $this->view->render($response, '/trabajador/trabajador.html',['template' => $item]);
+      return $this->view->render($response, '/trabajador/trabajador.html');
   })->setName('trabajador');
-
-  //Agregar Area
-  $this->any('/agr_area_t', function ($request, $response, $args) {
-      $parsedBody = $request->getParsedBody();
-      $area = $this->db->area();
-      $area_i['nombre'] = $parsedBody['nombre_area'];
-      $area_i['descripcion'] = $parsedBody['desc_area'];
-      $area -> insert($area_i);
-      return $response->withRedirect('/trabajador/trabajador_reg');
-      die();
-  })->setName('agr_area_t');
 
   //Registrar Trabajador
   $this->any('/registro', function ($request, $response, $args) {
@@ -314,7 +365,6 @@ $app->group('/trabajador', function (){
             $data['direccion']=$parsedBody['direccion'];
             $data['telefono']=$parsedBody['no_telefono'];
             $data['correo']=$parsedBody['correo'];
-            $data['area_idarea']=$parsedBody['area'];
             $trab_p->insert($data);
 
             //guardar datos en tabla trabajador
@@ -322,9 +372,11 @@ $app->group('/trabajador', function (){
             //date_default_timezone_set("America/Managua");
             $data1['carnet'] = $parsedBody['carnet'];
             $data1['cargo']=$parsedBody['cargo'];
+            $data1['area']=$parsedBody['area'];
             $persona_id=$this->db->persona()->select('idpersona')->order('idpersona desc')->limit(1)->fetch();
             $data1['persona_idpersona']=$persona_id['idpersona'];
             $trab_t->insert($data1);
+
             return $response->withRedirect('/trabajador/lista');
             die();
   })->setName('trabajador_reg');
@@ -359,10 +411,10 @@ $app->group('/trabajador', function (){
       $id = $request->getAttribute('id');
       $data['persona'] = $this->db->persona()->where('idpersona',$id)->fetch();
       $data['trabajador'] = $this->db->trabajador()->where('persona_idpersona',$id)->fetch();
-      $data['area'] = $this->db->area();
       return $this->view->render($response, '/trabajador/editar.html', $data);
   })->setName('trabajador_editar');
 
+  //Actualizar un Trabajador
   $this->any('/actualizar/{id}', function ($request, $response, $args) {
     $id = $request->getAttribute('id');
     $parsedBody = $request->getParsedBody();
@@ -376,7 +428,6 @@ $app->group('/trabajador', function (){
             $data['direccion']=$parsedBody['direccion'];
             $data['telefono']=$parsedBody['no_telefono'];
             $data['correo']=$parsedBody['correo'];
-            $data['area_idarea']=$parsedBody['area'];
             $trab_p->update($data);
 
             //guardar datos en tabla trabajador
@@ -384,12 +435,49 @@ $app->group('/trabajador', function (){
             //date_default_timezone_set("America/Managua");
             $data1['carnet'] = $parsedBody['carnet'];
             $data1['cargo']=$parsedBody['cargo'];
-            $persona_id=$this->db->persona()->select('idpersona')->order('idpersona desc')->limit(1)->fetch();
+            $data1['area']=$parsedBody['area'];
+            //$persona_id=$this->db->persona()->select('idpersona')->order('idpersona desc')->limit(1)->fetch();
             //$data1['persona_idpersona']=$persona_id['idpersona'];
             $trab_t->update($data1);
             return $response->withRedirect('/trabajador/lista');
             die();
   })->setName('actualizar_trab');
+
+  $this->any('/hora', function ($request, $response, $args) {
+      $parsedBody=$request->getParsedBody();
+      $asis = $this->db->asistencia();
+      $data['hora_entrada']=strtotime(''.$parsedBody['fecha'].' '.$parsedBody['entrada'].'');
+      $data['hora_salida']=strtotime(''.$parsedBody['fecha'].' '.$parsedBody['salida']);
+      $data['hora_acumulada']= date('H.is',$data['hora_salida'])- date('H.is',$data['hora_entrada']);
+      if (date('H.is',$data['hora_salida'])>12 && $data['hora_acumulada']>1)
+      {
+        $data['hora_acumulada'] = $data['hora_acumulada']-1;
+      }
+      $data['persona_idpersona']=$parsedBody['id'];
+      $asis->insert($data);
+  })->setName('agregar_hora');
+
+  $this->any('/editar_h/{id}',function($request,$response,$args){
+    $id = $request->getAttribute('id');
+    $asistencia = $this->db->asistencia()->where('idasistencia',$id)->fetch();
+    $data['asistencia'] = $asistencia;
+    return $this->view->render($response, '/trabajador/editar_hora.html', $data);
+  })->setName('editar_hora');
+
+  //Actualizar_horas
+  $this->any('/actualizar_h',function($request,$response,$args){
+    $parsedBody = $request->getParsedBody();
+    $asistencia = $this->db->asistencia()->where('idasistencia',$parsedBody['id']);
+    $data['hora_entrada'] = strtotime(''.$parsedBody['fecha'].' '.$parsedBody['h_entrada']);
+    $data['hora_salida'] = strtotime(''.$parsedBody['fecha'].' '.$parsedBody['h_salida']);
+    $data['hora_acumulada'] = date('H.is',$data['hora_salida']) - date('H.is',$data['hora_entrada']);
+    if (date('H.is',$data['hora_salida'])>12 && $data['hora_acumulada']>1)
+    {
+      $data['hora_acumulada'] = $data['hora_acumulada']-1;
+    }
+    $asistencia->update(array("hora_entrada" => $data['hora_entrada'],"hora_salida" => $data['hora_salida'],"hora_acumulada" => $data['hora_acumulada']));
+    return $response->withRedirect('/trabajador/lista');
+  })->setName('actualizar_hora');
 
 });
 
@@ -405,15 +493,36 @@ $app->group('/ajax', function () {
                         <div id="vald">
                             <h3 style="margin-top:5em; color:white;">Tu eres ' . $persona['nombre'] . ' ' . $persona['apellido'] . '?</h3>
                                 <form method="POST" action="/inicio/asistencia_reg">
-                                <button class="inverso" type="submit">Si</button>
+                                <button id="f_step" class="inverso" type="submit">Si</button>
                                 <a class="button inverso" href="/" style="margin-left:50px;">No</a>
-                                <input type="Hidden" name="idpersona" value="' . $persona['idpersona'] . '">
+                                <input type="Hidden" id="idpersona" name="idpersona" value="' . $persona['idpersona'] . '">
                             </form>
                         </div>
                     </div>
                 </div>
             </div>';
         else echo NULL;
+        return TRUE;
+    });
+
+    $this->any('/f_step', function ($request, $response, $args) {
+        $parsedBody = $request->getParsedBody();
+        $persona = $this->db->persona()->where('idpersona',$parsedBody['idpersona']);
+        $asistencia = $this->db->asistencia()->select('hora_entrada')->where('persona_idpersona',$parsedBody['idpersona']);
+         //tomamos a una persona según cedula
+            echo '<div class="row">
+                <div class="column column-50 column-offset-25 alto">
+                    <div class="centrar">
+                        <div id="vald">
+                            <h2 style="margin-top:5em; color:white;">Nombre: ' . $persona['nombre'] . ' ' . $persona['apellido']. '</h3>
+                            <h2 style="margin-top:5em; color:white;">Hora de Entrada: '.date('H:i:s',$asistencia['hora_entrada']). '</h3>
+                                <a class="button inverso" href="/" style="margin-left:50px;">Aceptar</a>
+                                <input type="Hidden" id="idpersona" name="idpersona" value="' . $persona['idpersona'] . '">
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>';
         return TRUE;
     });
 });

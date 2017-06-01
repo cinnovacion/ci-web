@@ -12,13 +12,17 @@
         <p class="p_detalles"><b>Telefono:</b> {{datos.telefono}}</p>
         <p class="p_detalles"><b>Correo:</b> {{datos.correo}}</p>
         <p class="p_detalles"><b>Dirección:</b> {{datos.direccion}}</p>
+        <a class="button" href="/trabajador/editar/{{datos.persona_idpersona}}">Editar</a>
+        <a class="button" id="btn_agr_hora">Añadir Horas</a>
         {%endfor%}
-        <!--<a href="" class="button" style="margin-top:5px;">Imprimir Carnet</a>-->
-        <!--<a href="" class="button" style="margin-top:5px;">Imprimir Constancia</a>-->
+        </div>
+        <div class="column column-50">
         {%for datos in lis_trab[1]%}
+        <br>
+        <br>
+        <p class="p_detalles"><b>Área:</b> {{datos.area}}</p>
         <p class="p_detalles"><b>Carnet:</b> {{datos.carnet}}</p>
         <p class="p_detalles"><b>Cargo:</b> {{datos.cargo}}</p>
-        <a class="button" href="/trabajador/editar/{{datos.persona_idpersona}}">Editar</a>
         {%endfor%}
       </div>
   </div>
@@ -30,7 +34,6 @@
             <th>Fecha</th>
             <th>Hora de entrada</th>
             <th>Hora de salida</th>
-            <th>Horas acumuladas</th>
             <th>Editar</th>
           </tr>
         </thead>
@@ -40,13 +43,33 @@
             <th>{{datos.hora_entrada|date('d/m/Y')}}</th>
             <th>{{datos.hora_entrada|date('H:i:s')}}</th>
             <th>{{datos.hora_salida|date('H:i:s')}}</th>
-            <th>{{datos.hora_acumulada|date('H')}}</th>
-            <th><a href="" class="button">Editar</a></th>
+            <th><a href="/trabajador/editar_h/{{datos.idasistencia}}" class="button">Editar</a></th>
           </tr>
           {%endfor%}
         </tbody>
       </table>
     </div>
   </div>
+</div>
+<div id="modal_agr_hora" class="modal">
+<span class="close" title="Cerrar">&times;</span>
+<form class="modal-content animate" method="post" name="horas" action="/trabajador/hora">
+  <div class="centrar">
+    <h4>Agregar Horas</h4>
+  </div>
+  <div class="container centrar">
+    {%for datos in lis_trab[1]%}
+    <input type="text" style="display:none;" name="id" value="{{datos.persona_idpersona}}">
+    {%endfor%}
+    <label for="Fecha">Ingrese Fecha:</label>
+    <input type="date" id=Fecha name="fecha" value="" required>
+    <label for="entrada">Hora de Entrada:</label>
+    <input type="time" id="entrada" name="entrada" value="" required>
+    <label for="salida">Hora de Salida:</label>
+    <input type="time" id="salida" name="salida" value="" required>
+    <br>
+    <input type="submit" class="button" name="" value="Agregar">
+  </div>
+  </form>
 </div>
 {% endblock %}
