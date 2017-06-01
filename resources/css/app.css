@@ -214,7 +214,7 @@ footer {
 .login .tabs .tablinks {
 	margin-bottom: 0;
 	color: #448AFF;
-	border-radius: 0;
+	border-radius: 10;
 	width: 100%;
 }
 
@@ -382,4 +382,11 @@ table{
 }
 .p_detalles{
   margin-bottom: 1rem;
+}
+#lis_cmd{
+  position: absolute;
+  top: 0.2rem;
+  left: 25.2rem;
+  padding-left: 10px;
+  padding-right: 10px;
 }

@@ -1,0 +1,19 @@
+{% extends "layouts/layout_admin.html" %}
+
+{% block content %}
+<div class="centrar panel">
+  <form method="post" name="horas" action="/trabajador/actualizar_h">
+    <div class="centrar">
+      <h4><strong>Editar Horas</strong></h4>
+    </div>
+      <label for="entrada">Hora de Entrada:</label>
+      <input type="time" id="entrada" name="h_entrada" value="{{asistencia['hora_entrada']|date('H:i')}}" required>
+      <label for="salida">Hora de Salida:</label>
+      <input type="time" id="salida" name="h_salida" value="{{asistencia['hora_salida']|date('H:i')}}" required>
+      <input type="text" style="display:none;" name="id" value="{{asistencia['idasistencia']}}">
+      <input type="date" style="display:none;" name="fecha" value="{{asistencia['hora_entrada']|date('Y-m-d')}}">
+      <br>
+      <input type="submit" class="button" name="" value="Aceptar">
+  </form>
+</div>
+{% endblock %}

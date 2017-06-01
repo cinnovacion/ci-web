@@ -4,12 +4,14 @@
 <div class="panel">
   <div class="column">
     <div class="row panel">
-        {%for datos in visita%}
+        {%for datos in persona%}
         <div class="column column-50">
-          <a href="/visita/lista" class="button" style="margin-top:5px;">◄ Atrás</a>
+          <a href="/visitas/lista" class="button" style="margin-top:5px;">◄ Atrás</a>
           <p class="p_detalles"><b>Nombre:</b>  {{datos.nombre}}</label>
           <p class="p_detalles"><b>Apellido:</b>  {{datos.apellido}}</label>
           <p class="p_detalles"><b>Cedula:</b>  {{datos.cedula}}</label>
+        {%endfor%}
+        {%for datos in visita%}
           <p class="p_detalles"><b>Placa:</b> {{datos.placa}}</p>
           <p class="p_detalles"><b>Organizacion:</b>  {{datos.org}}</p>
         </div>

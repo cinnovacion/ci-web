@@ -87,32 +87,6 @@
             }
         });
 
-        //Agregar Área
-        $('#btn_agr_area').click(function(){
-            $('#modal_agr_area').css('display', 'block');
-        });
-        $('.close').click(function(){
-           $('#modal_agr_area').css('display', 'none');
-        });
-        $(window).click(function(event){
-            if (event.target.id == $('#modal_agr_area').attr('id')) {
-                $('#modal_agr_area').css('display', 'none');
-            }
-        });
-
-        //Agregar Actividad
-        $('#btn_agr_activ').click(function(){
-            $('#modal_agr_activ').css('display', 'block');
-        });
-        $('.close').click(function(){
-           $('#modal_agr_activ').css('display', 'none');
-        });
-        $(window).click(function(event){
-            if (event.target.id == $('#modal_agr_activ').attr('id')) {
-                $('#modal_agr_activ').css('display', 'none');
-            }
-        });
-
         //Agregar Actividad
         $('#btn_agr_mot').click(function(){
             $('#modal_agr_mot').css('display', 'block');
@@ -123,6 +97,31 @@
         $(window).click(function(event){
             if (event.target.id == $('#modal_agr_mot').attr('id')) {
                 $('#modal_agr_mot').css('display', 'none');
+            }
+        });
+
+        //Agregar Horas
+        $('#btn_agr_hora').click(function(){
+            $('#modal_agr_hora').css('display', 'block');
+        });
+        $('.close').click(function(){
+           $('#modal_agr_hora').css('display', 'none');
+        });
+        $(window).click(function(event){
+            if (event.target.id == $('#modal_agr_hora').attr('id')) {
+                $('#modal_agr_hora').css('display', 'none');
+            }
+        });
+
+        $('#btn_agr_activ').click(function(){
+            $('#modal_agr_activ').css('display', 'block');
+        });
+        $('.close').click(function(){
+           $('#modal_agr_activ').css('display', 'none');
+        });
+        $(window).click(function(event){
+            if (event.target.id == $('#modal_agr_activ').attr('id')) {
+                $('#modal_agr_activ').css('display', 'none');
             }
         });
 
@@ -147,6 +146,19 @@
                         $('#cedula').css('border-color', 'red');
                         $('.alert').css('display', 'block');
                     }
+                }
+            });
+        });
+        $('#f_step').click(function(event){
+            event.preventDefault();
+            $.ajax({
+                url: "/ajax/f_step",
+                data: { id : $('#idpersona').val() },
+                type: 'POST',
+                dataType: 'html',
+                success: function(html){
+                        $('body').css('background-color', '#448AFF');
+                        $('.container').html(html);
                 }
             });
         });

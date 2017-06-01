@@ -33,7 +33,7 @@
               <label for="org">Organización:</label>
               <select name="org" id="org">
                 {% for names in org %}
-                  <option value="{{names.idUniversidad}}" {{(voluntario['Universidad_idUniversidad']==names.idUniversidad)?'selected="selected"':' '}}>{{names.nombre}}</option>
+                  <option value="{{names.idinstitucion}}" {{(voluntario['institucion_idinstitucion']==names.idinstitcion)?'selected="selected"':' '}}>{{names.nombre}}</option>
                 {% endfor %}
               </select>
               <a class='button' id="btn_agr_org">Agregar</a>
@@ -55,22 +55,11 @@
             <div id="area" style="display: block;">
               <label for="area">Área:</label>
               <select name="area" id="area">
-                {% for names in area %}
-                  <option value="{{names.idarea}}" {{(persona['area_idarea']==names.idarea)?'selected="selected"':' '}}>{{names.nombre}}</option>
-                {% endfor %}
+                <option value="Soporte Tecnico" {{(voluntario['area']=='Soporte Tecnico')?'selected="selected"':' '}}>Soporte Tecnico</option>
+                <option value="Area de Innovación" {{(voluntario['area']=='Area de Innovacion')?'selected="selected"':' '}}>Area de Innovaciòn</option>
               </select>
-              <a class="button" id="btn_agr_area">Agregar</a>
             </div>
 
-            <div id="act" style="display: block;">
-              <label for="act">Actividades:</label>
-              <select name="actividades" id="actividades">
-                {% for names in actividades %}
-                  <option value="{{names.idactividades}}" {{(persona['area_idarea']==names.area_idarea)?'selected="selected"':' '}}>{{names.nombre}}</option>
-                {% endfor %}
-              </select>
-              <a class="button" id="btn_agr_activ">Agregar</a>
-            </div>
           </div>
         </div>
         <input class="button" type="submit" value="Terminar Edición">
