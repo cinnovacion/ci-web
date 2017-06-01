@@ -3,6 +3,7 @@
 
 use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;
+date_default_timezone_set("America/Managua"); 
 
 $app->any('/', function ($request, $response, $args) {
     return $this->view->render($response, 'inicio.html');
@@ -58,6 +59,7 @@ $app->group('/inicio', function () {
 
             $datos_asis['hora_entrada'] = time();
             $datos_asis['persona_idpersona'] = $idpersona;
+            $datos_asis['fecha'] = date("Y-m-d", time());
 
             $registrando_asis->insert($datos_asis);
         }  
@@ -125,6 +127,66 @@ $app->group('/visitas', function () {
 });
 //Grupo de rutas de Voluntarios
 $app->group('/voluntarios', function () {
+
+    $this->any('/asis_dia', function ($request, $response, $args) {
+        $voluntario=$this->db->voluntario->select('persona_idpersona');
+        $lista=$this->db->persona->select('nombre', 'apellido')->where('idpersona',$voluntario);
+
+        $today = date('Y-m-d', time());
+
+        $asistencia=$this->db->asistencia->select('fecha', 'hora_entrada', 'hora_salida', 'hora_acumulada')->where(array('persona_idpersona' => $voluntario, 'fecha' => $today));
+
+        $todo[] = 0;
+        foreach ($lista as $key => $value) {
+            $todo['datos'][$key]['nombre'] = $value['nombre'];
+            $todo['datos'][$key]['apellido'] = $value['apellido'];
+        }
+        foreach ($asistencia as $key => $value) {
+            $todo['datos'][$key]['hora_entrada'] = $value['hora_entrada'];
+            $todo['datos'][$key]['hora_salida'] = $value['hora_salida'];
+            $todo['datos'][$key]['hora_acumulada'] = $value['hora_acumulada'];
+        }
+
+        return $this->view->render($response, '/voluntarios/asisxdia.html', $todo);
+    })->setName('voluntarios_asistencia_dia');
+
+    $this->any('/lista_asis_semana', function($request, $response, $args){
+        $mes=5;
+        $anio=2017;
+        /*echo date(W,mktime(0,0,0,$mes,date(t, mktime(0,0,0,$mes,1,$anio)),$anio))-date(W,mktime(0,0,0,$mes,1,$anio));
+        die();*/
+        /**
+         * Función para saber el numero de semanas que tiene un mes dado
+         * Tiene que recibir el año y mes
+         * Devuelve un array con el numero de la primera semana y la ultima
+         */
+        function semanasMes($year,$month)
+        /*$fmin = $this->db->asistencia()->min('hora_entrada');
+        echo $fmin;*/
+        {
+            # Obtenemos el ultimo dia del mes
+            $ultimoDiaMes=date("t",mktime(0,0,0,$month,1,$year));
+         
+            # Obtenemos la semana del primer dia del mes
+            $primeraSemana=date("W",mktime(0,0,0,$month,1,$year));
+         
+            # Obtenemos la semana del ultimo dia del mes
+            $ultimaSemana=date("W",mktime(0,0,0,$month,$ultimoDiaMes,$year));
+         
+            # Devolvemos en un array los dos valores
+            return array($primeraSemana,$ultimaSemana);
+        }
+         
+        $year=2017;
+        for($i=1;$i<=12;$i++)
+        {
+            list($primeraSemana,$ultimaSemana)=semanasMes($year,$i);
+         
+            echo "<br>Mes: ".$i."/".$year." - Primera semana: ".$primeraSemana." - Ultima semana: ".$ultimaSemana;
+        }
+        return $this->view->render($response, '/voluntarios/listaxtiempo.html',['lis_vol'=>$buscar]);
+    })->setName('asisxinter');
+
     //Formulario de Registro
     $this->any('/voluntarios_reg', function ($request, $response, $args) {
         $parsedBody  = $response->getBody();
@@ -341,6 +403,7 @@ $app->group('/trabajador', function (){
     $parsedBody = $request->getParsedBody();
     $trabajador=$this->db->trabajador()->select('persona_idpersona');
     $buscar = $this->db->persona()->where(array('idpersona'=>$trabajador, 'nombre LIKE ?'=>'%'.$parsedBody['buscar'].'%'));
+    echo $buscar; die();
     return $this->view->render($response, '/trabajador/lista.html',['lis_trab'=>$buscar]);
   })->setName('trabajador_buscar');
 

@@ -1,0 +1,44 @@
+{% extends "layouts/layout_admin.html" %}
+
+{% block content %}
+
+<div class="centrar panel">
+	<div class="panel">
+			<!--<input class="buscar" type="text" name="buscar" placeholder="Cédula" class="izquierda">
+			<button type="button" name="button"></button>-->
+		<table>
+			<caption>
+				<!--<a class="button" id="vol_cmd" href="/voluntarios/voluntarios_reg">Nuevo Voluntario</a> -->
+				<form id="frm_s" class="" action="/voluntarios/busqueda" method="post">
+					<input id="cmd_s" class="button" type="submit" name="cmd_buscar">
+					<input id="vol_s" type="text" name="buscar" placeholder="Nombre">
+					<input id="cmd_s" class="button" type="submit" name="cmd_buscar" value="Buscar">
+				</form>
+				<br>
+				<!--<h3><strong>LISTA DE VOLUNTARIOS</strong></h3>-->
+			</caption>
+			<thead>
+				<tr>
+					<th>Nombre</th>
+					<th>Apellido</th>
+					<th>Hora de Entrada</th>
+					<th>Hora de Salida</th>
+					<th>Horas Acumuladas</th>
+				</tr>
+			</thead>
+			<tbody>
+				{%for datos in datos%}
+					<tr>				
+						<th>{{datos['nombre']}}</th>
+						<th>{{datos['apellido']}}</th>
+						<th>{{datos['hora_entrada']|date('H:i')}}</th>
+						<th>{{datos['hora_salida']|date('H:i')}}</th>
+						<th>{{datos['hora_acumulada']}}</th>
+					</tr>
+				{%endfor%}			
+			</tbody>
+		</table>
+	</div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends "layouts/layout.html" %}
+
+{% block content %}
+
+<div class="derecha">
+	<select name="Año" type="number" style="background-color:white;">
+	  {%for datos in lis_vol%}
+	  <option value="1">Value 1</option>
+	  {%endfor%}
+	</select>
+
+	<select name="mes">
+	  <option value="value1" selected="">Enero</option>
+	  <option value="value">Febrero</option>
+	  <option value="value">Marzo</option>
+	  <option value="value">Abril</option>
+	  <option value="value">Mayo</option>
+	  <option value="value">Junio</option>
+	  <option value="value">Julio</option>
+	  <option value="value">Agosto</option>
+	  <option value="value">Septiembre</option>
+	  <option value="value">Octubre</option>
+	  <option value="value">Noviembre</option>
+	  <option value="value">Diciembre</option>
+	</select>
+
+	<select>
+		
+	</select>
+</div>
+
+
+{% endblock %}
