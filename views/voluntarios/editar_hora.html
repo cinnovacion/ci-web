@@ -11,6 +11,7 @@
       <label for="salida">Hora de Salida:</label>
       <input type="time" id="salida" name="h_salida" value="{{asistencia['hora_salida']|date('H:i')}}" required>
       <input type="text" style="display:none;" name="id" value="{{asistencia['idasistencia']}}">
+      <input type="text" style="display:none;" name="id_per" value="{{voluntario_id}}">
       <input type="date" style="display:none;" name="fecha" value="{{asistencia['hora_entrada']|date('Y-m-d')}}">
       <br>
       <input type="submit" class="button" name="" value="Aceptar">

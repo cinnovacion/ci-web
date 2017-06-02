@@ -50,7 +50,7 @@ $app->group('/inicio', function () {
              echo "Entramos a agregar salida";
              $salida = time();
              $acumuladas = date('H.is',$salida) - date('H.is',$asistencia['hora_entrada']);
-             if (date('H.is',$salida)>12 && $acumuladas>1)
+             if (date('H.is',$salida)>12 && $acumuladas>1 && date('H.is',$asistencia['hora_entrada'])<12)
              {
                $data['hora_acumulada'] = $data['hora_acumulada']-1;
              }
@@ -80,8 +80,8 @@ $app->group('/visitas', function () {
     //Mostrar lista de visitas
     $this->any('/lista', function ($request, $response, $args) {
         $lista['visita']= $this->db->visita();
-        $id=$this->db->visita()->select('persona_idpersona')->fetch();
-        $lista['persona']=$this->db->persona()->where('idpersona',$id['persona_idpersona']);
+        $id=$this->db->visita()->select('persona_idpersona');
+        $lista['persona']=$this->db->persona()->where('idpersona',$id);
         return $this->view->render($response, '/visitas/lista.html',$lista);
     })->setName('visitas_lista');
 
@@ -130,7 +130,7 @@ $app->group('/visitas', function () {
         //insertar en la base de datos
         var_dump($fecha);
         $visita()->insert($data1);
-        die();
+        return $response->withRedirect('/visitas/lista');
     })->setName('visitas_reg');
 });
 //Grupo de rutas de Voluntarios
@@ -271,24 +271,21 @@ $app->group('/voluntarios', function () {
         $data1['fecha_ingreso']=strtotime($parsedBody['fecha']);
         //$persona_id=$this->db->persona()->select('idpersona')->order('idpersona desc')->limit(1)->fetch();
         //$data1['persona_idpersona']=$persona_id['idpersona'];
+        $data1['area'] = $parsedBody['area'];
         $data1['institucion_idinstitucion']=$parsedBody['org'];
         $data1['carrera_idcarrera']=$parsedBody['carrera'];
         $vol_v->update($data1);
 
-        /*
-        $voluntario_id=$this->db->voluntario()->select('idvoluntario')->order('idvoluntario desc')->limit(1)->fetch();
-        $actividades_id=$this->db->actividades()->select('idactividades')->where('area',$parsedBody['area']);
-        for ($i=1; $i <= count($actividades_id) ; $i++) {
-          $data2['voluntario_idvoluntario']=$voluntario_id['idvoluntario'];
-          $data2['actividades_idactividades'] = $actividades_id[$i]['idactividades'];
-          $vol_a->insert($data2);
+        if ($parsedBody['area']!=$vol_v['area']) {
+          $voluntario_id=$this->db->voluntario()->select('idvoluntario')->order('idvoluntario desc')->limit(1)->fetch();
+          $actividades_id=$this->db->actividades()->select('idactividades')->where('area',$parsedBody['area']);
+          for ($i=1; $i <= count($actividades_id) ; $i++) {
+            $data2['voluntario_idvoluntario']=$voluntario_id['idvoluntario'];
+            $data2['actividades_idactividades'] = $actividades_id[$i]['idactividades'];
+            $vol_a->insert($data2);
+          }
         }
-        */
-        $actividades_id=$this->db->actividades()->select('idactividades')->where('')->limit(1)->fetch();
-        $data2['actividades_idactividades']=$actividades_id['idactividades'];
-        $vol_a->update($data2);
-        die();
-
+        return $response->withRedirect('/voluntarios/detalles/'.$id.'');
     })->setName('voluntarios_up');
 
     //Agregar Horas
@@ -298,12 +295,13 @@ $app->group('/voluntarios', function () {
         $data['hora_entrada']=strtotime(''.$parsedBody['fecha'].' '.$parsedBody['entrada'].'');
         $data['hora_salida']=strtotime(''.$parsedBody['fecha'].' '.$parsedBody['salida']);
         $data['hora_acumulada']= date('H.is',$data['hora_salida'])- date('H.is',$data['hora_entrada']);
-        if (date('H.is',$data['hora_salida'])>12 && $data['hora_acumulada']>1)
+        if (date('H.is',$data['hora_salida'])>12 && $data['hora_acumulada']>1 && date('H.is',$data['hora_entrada'])<12)
         {
           $data['hora_acumulada'] = $data['hora_acumulada']-1;
         }
         $data['persona_idpersona']=$parsedBody['id'];
         $asis->insert($data);
+        return $response->withRedirect('/voluntarios/detalles/'.$parsedBody['id'].'');
     })->setName('agregar_hora');
 
     //Editar horas
@@ -311,6 +309,7 @@ $app->group('/voluntarios', function () {
       $id = $request->getAttribute('id');
       $asistencia = $this->db->asistencia()->where('idasistencia',$id)->fetch();
       $data['asistencia'] = $asistencia;
+      $data['voluntario_id'] = $id;
       return $this->view->render($response, '/voluntarios/editar_hora.html', $data);
     })->setName('editar_hora');
 
@@ -321,12 +320,12 @@ $app->group('/voluntarios', function () {
       $data['hora_entrada'] = strtotime(''.$parsedBody['fecha'].' '.$parsedBody['h_entrada']);
       $data['hora_salida'] = strtotime(''.$parsedBody['fecha'].' '.$parsedBody['h_salida']);
       $data['hora_acumulada'] = date('H.is',$data['hora_salida']) - date('H.is',$data['hora_entrada']);
-      if (date('H.is',$data['hora_salida'])>12 && $data['hora_acumulada']>1)
+      if (date('H.is',$data['hora_salida'])>12 && $data['hora_acumulada']>1 && date('H.is',$data['hora_entrada'])<12)
       {
         $data['hora_acumulada'] = $data['hora_acumulada']-1;
       }
       $asistencia->update(array("hora_entrada" => $data['hora_entrada'],"hora_salida" => $data['hora_salida'],"hora_acumulada" => $data['hora_acumulada']));
-      return $response->withRedirect('/voluntarios/lista');
+      return $response->withRedirect('/voluntarios/detalles/'.$parsedBody['id_per'].'');
     })->setName('actualizar_hora');
 
     $this->any('/agr_activ',function($request,$response,$args){
@@ -339,7 +338,8 @@ $app->group('/voluntarios', function () {
       $data1['voluntario_idvoluntario']= $parsedBody['id_vol'];
       $data1['actividades_idactividades']=$activ_id;
       $activ->insert($data1);
-      return $response->withRedirect('/voluntarios/lista');
+      $persona_id = $this->db->voluntario()->select('persona_idpersona')->where('idvoluntario',$parsedBody['id_vol']);
+      return $response->withRedirect('/voluntarios/detalles/'.$persona_id[0]['persona_idpersona'].'');
     })->setName('actualizar_hora');
 
 });
@@ -439,22 +439,23 @@ $app->group('/trabajador', function (){
             //$persona_id=$this->db->persona()->select('idpersona')->order('idpersona desc')->limit(1)->fetch();
             //$data1['persona_idpersona']=$persona_id['idpersona'];
             $trab_t->update($data1);
-            return $response->withRedirect('/trabajador/lista');
-            die();
+            return $response->withRedirect('/trabajador/detalles/'.$id);
   })->setName('actualizar_trab');
 
+  //agregar_hora
   $this->any('/hora', function ($request, $response, $args) {
       $parsedBody=$request->getParsedBody();
       $asis = $this->db->asistencia();
       $data['hora_entrada']=strtotime(''.$parsedBody['fecha'].' '.$parsedBody['entrada'].'');
       $data['hora_salida']=strtotime(''.$parsedBody['fecha'].' '.$parsedBody['salida']);
       $data['hora_acumulada']= date('H.is',$data['hora_salida'])- date('H.is',$data['hora_entrada']);
-      if (date('H.is',$data['hora_salida'])>12 && $data['hora_acumulada']>1)
+      if (date('H.is',$data['hora_salida'])>12 && $data['hora_acumulada']>1 && date('H.is',$data['hora_entrada'])<12)
       {
         $data['hora_acumulada'] = $data['hora_acumulada']-1;
       }
       $data['persona_idpersona']=$parsedBody['id'];
       $asis->insert($data);
+      return $response->withRedirect('/trabajador/detalles/'.$parsedBody['id']);
   })->setName('agregar_hora');
 
   $this->any('/editar_h/{id}',function($request,$response,$args){
@@ -471,12 +472,12 @@ $app->group('/trabajador', function (){
     $data['hora_entrada'] = strtotime(''.$parsedBody['fecha'].' '.$parsedBody['h_entrada']);
     $data['hora_salida'] = strtotime(''.$parsedBody['fecha'].' '.$parsedBody['h_salida']);
     $data['hora_acumulada'] = date('H.is',$data['hora_salida']) - date('H.is',$data['hora_entrada']);
-    if (date('H.is',$data['hora_salida'])>12 && $data['hora_acumulada']>1)
+    if (date('H.is',$data['hora_salida'])>12 && $data['hora_acumulada']>1 && date('H.is',$data['hora_entrada'])<12)
     {
       $data['hora_acumulada'] = $data['hora_acumulada']-1;
     }
     $asistencia->update(array("hora_entrada" => $data['hora_entrada'],"hora_salida" => $data['hora_salida'],"hora_acumulada" => $data['hora_acumulada']));
-    return $response->withRedirect('/trabajador/lista');
+    return $response->withRedirect('/trabajador/detalles/'.$parsedBody['id_per']);
   })->setName('actualizar_hora');
 
 });

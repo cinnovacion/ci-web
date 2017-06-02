@@ -51,9 +51,8 @@
               <a class="button" id="btn_agr_carr">Agregar</a>
             </div>
 
-            <label for="nivel">Fecha de Ingreso:</label>
-            <input type="date" name="fecha">
-
+            <label for="datepicker">Fecha de Ingreso:</label>
+            <input type="text" name="fecha" id="datepicker" value="{{'now'|date('Y-m-d')}}" readonly>
             <div id="area" style="display: block;">
               <label for="area">Área:</label>
               <select name="area" id="area">

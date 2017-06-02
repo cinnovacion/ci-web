@@ -10,6 +10,7 @@
       <input type="time" id="entrada" name="h_entrada" value="{{asistencia['hora_entrada']|date('H:i')}}" required>
       <label for="salida">Hora de Salida:</label>
       <input type="time" id="salida" name="h_salida" value="{{asistencia['hora_salida']|date('H:i')}}" required>
+      <input type="text" style="display:none;" name="id_per" value="{{asistencia['persona_idpersona']}}">
       <input type="text" style="display:none;" name="id" value="{{asistencia['idasistencia']}}">
       <input type="date" style="display:none;" name="fecha" value="{{asistencia['hora_entrada']|date('Y-m-d')}}">
       <br>

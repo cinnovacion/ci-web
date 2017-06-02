@@ -9,9 +9,6 @@
             $(elemento).css('margin-top', margen);
         }
 
-        // posicion de formulacio de asistencia
-        centrar('.login');
-        centrar('#vald');
 
     	// Funcionalidad de las pestañas
     	$('#trabajadores a').on('click', function() {
@@ -162,6 +159,11 @@
                 }
             });
         });
-
+    	  $( "#datepicker" ).datepicker($.datepicker.regional[ "es" ]);
+        $( "#accordion" ).accordion({
+          collapsible: true,
+          active: false,
+          heightStyle: "fill"
+        });
     }); // Fin de documento listo
 })(jQuery); // fin de espacio de nombre jquery

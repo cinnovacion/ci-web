@@ -49,14 +49,14 @@
               <a class="button" id="btn_agr_carr">Agregar</a>
             </div>
 
-            <label for="nivel">Fecha de Ingreso:</label>
-            <input type="date" name="fecha" value="{{voluntario['fecha_ingreso']|date('Y-m-d')}}">
+            <label for="datepicker">Fecha de Ingreso:</label>
+            <input type="text" id="datepicker" name="fecha" value="{{voluntario['fecha_ingreso']|date('Y-m-d')}}">
 
             <div id="area" style="display: block;">
               <label for="area">Área:</label>
               <select name="area" id="area">
                 <option value="Soporte Tecnico" {{(voluntario['area']=='Soporte Tecnico')?'selected="selected"':' '}}>Soporte Tecnico</option>
-                <option value="Area de Innovación" {{(voluntario['area']=='Area de Innovacion')?'selected="selected"':' '}}>Area de Innovaciòn</option>
+                <option value="Area de Innovacion" {{(voluntario['area']=='Area de Innovacion')?'selected="selected"':' '}}>Area de Innovaciòn</option>
               </select>
             </div>
 
