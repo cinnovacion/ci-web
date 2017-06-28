@@ -32,18 +32,29 @@
 				</tr>
 			</thead>
 			<tbody>
-				{%for datos in lis_trab%}
+				{%for datos in persona%}
 				<tr>
 					<th>{{datos.nombre}}</th>
 					<th>{{datos.apellido}}</th>
 					<th>{{datos.cedula}}</th>
 					<th>{{datos.telefono}}</th>
-					<th><a class='button' href="/trabajador/detalles/{{datos.idpersona}}">Mas</a></th>
+					<th><a class='button' href="/trabajador/detalles/{{datos.idpersona}}_1_0">Mas</a></th>
 				</tr>
 				{%endfor%}
-			</table>
 			</tbody>
+			<!--<tfoot>
+				<tr>
+					{%for datos in paginas%}
+					<th><a class="button button-clear layout_items pag" href="/voluntarios/lista/{{datos.no_pag}}_{{datos.partir_de}}">{{datos.no_pag}}</a></th>
+					{%endfor%}
+				</tr>
+			</tfoot>-->
+			</table>
 	</div>
 </div>
-
+<div class="centrar" style="margin-bottom: 120px; margin-top:0px;">
+	{%for datos in paginas%}
+	<th><a class="button button-clear layout_items pag" href="/trabajador/lista/{{datos.no_pag}}_{{datos.partir_de}}">{{datos.no_pag}}</a></th>
+	{%endfor%}
+</div>
 {% endblock %}

@@ -4,7 +4,7 @@
 <div class="panel" style="margin-right:0px;">
   <div class="row panel" style="margin-left:0px; margin-bottom:0px;">
       <div class="column column-50">
-        <a href="/voluntarios/lista" class="button" style="margin-top:5px;">◄ Atrás</a>
+        <a href="/voluntarios/lista/1_0" class="button" style="margin-top:5px;">◄ Atrás</a>
         {%for datos in persona%}
         <a class="button" href="/voluntarios/editar/{{datos.idpersona}}">Editar</a>
         <p class="p_detalles"><b>Nombre:</b> {{datos.nombre}} {{datos.apellido}}</p>
@@ -32,18 +32,21 @@
         {%for datos in ultima%}
         <p class="p_detalles"><b>Ultima Fecha:</b> {{datos.hora_entrada|date("d/m/Y")}}</p>
         {%endfor%}
-        <div id="accordion">
-          <p class="p_detalles" style="margin-bottom:0;"><b>Actividades realizadas: </b></p>
-            <ol>
-              {%for datos in area%}
-                <li>►{{datos.nombre}}</li>
-              {%endfor%}
-            </ol>
-        </div>
+          <div id="accordion">
+            <p class="p_detalles" style="margin-bottom:0;"><b>Actividades realizadas: </b></p>
+              <ol>
+                {%for datos in area%}
+                  <li>►{{datos.nombre}}</li>
+                {%endfor%}
+              </ol>
+          </div>
       </div>
   </div>
   <div class="column">
     <div class="centrar panel">
+      {%for datos in paginas%}
+      <th><a class="button button-clear layout_items pag" href="/voluntarios/detalles/{{datos.id}}_{{datos.no_pag}}_{{datos.partir_de}}">{{datos.no_pag}}</a></th>
+      {%endfor%}
       <table>
         <thead>
           <tr>
@@ -69,7 +72,6 @@
     </div>
   </div>
 </div>
-
 <div id="modal_agr_hora" class="modal">
 <span class="close" title="Cerrar">&times;</span>
 <form class="modal-content animate" method="post" name="horas" action="/voluntarios/hora">

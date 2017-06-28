@@ -14,7 +14,6 @@
 		<table>
 			<caption>
 				<a class="button" id="vol_cmd" href="/voluntarios/voluntarios_reg">Nuevo Voluntario</a>
-				<a class="button" id="lis_cmd" href="/voluntarios/asis_dia">Lista de Asistencia</a>
 				<form id="frm_s" class="" action="/voluntarios/busqueda" method="post">
 					<input id="cmd_s" class="button" type="submit" name="cmd_buscar">
 					<input id="vol_s" type="text" name="buscar" placeholder="Nombre">
@@ -33,22 +32,18 @@
 				</tr>
 			</thead>
 			<tbody>
-				{%for datos in persona%}
+				{%for datos in lis_vol%}
 				<tr>
-					<th>{{datos['nombre']}}</th>
-					<th>{{datos['apellido']}}</th>
-					<th>{{datos['cedula']}}</th>
-					<th>{{datos['telefono']}}</th>
-					<th><a class='button' href="/voluntarios/detalles/{{datos.idpersona}}_1_0">Más</a></th>
+					<th>{{datos.nombre}}</th>
+					<th>{{datos.apellido}}</th>
+					<th>{{datos.cedula}}</th>
+					<th>{{datos.telefono}}</th>
+					<th><a class='button' href="/voluntarios/detalles/{{datos.idpersona}}">Mas</a></th>
 				</tr>
 				{%endfor%}
 			</tbody>
 		</table>
 	</div>
 </div>
-<div class="centrar" style="margin-bottom: 120px; margin-top:0px;">
-	{%for datos in paginas%}
-	<th><a class="button button-clear layout_items pag" href="/voluntarios/lista/{{datos.no_pag}}_{{datos.partir_de}}">{{datos.no_pag}}</a></th>
-	{%endfor%}
-</div>
+
 {% endblock %}

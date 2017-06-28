@@ -3,7 +3,7 @@
 {% block content %}
 <div class="row">
     <div class="column column-50 column-offset-25 alto">
-		<div class="login centrar panel">
+		<div class="login centrar panel red">
 
 			<!-- div class="row tabs">
     			<div id="voluntarios" class="column">
@@ -22,13 +22,13 @@
 			<div class="tabcontent">
         <form method="POST" action="inicio/asistencia_reg">
             <div>
-		            <input id="cedula" type="text" name="cedula" placeholder="Cédula" autocomplete="off" autofocus="">
+		            <input id="cedula" type="text" name="cedula" class="cedula_val" placeholder="Cédula" autocomplete="off" autofocus="">
                 <div class="alert danger" style="display:none;">
                     <span class="closebtn">&times;</span>
-                    <p>Esta cédula no esta registrada.</p>
+                    <p>Esta cédula no está registrada.</p>
                 </div>
             </div>
-            <button id="submit">Aceptar</button>
+            <button class="submit_reg" id="submit">Aceptar</button>
         </form>
 				<!-- div id="tab_vol">
 					<form method="POST" action="/inicio/asistencia_reg">
@@ -45,5 +45,35 @@
 			</div>
 		</div>
 	</div>
+</div>
+{%if persona == NULL%}
+<div id="modal_deg_admin" class="modal">
+{%else%}
+<div style="display: block;" id="modal_deg_admin" class="modal">
+{%endif%}
+<span class="close" title="Cerrar">&times;</span>
+<form class="modal-content animate red" method="post" name="horas" action="/">
+  <div class="centrar">
+    {%if hora_salida == NULL%}
+    <h2><b>Entrada Registrada</b></h2>
+    {%else%}
+    <h2><b>Salida Registrada</b></h2>
+    {%endif%}
+  </div>
+  <div class="container izquierda">
+    {%for datos in persona%}
+    <p class="p_detalles"><b style="color: #448AFF">Nombre:</b> {{datos.nombre}} {{datos.apellido}}</p>
+    {%endfor%}
+    <p class="p_detalles"><b style="color: #448AFF">Hora de Entrada:</b> {{hora_entrada|date('H:i')}}</p>
+    {%if hora_salida != NULL%}
+    <p class="p_detalles"><b style="color: #448AFF">Hora de Salida:</b> {{hora_salida|date('H:i')}}</p>
+    <p class="p_detalles"><b style="color: #448AFF">Horas Acumuladas:</b> {{hora_acumulada}}</p>
+    {%endif%}
+    <br>
+  </div>
+  <div class="centrar">
+    <input type="submit" class="button" id="can_admin" name="" value="Aceptar">
+  </div>
+  </form>
 </div>
 {% endblock %}

@@ -30,6 +30,8 @@ datepicker.regional.es = {
 	isRTL: false,
 	showMonthAfterYear: false,
   maxDate: 0,
+	changeMonth: true,
+  changeYear: true,
 	yearSuffix: "" };
 datepicker.setDefaults( datepicker.regional.es );
 

@@ -5,8 +5,8 @@
   <div class="row panel" style="margin-left:0px;  margin-bottom:0px;">
         <div class="column column-50">
 
-        <a href="/trabajador/lista" class="button" style="margin-top:5px;">◄ Atrás</a>
-        {%for datos in lis_trab[0]%}
+        <a href="/trabajador/lista/1_0" class="button" style="margin-top:5px;">◄ Atrás</a>
+        {%for datos in persona%}
         <p class="p_detalles"><b>Nombre:</b> {{datos.nombre}} {{datos.apellido}}</p>
         <p class="p_detalles"><b>Cedula:</b> {{datos.cedula}}</p>
         <p class="p_detalles"><b>Telefono:</b> {{datos.telefono}}</p>
@@ -17,8 +17,12 @@
         {%endfor%}
         </div>
         <div class="column column-50">
-        {%for datos in lis_trab[1]%}
-        <br>
+        {%if cant== 0%}
+        <a class="button" style="margin-top:5px;" id="btn_agr_admin">Volver Admin</a>
+        {%elseif cant == 1%}
+        <a class="button" style="margin-top:5px;" id="btn_deg_admin">Degradar Admin</a>
+        {%endif%}
+        {%for datos in trab%}
         <br>
         <p class="p_detalles"><b>Área:</b> {{datos.area}}</p>
         <p class="p_detalles"><b>Carnet:</b> {{datos.carnet}}</p>
@@ -38,7 +42,7 @@
           </tr>
         </thead>
         <tbody>
-          {%for datos in lis_trab[2]%}
+          {%for datos in asis%}
           <tr>
             <th>{{datos.hora_entrada|date('d/m/Y')}}</th>
             <th>{{datos.hora_entrada|date('H:i:s')}}</th>
@@ -51,6 +55,10 @@
     </div>
   </div>
 </div>
+
+
+
+
 <div id="modal_agr_hora" class="modal">
 <span class="close" title="Cerrar">&times;</span>
 <form class="modal-content animate" method="post" name="horas" action="/trabajador/hora">
@@ -58,7 +66,7 @@
     <h4>Agregar Horas</h4>
   </div>
   <div class="container centrar">
-    {%for datos in lis_trab[1]%}
+    {%for datos in trab%}
     <input type="text" style="display:none;" name="id" value="{{datos.persona_idpersona}}">
     {%endfor%}
     <label for="Fecha">Ingrese Fecha:</label>
@@ -69,6 +77,48 @@
     <input type="time" id="salida" name="salida" value="" required>
     <br>
     <input type="submit" class="button" name="" value="Agregar">
+  </div>
+  </form>
+</div>
+<div id="modal_agr_admin" class="modal">
+<span class="close" title="Cerrar">&times;</span>
+<form class="modal-content animate" method="post" name="horas" action="/trabajador/agr_admin">
+  <div class="centrar">
+    <h4>Registrar Admin</h4>
+  </div>
+  <div class="container centrar">
+    {%for datos in trab%}
+    <input type="text" style="display:none;" name="id_trab" value="{{datos.idtrabajador}}">
+    <input type="text" style="display:none;" name="id_per" value="{{datos.persona_idpersona}}">
+    {%endfor%}
+    <input type="text" id=user name="user" required placeholder="Nombre de Usuario">
+    <input type="password" id="pass" name="pass" value="" required placeholder="Contraseña">
+    <input type="password" id="pass_d" name="pass_d" value="" required placeholder="Repetir Contraseña">
+    <br>
+    <div class="alert danger adm" style="display:none; margin-bottom:1; padding:2;">
+        <span class="closebtn">&times;</span>
+        <p style="margin:0;">Las contraseñas no coinciden.</p>
+    </div>
+    <input type="submit" class="button" id="reg_admin" name="" value="Registrar">
+  </div>
+  </form>
+</div>
+<div id="modal_deg_admin" class="modal">
+<span class="close" title="Cerrar">&times;</span>
+<form class="modal-content animate" method="post" name="horas" action="/trabajador/deg_admin">
+  <div class="centrar">
+    <h4>¿Desea retirar permisos de administrador a
+      {%for datos in persona%}{{datos.nombre}} {{datos.apellido}}{%endfor%}?
+    </h4>
+  </div>
+  <div class="container centrar">
+    {%for datos in trab%}
+    <input type="text" style="display:none;" name="id_trab" value="{{datos.idtrabajador}}">
+    <input type="text" style="display:none;" name="id_per" value="{{datos.persona_idpersona}}">
+    {%endfor%}
+    <br>
+    <input type="submit" class="button" id="reg_admin" name="" value="Si">
+    <input type="submit" class="button" id="can_admin" name="" value="No">
   </div>
   </form>
 </div>

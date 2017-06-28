@@ -129,6 +129,11 @@
 
         $('#submit').click(function(event){
             event.preventDefault();
+            var x = $('.cedula_val').val();
+            if (x.length<16 && x.length>0) {
+              var y = x.substring(0,3)+"-"+x.substring(3,9)+"-"+x.substring(9);
+              $('.cedula_val').val(y);
+            }
             $.ajax({
                 url: "/ajax/cedula",
                 data: { cedula : $('#cedula').val() },
@@ -146,24 +151,122 @@
                 }
             });
         });
-        $('#f_step').click(function(event){
-            event.preventDefault();
-            $.ajax({
-                url: "/ajax/f_step",
-                data: { id : $('#idpersona').val() },
-                type: 'POST',
-                dataType: 'html',
-                success: function(html){
-                        $('body').css('background-color', '#448AFF');
-                        $('.container').html(html);
-                }
-            });
+        $('#admin').click(function(event){
+          event.preventDefault();
+          $.ajax({
+            url: "/ajax/admin",
+            data: {usuario: $('#usuario').val(),password:$('#password').val()},
+            type: 'POST',
+            dataType: 'html',
+            success: function(html){
+              if (html.length>2) {
+                $('.adm').css('display', 'block');
+                $('#usuario').focus();
+                $('#usuario').css('border-color', 'red');
+                $('#password').css('border-color', 'red');
+              }
+              else {
+                $('#adm').submit();
+              }
+            }
+          });
         });
     	  $( "#datepicker" ).datepicker($.datepicker.regional[ "es" ]);
         $( "#accordion" ).accordion({
           collapsible: true,
           active: false,
-          heightStyle: "fill"
+          heightStyle: "fill",
         });
+
+        //Registrar admin
+        $('#btn_agr_admin').click(function(){
+            $('#modal_agr_admin').css('display', 'block');
+        });
+        $('.close').click(function(){
+           $('#modal_agr_admin').css('display', 'none');
+        });
+        $(window).click(function(event){
+            if (event.target.id == $('#modal_agr_admin').attr('id')) {
+                $('#modal_agr_admin').css('display', 'none');
+            }
+        });
+
+        //Degradar admin
+        $('#btn_deg_admin').click(function(){
+            $('#modal_deg_admin').css('display', 'block');
+        });
+        $('.close').click(function(){
+           $('#modal_deg_admin').css('display', 'none');
+        });
+        $(window).click(function(event){
+            if (event.target.id == $('#modal_deg_admin').attr('id')) {
+                $('#modal_deg_admin').css('display', 'none');
+            }
+        });
+        $('#can_admin').click(function(event){
+          event.preventDefault();
+          $('#modal_deg_admin').css('display', 'none');
+        })
+
+        //Validar contraseña en el registro de administradores
+        $('#reg_admin').click(function(){
+          if ($('#pass').val() !== $('#pass_d').val()) {
+            event.preventDefault();
+            $('.adm').css('display', 'block');
+            $('#pass_d').focus();
+            $('#pass_d').css('border-color','red')
+          }
+        });
+        //Corregir el ingreso de la cedula
+        $('.submit_reg').click(function(){
+          var x = $('.cedula_val').val();
+          if (x.length<16 && x.length>0) {
+            var y = x.substring(0,3)+"-"+x.substring(3,9)+"-"+x.substring(9);
+            $('.cedula_val').val(y);
+          }
+        });
+          //ajax para la busqueda por semana
+          $(document).ready(function() {
+            $("#years").change(function(){
+              $('select[id=years]').val();
+              $('#year').val($(this).val());
+              $.ajax({
+                url: "/ajax/semanas",
+                data: {anio:$('#year').val(),mes:$('#month').val()},
+                type: 'POST',
+                dataType: 'html',
+                success: function(html){
+                  $('#weeks').html(html);
+                }
+              });
+            });
+            $("#months").change(function(){
+              $('select[id=months]').val();
+              $('#month').val($(this).val());
+              $.ajax({
+                url: "/ajax/semanas",
+                data: {anio:$('#year').val(),mes:$('#month').val()},
+                type: 'POST',
+                dataType: 'html',
+                success: function(html){
+                  $('#weeks').html(html);
+                }
+              });
+            });
+            $("#weeks").change(function(){
+              var w = $('select[id=weeks]').val();
+              var i = w.substring(8,18);
+              var f = w.substring(31);
+              $('#f_inicio').val(i);
+              $('#f_final').val(f);
+            });
+            // Instrucciones a ejecutar al terminar la carga
+            $('#years').change();
+            $('#months').change();
+            $('#weeks').change();
+          });
+          $('#b_semana').click(function(){
+            $('#weeks').change();
+          });
     }); // Fin de documento listo
 })(jQuery); // fin de espacio de nombre jquery

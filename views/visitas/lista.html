@@ -23,20 +23,23 @@
            </tr>
         </thead>
         <tbody>
-           {%for datos in persona%}
+					{%for datos in datos%}
            <tr>
-              <th>{{datos.nombre}}</th>
-              <th>{{datos.apellido}}</th>
-              <th>{{datos.cedula}}</th>
-					 {%endfor%}
-					 {%for datos in visita%}
-              <th>
-                 <a class='button' href="/visitas/mas/{{datos.idvisita}}">Más</a>
-              </th>
+              <th>{{datos['nombre']}}</th>
+              <th>{{datos['apellido']}}</th>
+              <th>{{datos['cedula']}}</th>
+							{%if datos['idvisita'] != 0%}
+              <th><a class='button' href="/visitas/mas/{{datos['idvisita']}}">Más</a></th>
+							{%endif%}
             </tr>
-           {%endfor%}
+					{%endfor%}
          </tbody>
         </table>
   </div>
+</div>
+<div class="centrar" style="margin-bottom: 120px; margin-top:0px;">
+	{%for datos in paginas%}
+	<th><a class="button button-clear layout_items pag" href="/visitas/lista/{{datos.no_pag}}_{{datos.partir_de}}">{{datos.no_pag}}</a></th>
+	{%endfor%}
 </div>
 {% endblock %}

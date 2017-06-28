@@ -57,14 +57,20 @@ a {
 
 a:hover {
     background-color: : #7fc836 !important;
+    border: 1px;
+    border-color: #448AFF;
 }
 
 a.button {
 	font-size: 1.3rem;
+  border: 1px;
+  border-color: #448AFF;
 }
 
 .layout_items{
   color : #448AFF !important;
+  padding: 0px;
+  margin: 5px;
 }
 .layout_items:hover{
   color: #7fc836 !important;
@@ -382,6 +388,7 @@ table{
 }
 .p_detalles{
   margin-bottom: 1rem;
+  color: #000000;
 }
 #lis_cmd{
   position: absolute;
@@ -391,8 +398,14 @@ table{
   padding-right: 10px;
 }
 /*lista desplegable js*/
-#accordion-resizer {
-    padding: 10px;
-    width: 350px;
+#accordion {
+    width: 41.5rem;
     height: 220px;
   }
+select:focus{
+  background-image: url('/resources/img/icon.svg');
+}
+.pag{
+  padding: 0;
+  margin-bottom: 0;
+}

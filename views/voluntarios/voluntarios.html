@@ -12,13 +12,13 @@
           <div class="column column-50">
 
             <label for="nombre">Nombre:</label>
-            <input type="text" name="nombre" placeholder="Ingrese su Nombre" autofocus="on" value="">
+            <input type="text" name="nombre" placeholder="Ingrese su Nombre" autofocus="on" value="" required>
 
             <label for="apellido">Apellido:</label>
-            <input type="text" name="apellido" id="apellido" placeholder="Ingrese su Apellido" value="">
+            <input type="text" name="apellido" id="apellido" placeholder="Ingrese su Apellido" value="" required>
 
             <label for="ced">No. de Cédula:</label>
-            <input type="text" name="ced" id="ced" placeholder="Ingrese su Cédula" value="">
+            <input type="text" name="ced" id="ced" class="cedula_val" placeholder="Ingrese su Cédula" value="" required>
 
             <label for="direccion">Dirección:</label>
             <input type="text" name="direccion" id="direccion" placeholder="Ingrese su Dirección" value="">
@@ -52,7 +52,7 @@
             </div>
 
             <label for="datepicker">Fecha de Ingreso:</label>
-            <input type="text" name="fecha" id="datepicker" value="{{'now'|date('Y-m-d')}}" readonly>
+            <input type="text" name="fecha" id="datepicker" value="{{'now'|date('Y-m-d')}}" readonly required>
             <div id="area" style="display: block;">
               <label for="area">Área:</label>
               <select name="area" id="area">
@@ -62,7 +62,7 @@
             </div>
           </div>
         </div>
-        <input class="button" type="submit" value="Aceptar">
+        <input class="button submit_reg" type="submit" value="Aceptar">
       </fieldset>
     </form>
   </div>
