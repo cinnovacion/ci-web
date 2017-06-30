@@ -13,8 +13,10 @@
         <p class="p_detalles"><b>Correo:</b> {{datos.correo}}</p>
         <p class="p_detalles"><b>Dirección:</b> {{datos.direccion}}</p>
         {%endfor%}
+        {%for datos in area%}
+        <p class="p_detalles"><b>Area:</b> {{datos.nombre}}</p>
+        {%endfor%}
         {%for datos in volun%}
-        <p class="p_detalles"><b>Area:</b> {{datos.area}}</p>
         <p class="p_detalles"><b>Carnet:</b> {{datos.carnet}}</p>
         {%endfor%}
         {%for datos in persona%}
@@ -35,7 +37,7 @@
           <div id="accordion">
             <p class="p_detalles" style="margin-bottom:0;"><b>Actividades realizadas: </b></p>
               <ol>
-                {%for datos in area%}
+                {%for datos in actividades%}
                   <li>►{{datos.nombre}}</li>
                 {%endfor%}
               </ol>

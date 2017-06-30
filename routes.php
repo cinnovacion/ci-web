@@ -205,8 +205,10 @@ $app->group('/voluntarios', function () {
 
     $this->any('/busqueda_semana' , function($request,$response,$args){
         $parsedBody = $request->getParsedBody();
-        echo $parsedBody['f_inicio']."<br>";
-        echo $parsedBody['f_final'];
+        $inicio = strtotime($parsedBody['f_inicio']);
+        $final = strtotime($parsedBody['f_final']);
+        echo $datos['asistencia'] = $this->db->asistencia()->select('hora_entrada','hora_salida','persona_idpersona')->where('hora_entrada > '.$inicio.' AND hora_entrada < '.$final);
+        echo json_encode($datos['asistencia']);
     })->setName('busqueda_semana');
 
     //Formulario de Registro
@@ -215,7 +217,8 @@ $app->group('/voluntarios', function () {
         $org         = $this->db->institucion();
         $carrera     = $this->db->carrera();
         $actividades = $this->db->actividades();
-        $item = [$org,$carrera,$actividades];
+        $area        = $this->db->area();
+        $item = [$org,$carrera,$actividades,$area];
         return $this->view->render($response, '/voluntarios/voluntarios.html',['template' => $item]);
     })->setName('voluntarios');
 
@@ -243,7 +246,6 @@ $app->group('/voluntarios', function () {
 
         $vol_p=$this->db->persona();
         $vol_v=$this->db->voluntario();
-        $vol_a=$this->db->voluntario_has_actividades();
         //guardar datos en tabla persona
         $data['nombre']=$parsedBody['nombre'];
         $data['apellido']=$parsedBody['apellido'];
@@ -257,23 +259,15 @@ $app->group('/voluntarios', function () {
         //predeterminar la zona horaria
         date_default_timezone_set("America/Managua");
         $data1['carnet']=time()."-".$parsedBody['ced'];
-        $data1['area'] = $parsedBody['area'];
         $data1['fecha_ingreso']=strtotime($parsedBody['fecha']);
         $persona_id=$this->db->persona()->select('idpersona')->order('idpersona desc')->limit(1)->fetch();
         $data1['persona_idpersona']=$persona_id['idpersona'];
         $data1['institucion_idinstitucion']=$parsedBody['org'];
         $data1['carrera_idcarrera']=$parsedBody['carrera'];
+        $data1['area_idarea']=$parsedBody['area'];
         $vol_v->insert($data1);
 
-        $voluntario_id=$this->db->voluntario()->select('idvoluntario')->order('idvoluntario desc')->limit(1)->fetch();
-        $actividades_id=$this->db->actividades()->select('idactividades')->where('area',$parsedBody['area']);
-        for ($i=1; $i <= count($actividades_id) ; $i++) {
-          $data2['voluntario_idvoluntario']=$voluntario_id['idvoluntario'];
-          $data2['actividades_idactividades'] = $actividades_id[$i]['idactividades'];
-          $vol_a->insert($data2);
-        }
         return $response->withRedirect('/voluntarios/detalles/'.$persona_id['idpersona'].'_1_0');
-        die();
     })->setName('voluntarios_reg');
 
     //Mostrar lista de voluntarios registrados
@@ -338,15 +332,12 @@ $app->group('/voluntarios', function () {
         $lista['asis'] = $this->db->asistencia()->where('persona_idpersona',$id)->limit($limite,$pa);
         $acumuladas = $this->db->asistencia()->where('persona_idpersona',$id)->sum('hora_acumulada');
         $lista['acum'] = round($acumuladas,2);
-        $act_id = $this->db->voluntario_has_actividades()->select('actividades_idactividades')->where('voluntario_idvoluntario',$id_vol);
-        for ($i=0; $i <count($act_id) ; $i++) {
-          $idactiv[$i] = $act_id[$i]['actividades_idactividades'];
-        }
-        $lista['area'] = $this->db->actividades()->where('idactividades',$idactiv);
+        $id_area = $this->db->voluntario()->select('area_idarea')->where('persona_idpersona',$id)->fetch();
+        $lista['area'] = $this->db->area()->where('idarea',$lista['volun'][1]['area_idarea']);
+        $lista['actividades'] = $this->db->actividades()->where('area_idarea',$lista['volun'][1]['area_idarea']);
         /*echo json_encode($lista['area']); die();*/
         $lista['ultima'] = $this->db->asistencia()->where('persona_idpersona',$id)->select('hora_entrada')->order('hora_entrada desc')->limit(1);
 
-        //die();
         return $this->view->render($response, '/voluntarios/detalles.html',$lista);
     })->setName('voluntarios_detalles');
 
@@ -716,49 +707,49 @@ $app->group('/ajax', function () {
       //dar formato para comparar
       $p_dia_f = $p_dia->format('dmY');
       //dar formato para imprimir
-      $p_dia_ft = $dias_t[$p_dia->format('w')].$p_dia->format(' - d/m/Y');
+      $p_dia_ft = $dias_t[$p_dia->format('w')].$p_dia->format(' - d-m-Y');
       //conseguir el ultimo dia del mes
       $u_dia = $my_date->modify('last day of '.$meses_t[$mes].' '.$anio);
       //dar formato para comparar
       $u_dia_f = $u_dia->format('dmY');
       //dar formato para imprimir
-      $u_dia_ft = $dias_t[$u_dia->format('w')].$u_dia->format(' - d/m/Y');
+      $u_dia_ft = $dias_t[$u_dia->format('w')].$u_dia->format(' - d-m-Y');
       //conseguir el primer lunes del mes
       $p_lunes = $my_date->modify('first monday of '.$meses_t[$mes].' '.$anio);
       //dar formato para comparar
       $p_lunes_f = $p_lunes->format('dmY');
       //dar formato para imprimir
-      $p_lunes_ft = $dias_t[$p_lunes->format('w')].$p_lunes->format(' - d/m/Y');
+      $p_lunes_ft = $dias_t[$p_lunes->format('w')].$p_lunes->format(' - d-m-Y');
       //conseguir el ultimo lunes del mes
       $u_lunes = $my_date->modify('last monday of '.$meses_t[$mes].' '.$anio);
       //dar formato para comparar
       $u_lunes_f = $u_lunes->format('dmY');
       //dar formato para imprimir
-      $u_lunes_ft = $dias_t[$u_lunes->format('w')].$u_lunes->format(' - d/m/Y');
+      $u_lunes_ft = $dias_t[$u_lunes->format('w')].$u_lunes->format(' - d-m-Y');
       //conseguir el primer viernes del mes
       $p_viernes = $my_date->modify('first friday of '.$meses_t[$mes].' '.$anio);
       //dar formato para comparar
       $p_viernes_f = $p_viernes->format('dmY');
       //dar formato para imprimir
-      $p_viernes_ft = $dias_t[$p_viernes->format('w')].$p_viernes->format(' - d/m/Y');
+      $p_viernes_ft = $dias_t[$p_viernes->format('w')].$p_viernes->format(' - d-m-Y');
       //conseguir el ultimo viernes del mes
       $u_viernes = $my_date->modify('last friday of '.$meses_t[$mes].' '.$anio);
       //dar formato para comparar
       $u_viernes_f = $u_viernes->format('dmY');
       //dar formato para imprimir
-      $u_viernes_ft = $dias_t[$u_viernes->format('w')].$u_viernes->format(' - d/m/Y');
+      $u_viernes_ft = $dias_t[$u_viernes->format('w')].$u_viernes->format(' - d-m-Y');
       //revisar si el primer lunes no coincide con el primer dia en dado caso se busca la semana ultima del mes anterior
       if ($p_viernes_f < $p_lunes_f) {
         if ($p_lunes->format('m')==01) {
           // en caso de que el mes sea enero se aplica esta condicion
           $an_s = $anio -1;
           $p_semana = $my_date->modify('last monday of '.$meses_t[11].' '.$an_s);
-          $p_semana_l = $dias_t[$p_semana->format('w')].$p_semana->format(' - d/m/Y');
+          $p_semana_l = $dias_t[$p_semana->format('w')].$p_semana->format(' - d-m-Y');
           $p_semana_v = $p_viernes_ft;
         }
         else {
           $p_semana = $my_date->modify('last monday of '.$meses_t[$mes-1].' '.$anio);
-          $p_semana_l = $dias_t[$p_semana->format('w')].$p_semana->format(' - d/m/Y');
+          $p_semana_l = $dias_t[$p_semana->format('w')].$p_semana->format(' - d-m-Y');
           $p_semana_v = $p_viernes_ft;
         }
       }
@@ -770,12 +761,12 @@ $app->group('/ajax', function () {
             $an_t = $anio +1;
             $u_semana_l = $u_lunes_ft;
             $u_semana = $my_date->modify('first friday of '.$meses_t[0].' '.$an_t);
-            $u_semana_v = $dias_t[$u_semana->format('w')].$u_semana->format(' - d/m/Y');
+            $u_semana_v = $dias_t[$u_semana->format('w')].$u_semana->format(' - d-m-Y');
           }
           else {
             $u_semana_l = $u_lunes_ft;
             $u_semana = $my_date->modify('first friday of '.$meses_t[$mes+1].' '.$anio);
-            $u_semana_v = $dias_t[$u_semana->format('w')].$u_semana->format(' - d/m/Y');
+            $u_semana_v = $dias_t[$u_semana->format('w')].$u_semana->format(' - d-m-Y');
           }
 
         }
@@ -794,9 +785,9 @@ $app->group('/ajax', function () {
         }
         else {
            $lunes = $my_date->modify($cant[$l].' monday of '.$meses_t[$mes].' '.$anio);
-           $datos['semana'][$j]['lunes'] = $dias_t[$lunes->format('w')].$lunes->format(' - d/m/Y');
+           $datos['semana'][$j]['lunes'] = $dias_t[$lunes->format('w')].$lunes->format(' - d-m-Y');
            $viernes = $my_date->modify($cant[$v].' friday of '.$meses_t[$mes].' '.$anio);
-           $datos['semana'][$j]['viernes'] = $dias_t[$viernes->format('w')].$viernes->format(' - d/m/Y');
+           $datos['semana'][$j]['viernes'] = $dias_t[$viernes->format('w')].$viernes->format(' - d-m-Y');
            $final = $viernes->format('dmY');
            echo "<option value='".$datos['semana'][$j]['lunes']." - ".$datos['semana'][$j]['viernes']."'>".$datos['semana'][$j]['lunes']." - ".$datos['semana'][$j]['viernes']."</option>";
            $l = $l +1;

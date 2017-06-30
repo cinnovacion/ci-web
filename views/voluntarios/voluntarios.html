@@ -56,8 +56,9 @@
             <div id="area" style="display: block;">
               <label for="area">Área:</label>
               <select name="area" id="area">
-                <option value="Soporte Tecnico">Soporte Tecnico</option>
-                <option value="Area de Innovación">Area de Innovaciòn</option>
+                {% for names in template[3] %}
+                <option value="{{names.idarea}}">{{names.nombre}}</option>
+                {% endfor %}
               </select>
             </div>
           </div>
