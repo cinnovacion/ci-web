@@ -33,7 +33,7 @@
               <label for="org">Organización:</label>
               <select name="org" id="org">
                 {% for names in org %}
-                  <option value="{{names.idinstitucion}}" {{(voluntario['institucion_idinstitucion']==names.idinstitcion)?'selected="selected"':' '}}>{{names.nombre}}</option>
+                  <option value="{{names.idinstitucion}}" {{(voluntario['institucion_idinstitucion']==names.idinstitucion)?'selected="selected"':' '}}>{{names.nombre}}</option>
                 {% endfor %}
               </select>
               <a class='button' id="btn_agr_org">Agregar</a>
@@ -55,8 +55,9 @@
             <div id="area" style="display: block;">
               <label for="area">Área:</label>
               <select name="area" id="area">
-                <option value="Soporte Tecnico" {{(voluntario['area']=='Soporte Tecnico')?'selected="selected"':' '}}>Soporte Tecnico</option>
-                <option value="Area de Innovacion" {{(voluntario['area']=='Area de Innovacion')?'selected="selected"':' '}}>Area de Innovaciòn</option>
+                {% for names in area%}
+                <option value="{{names.idarea}}" {{(voluntario['area_idarea']==names.idarea)?'selected="selected"':' '}}>{{names.nombre}}</option>
+                {%endfor%}
               </select>
             </div>
 

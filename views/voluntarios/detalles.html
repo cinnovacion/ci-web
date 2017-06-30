@@ -40,6 +40,9 @@
                 {%for datos in actividades%}
                   <li>►{{datos.nombre}}</li>
                 {%endfor%}
+                {%for datos in actividad_extra%}
+                  <li>►{{datos.nombre}}</li>
+                {%endfor%}
               </ol>
           </div>
       </div>
@@ -66,7 +69,7 @@
             <th>{{datos.hora_entrada|date('H:i:s')}}</th>
             <th>{{datos.hora_salida|date('H:i:s')}}</th>
             <th>{{datos.hora_acumulada}}</th>
-            <th><a href="/voluntarios/editar_h/{{datos.idasistencia}}" class="button">Editar</a></th>
+            <th><a href="/voluntarios/editar_h/{{datos.idasistencia}}_{{datos.persona_idpersona}}" class="button">Editar</a></th>
           </tr>
           {%endfor%}
         </tbody>
@@ -105,7 +108,7 @@
     {%for datos in volun%}
     <input type="text" style="display:none;" name="id_vol" value="{{datos.idvoluntario}}">
     {%endfor%}
-    <input type="text" name="nombre_activ" value="" placeholder="Nombre">
+    <input type="text" name="nombre_activ" value="" placeholder="Nombre" required>
     <br>
     <input type="submit" class="button" name="" value="Agregar">
   </div>

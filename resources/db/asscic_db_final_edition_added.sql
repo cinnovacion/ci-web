@@ -213,7 +213,7 @@ ENGINE = InnoDB;
 -- Table `asscic`.`actividad_extra`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `asscic`.`actividad_extra` (
-  `idactividad_extra` INT NOT NULL,
+  `idactividad_extra` INT NOT NULL AUTO_INCREMENT,
   `nombre` VARCHAR(45) NOT NULL,
   `voluntario_idvoluntario` INT NOT NULL,
   PRIMARY KEY (`idactividad_extra`, `voluntario_idvoluntario`),
@@ -246,7 +246,7 @@ COMMIT;
 -- -----------------------------------------------------
 START TRANSACTION;
 USE `asscic`;
-INSERT INTO `asscic`.`carrera` (`idcarrera`, `nombre`) VALUES (DEFAULT, 'Ingenieria en Computación');
+INSERT INTO `asscic`.`carrera` (`idcarrera`, `nombre`) VALUES (DEFAULT, 'Ingenieria en ComputaciÃ³n');
 INSERT INTO `asscic`.`carrera` (`idcarrera`, `nombre`) VALUES (DEFAULT, 'Ingenieria Industrial');
 INSERT INTO `asscic`.`carrera` (`idcarrera`, `nombre`) VALUES (DEFAULT, 'Ingenieria en Sistemas');
 
@@ -254,8 +254,8 @@ COMMIT;
 
 START TRANSACTION;
 USE `asscic`;
-INSERT INTO `asscic`.`area` (`idarea`, `nombre`,`descripcion`) VALUES (DEFAULT, 'Soporte Tecnico','Area de reparacion y mantenimiento');
-INSERT INTO `asscic`.`area` (`idarea`, `nombre`,`descripcion`) VALUES (DEFAULT, 'C.I.','area de desarrollo y robotica');
+INSERT INTO `asscic`.`area` (`idarea`, `nombre`,`descripcion`) VALUES (DEFAULT, 'Soporte Tecnico','Area de reparaciÃ³n y mantenimiento');
+INSERT INTO `asscic`.`area` (`idarea`, `nombre`,`descripcion`) VALUES (DEFAULT, 'C.I.','area de desarrollo y robÃ³tica');
 
 COMMIT;
 
@@ -274,5 +274,14 @@ COMMIT;
 START TRANSACTION;
 USE  `asscic`;
 INSERT INTO `asscic`.`admin` (`idadmin`,`usuario`,`password`,`trabajador_idtrabajador`) VALUES (DEFAULT,'jorge','1234',1);
+
+COMMIT;
+
+START TRANSACTION;
+USE  `asscic`;
+INSERT INTO `asscic`.`actividades` (`idactividades`,`nombre`,`area_idarea`) VALUES (DEFAULT,'ReparaciÃ³n',1);
+INSERT INTO `asscic`.`actividades` (`idactividades`,`nombre`,`area_idarea`) VALUES (DEFAULT,'Mantenimiento',1);
+INSERT INTO `asscic`.`actividades` (`idactividades`,`nombre`,`area_idarea`) VALUES (DEFAULT,'Desarrollo',2);
+INSERT INTO `asscic`.`actividades` (`idactividades`,`nombre`,`area_idarea`) VALUES (DEFAULT,'RobÃ³tica',2);
 
 COMMIT;

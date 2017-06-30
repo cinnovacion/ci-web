@@ -22,9 +22,11 @@
         {%elseif cant == 1%}
         <a class="button" style="margin-top:5px;" id="btn_deg_admin">Degradar Admin</a>
         {%endif%}
-        {%for datos in trab%}
+        {%for datos in area%}
         <br>
-        <p class="p_detalles"><b>Área:</b> {{datos.area}}</p>
+        <p class="p_detalles"><b>Área:</b> {{datos.nombre}}</p>
+        {%endfor%}
+        {%for datos in trab%}
         <p class="p_detalles"><b>Carnet:</b> {{datos.carnet}}</p>
         <p class="p_detalles"><b>Cargo:</b> {{datos.cargo}}</p>
         {%endfor%}
