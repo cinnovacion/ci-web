@@ -668,20 +668,19 @@ $app->group('/ajax', function () {
     $this->any('/admin', function ($request, $response, $args) {
         $parsedBody = $request->getParsedBody();
          //tomamos a una persona según cedula
-        if($administrador = $this->db->admin()->where('usuario', $parsedBody['usuario'])->fetch())
-            {
-              if ($administrador = $this->db->admin()->where('password',$parsedBody['password'])->fetch()) {
-                return false;
-              }
-              else {
-                echo "<p style='color:red; margin:0;'>El usuario o la contraseña es incorrecta.</p>";
-                return TRUE;
-              }
+        $prueba = $this->db->admin()->select('password')->where('usuario', $parsedBody['usuario'])->fetch();
+        if ($prueba) {
+            if (strcmp($prueba['password'], $parsedBody['password']) == 0) {
+                return FALSE;
+            }else{
+              echo "<p style='color:red; margin:0;'>la contraseña es incorrecta.</p>";
+              return TRUE;
             }
-        else {
-          echo "<p style='color:red; margin:0;'>El usuario o la contraseña es incorrecta.</p>";
+        }else{
+          echo "<p style='color:red; margin:0;'>la contraseña es incorrecta.</p>";
           return TRUE;
-        };
+        }
+
     });
     $this->any('/semanas', function ($request, $response, $args) {
       $parsedBody = $request->getParsedBody();
