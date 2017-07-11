@@ -409,3 +409,11 @@ select:focus{
   padding: 0;
   margin-bottom: 0;
 }
+.lab_sem{
+  width:10%;
+  display: inline;
+  margin-right: 10px;
+}
+.sel_sem{
+  width:30%;
+}

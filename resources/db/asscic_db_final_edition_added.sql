@@ -140,11 +140,11 @@ CREATE TABLE IF NOT EXISTS `asscic`.`asistencia` (
   `hora_entrada` INT(11) NOT NULL,
   `hora_salida` INT(11) NOT NULL,
   `hora_acumulada` DOUBLE NULL,
-  `persona_idpersona` INT NOT NULL,
-  PRIMARY KEY (`idasistencia`, `persona_idpersona`),
-  INDEX `fk_asistencia_persona1_idx` (`persona_idpersona` ASC),
+  `idpersona` INT NOT NULL,
+  PRIMARY KEY (`idasistencia`, `idpersona`),
+  INDEX `fk_asistencia_persona1_idx` (`idpersona` ASC),
   CONSTRAINT `fk_asistencia_persona1`
-    FOREIGN KEY (`persona_idpersona`)
+    FOREIGN KEY (`idpersona`)
     REFERENCES `asscic`.`persona` (`idpersona`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
@@ -254,7 +254,7 @@ COMMIT;
 
 START TRANSACTION;
 USE `asscic`;
-INSERT INTO `asscic`.`area` (`idarea`, `nombre`,`descripcion`) VALUES (DEFAULT, 'Soporte Tecnico','Area de reparaciÃ³n y mantenimiento');
+INSERT INTO `asscic`.`area` (`idarea`, `nombre`,`descripcion`) VALUES (DEFAULT, 'Soporte TÃ©cnico','Area de reparaciÃ³n y mantenimiento');
 INSERT INTO `asscic`.`area` (`idarea`, `nombre`,`descripcion`) VALUES (DEFAULT, 'C.I.','area de desarrollo y robÃ³tica');
 
 COMMIT;

@@ -22,6 +22,9 @@
         {%elseif cant == 1%}
         <a class="button" style="margin-top:5px;" id="btn_deg_admin">Degradar Admin</a>
         {%endif%}
+        {%for datos in persona%}
+        <a class="button" href="/trabajador/lista_asis_mes/{{datos.idpersona}}">Asistencia Mensual</a>
+        {%endfor%}
         {%for datos in area%}
         <br>
         <p class="p_detalles"><b>Área:</b> {{datos.nombre}}</p>

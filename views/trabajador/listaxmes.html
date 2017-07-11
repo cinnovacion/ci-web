@@ -1,0 +1,56 @@
+{% extends "layouts/layout_admin.html" %}
+{% block content %}
+
+<div style="margin-bottom: 150px; background-color:#fff">
+	<div class="panel" style="margin-bottom: 10px">
+		<div class="row">
+			<div class="column column-50" style="margin-top:20px">
+				<form class="" action="/voluntarios/busqueda_semana" method="post">
+					<label for="months">Mes:</label>
+					<select id="months" class="" name="mes" style="width:50%">
+						<option value="0" {{('01'=='now'|date('m'))?'selected="selected"':' '}}>Enero</option>
+						<option value="1" {{('02'=='now'|date('m'))?'selected="selected"':' '}}>Febrero</option>
+						<option value="2" {{('03'=='now'|date('m'))?'selected="selected"':' '}}>Marzo</option>
+						<option value="3" {{('04'=='now'|date('m'))?'selected="selected"':' '}}>Abril</option>
+						<option value="4" {{('05'=='now'|date('m'))?'selected="selected"':' '}}>Mayo</option>
+						<option value="5" {{('06'=='now'|date('m'))?'selected="selected"':' '}}>Junio</option>
+						<option value="6" {{('07'=='now'|date('m'))?'selected="selected"':' '}}>Julio</option>
+						<option value="7" {{('08'=='now'|date('m'))?'selected="selected"':' '}}>Agosto</option>
+						<option value="8" {{('09'=='now'|date('m'))?'selected="selected"':' '}}>Septiembre</option>
+						<option value="9" {{('10'=='now'|date('m'))?'selected="selected"':' '}}>Octubre</option>
+						<option value="10" {{('11'=='now'|date('m'))?'selected="selected"':' '}}>Noviembre</option>
+						<option value="11" {{('12'=='now'|date('m'))?'selected="selected"':' '}}>Diciembre</option>
+					</select>
+					<input type="submit" id="b_semana" name="" class="button" value="Buscar">
+					</div>
+					</form>
+					</div>
+		</div>
+		<div class="panel" style="margin-top: 0">
+			<table>
+				<caption><h4><strong></strong></h4></caption>
+				<thead>
+					<tr>
+						<th>Lunes</th>
+						<th>Martes</th>
+						<th>Miercoles</th>
+						<th>Jueves</th>
+						<th>Viernes</th>
+						<th>Sábado</th>
+						<th>Domingo</th>
+					</tr>
+				</thead>
+				<tbody>
+					<th></th>
+					<th></th>
+					<th></th>
+					<th></th>
+					<th></th>
+					<th></th>
+					<th></th>
+				</tbody>
+			</table>
+		</div>
+	</div>
+
+{% endblock %}

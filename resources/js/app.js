@@ -178,6 +178,12 @@
           heightStyle: "fill",
         });
 
+        $( "#accordion" ).accordion({
+          collapsible: true,
+          active: false,
+          heightStyle: "fill",
+        });
+
         //Registrar admin
         $('#btn_agr_admin').click(function(){
             $('#modal_agr_admin').css('display', 'block');
@@ -268,5 +274,8 @@
           $('#b_semana').click(function(){
             $('#weeks').change();
           });
+
+
+
     }); // Fin de documento listo
 })(jQuery); // fin de espacio de nombre jquery

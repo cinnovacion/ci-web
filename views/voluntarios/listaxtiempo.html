@@ -2,50 +2,50 @@
 {% extends "layouts/layout_admin.html" %}
 {% block content %}
 
-<div class="centrar panel">
-	<div class="panel">
+<div style="margin-bottom: 150px; background-color:#fff;" >
+	<div class="panel" style="margin-bottom: 10px">
 		<div class="row">
-			<div class="column column-50">
+			<div class="column column-50" style="margin-top:20px">
 				<form class="" action="/voluntarios/busqueda_semana" method="post">
-					<label for="years" >Año:</label>
-					<select id="years" class="" name="">
+					<label for="years" class="lab_sem">Año:</label>
+					<select id="years"  name="" class="sel_sem" >
 						{%for datos in asistencia%}
-						<option value="{{datos.anios}}">{{datos.anios}}</option>
+						<option value="{{datos.anios}}" {{(datos.anios=='now'|date('Y'))?'selected="selected"':' '}}>{{datos.anios}}</option>
 						{%endfor%}
 					</select>
 					<input type="text" name="year" id="year" value="" style="display:none">
-					<label for="months">Mes:</label>
-					<select id="months" class="" name="">
-						<option value="0">Enero</option>
-						<option value="1">Febrero</option>
-						<option value="2">Marzo</option>
-						<option value="3">Abril</option>
-						<option value="4">Mayo</option>
-						<option value="5">Junio</option>
-						<option value="6">Julio</option>
-						<option value="7">Agosto</option>
-						<option value="8">Septiembre</option>
-						<option value="9">Octubre</option>
-						<option value="10">Noviembre</option>
-						<option value="11">Diciembre</option>
+					<label for="months" class="lab_sem" style="margin-left:22px;">Mes:</label>
+					<select id="months"  name="" class="sel_sem">
+						<option value="0" {{('01'=='now'|date('m'))?'selected="selected"':' '}}>Enero</option>
+						<option value="1" {{('02'=='now'|date('m'))?'selected="selected"':' '}}>Febrero</option>
+						<option value="2" {{('03'=='now'|date('m'))?'selected="selected"':' '}}>Marzo</option>
+						<option value="3" {{('04'=='now'|date('m'))?'selected="selected"':' '}}>Abril</option>
+						<option value="4" {{('05'=='now'|date('m'))?'selected="selected"':' '}}>Mayo</option>
+						<option value="5" {{('06'=='now'|date('m'))?'selected="selected"':' '}}>Junio</option>
+						<option value="6" {{('07'=='now'|date('m'))?'selected="selected"':' '}}>Julio</option>
+						<option value="7" {{('08'=='now'|date('m'))?'selected="selected"':' '}}>Agosto</option>
+						<option value="8" {{('09'=='now'|date('m'))?'selected="selected"':' '}}>Septiembre</option>
+						<option value="9" {{('10'=='now'|date('m'))?'selected="selected"':' '}}>Octubre</option>
+						<option value="10" {{('11'=='now'|date('m'))?'selected="selected"':' '}}>Noviembre</option>
+						<option value="11" {{('12'=='now'|date('m'))?'selected="selected"':' '}}>Diciembre</option>
 					</select>
 					<input type="text" name="month" id="month" value="" style="display:none">
-					</div>
-					<div class="column column-50">
-					<label for="weeks" style="color:#448AFF">Semana:</label>
-					<select id="weeks" class="" name="">
+					<label for="weeks" style="color:#448AFF" class="lab_sem" >Semana:</label>
+					<select id="weeks"  name="" style="width:70%">
 						<option value=""></option>
 					</select>
-					<br>
-					<br>
-					<input type="text" name="f_inicio" id="f_inicio" value="" style="display:">
-					<input type="text" name="f_final" id="f_final" value="" style="display:">
+					<input type="text" name="f_inicio" id="f_inicio" value="" style="display:none">
+					<input type="text" name="f_final" id="f_final" value="" style="display:none">
 					<input type="submit" id="b_semana" name="" class="button" value="Buscar">
-					</form>
+				</form>
+					</div>
+					<div class="column column-50" style="margin-top:20px">
 					</div>
 		</div>
-		<div class="row">
+	</div>
+	<div class="panel" style="margin-top:0">
 			<table>
+				<caption><h4><strong>{{cabecera['titulo']}}</strong></h4></caption>
 				<thead>
 					<tr>
 						<th>Lunes</th>
@@ -55,9 +55,61 @@
 						<th>Viernes</th>
 					</tr>
 				</thead>
+				<tbody>
+					{%set i = 0%}
+					{%if registro['lunes'][0]['nombre'] == true%}
+					{%for j in 1..cantidad%}
+					<tr>
+						<th>
+							{%if registro['lunes'][i]==true%}
+							<p class="p_detalles" id="opener">Nombre: {{registro['lunes'][i]['nombre']}} {{registro['lunes'][i]['apellido']}}</p>
+							<!--
+							  <ul>
+							  	<li>{{registro['lunes'][i]['fecha']}}</li>
+									<li>{{registro['lunes'][i]['hora_entrada']}}</li>
+									<li>{{registro['lunes'][i]['hora_salida']}}</li>
+									<li>{{registro['lunes'][i]['hora_acumulada']}}</li>
+							  </ul>
+							-->
+							{%else%}
+							<p class="p_detalles centrar">-</p>
+							{%endif%}
+						</th>
+						<th>
+							{%if registro['martes'][i]==true%}
+							<p class="p_detalles">Nombre: {{registro['martes'][i]['nombre']}} {{registro['martes'][i]['apellido']}}</p>
+							{%else%}
+							<p class="p_detalles centrar">-</p>
+							{%endif%}
+						</th>
+						<th>
+							{%if registro['miercoles'][i]==true%}
+							<p class="p_detalles">Nombre: {{registro['miercoles'][i]['nombre']}} {{registro['miercoles'][i]['apellido']}}</p>
+							{%else%}
+							<p class="p_detalles centrar">-</p>
+							{%endif%}
+						</th>
+						<th>
+							{%if registro['jueves'][i]==true%}
+							<p class="p_detalles">Nombre: {{registro['jueves'][i]['nombre']}} {{registro['jueves'][i]['apellido']}}</p>
+							{%else%}
+							<p class="p_detalles centrar">-</p>
+							{%endif%}
+						</th>
+						<th>
+							{%if registro['viernes'][i]==true%}
+							<p class="p_detalles">Nombre: {{registro['viernes'][i]['nombre']}} {{registro['viernes'][i]['apellido']}}</p>
+							{%else%}
+							<p class="p_detalles centrar">-</p>
+							{%endif%}
+						</th>
+					</tr>
+					{%set i = i+1%}
+				{% endfor %}
+				{%endif%}
+				</tbody>
 			</table>
 		</div>
-	</div>
 </div>
 
 {% endblock %}

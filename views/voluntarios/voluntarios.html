@@ -33,7 +33,7 @@
           <div class="column column-50">
             <div id="orga" style="display: block;">
               <label for="org">Organización:</label>
-              <select name="org" id="org">
+              <select name="org" id="org" class="combobox">
                 {% for names in template[0] %}
                   <option value="{{names.idinstitucion}}">{{names.nombre}}</option>
                 {% endfor %}
@@ -43,7 +43,7 @@
 
             <div id="car" style="display: block;">
               <label for="carrera">Carrera:</label>
-              <select name="carrera" id="carrera">
+              <select name="carrera" id="carrera" class="combobox">
                 {% for names in template[1] %}
                   <option value="{{names.idcarrera}}">{{names.nombre}}</option>
                 {% endfor %}

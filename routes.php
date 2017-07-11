@@ -43,7 +43,7 @@ $app->group('/inicio', function () {
         $parsedBody = $request->getParsedBody();
         date_default_timezone_set("America/Managua");
         $idpersona = $parsedBody['idpersona'];
-        $asistencia = $this->db->asistencia->where(array('persona_idpersona' => $idpersona, 'hora_acumulada' => 0))->fetch();
+        $asistencia = $this->db->asistencia->where(array('idpersona' => $idpersona, 'hora_acumulada' => 0))->fetch();
         if ($asistencia){
             //Entramos a agregar salida
             $salida = time();
@@ -63,7 +63,7 @@ $app->group('/inicio', function () {
             $today = date('Y-m-d', time());
             $datos_asis['fecha'] = $today;
             $datos_asis['hora_entrada'] = time();
-            $datos_asis['persona_idpersona'] = $idpersona;
+            $datos_asis['idpersona'] = $idpersona;
             $datos_asis['hora_acumulada']=0;
             $lista['hora_entrada'] = $datos_asis['hora_entrada'];
             $registrando_asis->insert($datos_asis);
@@ -171,28 +171,14 @@ $app->group('/voluntarios', function () {
     $this->any('/asis_dia', function ($request, $response, $args) {
         $voluntario=$this->db->voluntario()->select('persona_idpersona');
         $today = date('Y-m-d', time());
-        $asistencia=$this->db->asistencia()->select('fecha', 'hora_entrada', 'hora_salida', 'hora_acumulada','persona_idpersona')->where(array('persona_idpersona' => $voluntario, 'fecha' => $today));
-        for ($i=0; $i <count($asistencia) ; $i++) {
-          $id[$i] = $asistencia[$i]['persona_idpersona'];
-        }
-        $persona=$this->db->persona()->select('nombre', 'apellido')->where('idpersona',$id);
-        $todo[] = 0;
-        foreach ($persona as $key => $value) {
-            $todo['datos'][$key]['nombre'] = $value['nombre'];
-            $todo['datos'][$key]['apellido'] = $value['apellido'];
-        }
-        foreach ($asistencia as $key => $value) {
-            $todo['datos'][$key]['hora_entrada'] = $value['hora_entrada'];
-            $todo['datos'][$key]['hora_salida'] = $value['hora_salida'];
-            $todo['datos'][$key]['hora_acumulada'] = round($value['hora_acumulada'],2);
-        }
+        $todo['datos'] = $this->db->asistencia()->select('asistencia.fecha','asistencia.hora_entrada','asistencia.hora_salida','asistencia.hora_acumulada','persona.nombre','persona.apellido')->where(array('persona.idpersona' => $voluntario, 'asistencia.fecha' => $today));
         return $this->view->render($response, '/voluntarios/asisxdia.html', $todo);
     })->setName('voluntarios_asistencia_dia');
 
     $this->any('/lista_asis_semana', function($request, $response, $args){
         $anio_min = $this->db->voluntario()->select('fecha_ingreso')->min('fecha_ingreso');
         $vol = $this->db->voluntario()->select('persona_idpersona');
-        $anio_max = $this->db->asistencia()->select('hora_entrada')->where('persona_idpersona')->max('hora_entrada');
+        $anio_max = $this->db->asistencia()->select('hora_entrada')->where('idpersona')->max('hora_entrada');
         $for_min = date('Y',$anio_min);
         $for_max = date('Y',$anio_max);
         $w = 0;
@@ -204,11 +190,67 @@ $app->group('/voluntarios', function () {
     })->setName('asisxinter');
 
     $this->any('/busqueda_semana' , function($request,$response,$args){
+        $anio_min = $this->db->voluntario()->select('fecha_ingreso')->min('fecha_ingreso');
+        $vol = $this->db->voluntario()->select('persona_idpersona');
+        $anio_max = $this->db->asistencia()->select('hora_entrada')->where('idpersona')->max('hora_entrada');
+        $for_min = date('Y',$anio_min);
+        $for_max = date('Y',$anio_max);
+        $w = 0;
+        for ($i=$for_min; $i <=$for_max ; $i++) {
+          $datos['asistencia'][$w]['anios']= $i;
+          $w = $w+1;
+        }
+
         $parsedBody = $request->getParsedBody();
         $inicio = strtotime($parsedBody['f_inicio']);
-        $final = strtotime($parsedBody['f_final']);
-        echo $datos['asistencia'] = $this->db->asistencia()->select('hora_entrada','hora_salida','persona_idpersona')->where('hora_entrada > '.$inicio.' AND hora_entrada < '.$final);
-        echo json_encode($datos['asistencia']);
+        $final = strtotime($parsedBody['f_final'].' +23 hour');
+        //echo $lista = $this->db->asistencia()->select('fecha','hora_entrada','hora_salida','persona_idpersona')->where('hora_entrada >= '.$inicio.' AND hora_entrada <= '.$final);
+        $persona = $this->db->persona()->select('idpersona','nombre','apellido');
+        $asis = $this->db->asistencia()->select('idpersona');
+        $lista = $this->db->asistencia()->select('asistencia.fecha','asistencia.hora_entrada','asistencia.hora_salida','asistencia.hora_acumulada','persona.nombre','persona.apellido')->where('hora_entrada >= '.$inicio.' AND hora_salida <= '.$final);
+
+        //echo count($datos['asistencia']);
+        //echo date('w',$lista[0]['hora_entrada']);
+        $datos['cabecera']['titulo'] = "Lunes ".date('d/m/Y',$inicio)." - Viernes ".date('d/m/Y',$final);
+        $j = 0;
+        for ($i=0; $i <= count($lista) ; $i++) {
+          if (date('w',$lista[$i]['hora_entrada'])==1) {
+            $datos['registro']['lunes'][$j] = $lista[$i];
+            $j += 1;
+          }
+        }
+        $j = 0;
+        for ($i=0; $i <= count($lista) ; $i++) {
+          if (date('w',$lista[$i]['hora_entrada'])==2) {
+            $datos['registro']['martes'][$j]= $lista[$i];
+            $j += 1;
+          }
+        }
+        $j = 0;
+        for ($i=0; $i <= count($lista) ; $i++) {
+          if (date('w',$lista[$i]['hora_entrada'])==3) {
+            $datos['registro']['miercoles'][$j] = $lista[$i];
+            $j += 1;
+          }
+        }
+        $j = 0;
+        for ($i=0; $i <= count($lista) ; $i++) {
+          if (date('w',$lista[$i]['hora_entrada'])==4) {
+            $datos['registro']['jueves'][$j]= $lista[$i];
+            $j += 1;
+          }
+        }
+        $j = 0;
+        for ($i=0; $i <= count($lista) ; $i++) {
+          if (date('w',$lista[$i]['hora_entrada'])==5) {
+            $datos['registro']['viernes'][$j] = $lista[$i];
+            $j += 1;
+          }
+        }
+        //echo json_encode($datos['registro']); die();
+        $datos['cantidad'] = ceil(count($lista)/5);
+
+        return $this->view->render($response, '/voluntarios/listaxtiempo.html',$datos);
     })->setName('busqueda_semana');
 
     //Formulario de Registro
@@ -292,6 +334,7 @@ $app->group('/voluntarios', function () {
           }
         }
         $lista['persona']=$this->db->persona()->where('idpersona',$voluntario)->limit($limite,$pa);
+
         return $this->view->render($response, '/voluntarios/lista.html',$lista);
     })->setName('voluntarios_lista');
 
@@ -311,7 +354,7 @@ $app->group('/voluntarios', function () {
         $id_vol = $this->db->voluntario()->select('idvoluntario')->where('persona_idpersona',$id)->fetch();
         $no = $request->getAttribute('no');
         $pa = $request->getAttribute('pa');
-        $lista_num = $this->db->asistencia()->where('persona_idpersona',$id)->count();
+        $lista_num = $this->db->asistencia()->where('idpersona',$id)->count();
         $limite = 25;
         $paginas = $lista_num/$limite;
         $paginas =ceil($paginas);
@@ -329,15 +372,15 @@ $app->group('/voluntarios', function () {
               $lista['paginas'][$i]['partir_de'] = $partir_de;
           }
         }
-        $lista['asis'] = $this->db->asistencia()->where('persona_idpersona',$id)->limit($limite,$pa);
-        $acumuladas = $this->db->asistencia()->where('persona_idpersona',$id)->sum('hora_acumulada');
+        $lista['asis'] = $this->db->asistencia()->where('idpersona',$id)->limit($limite,$pa);
+        $acumuladas = $this->db->asistencia()->where('idpersona',$id)->sum('hora_acumulada');
         $lista['acum'] = round($acumuladas,2);
         $id_area = $this->db->voluntario()->select('area_idarea')->where('persona_idpersona',$id)->fetch();
         $lista['area'] = $this->db->area()->where('idarea',$id_area['area_idarea']);
         $lista['actividades'] = $this->db->actividades()->where('area_idarea',$id_area['area_idarea']);
         $lista['actividad_extra'] = $this->db->actividad_extra()->where('voluntario_idvoluntario',$id_vol);
         /*echo json_encode($lista['area']); die();*/
-        $lista['ultima'] = $this->db->asistencia()->where('persona_idpersona',$id)->select('hora_entrada')->order('hora_entrada desc')->limit(1);
+        $lista['ultima'] = $this->db->asistencia()->where('idpersona',$id)->select('hora_entrada')->order('hora_entrada desc')->limit(1);
 
         return $this->view->render($response, '/voluntarios/detalles.html',$lista);
     })->setName('voluntarios_detalles');
@@ -388,6 +431,7 @@ $app->group('/voluntarios', function () {
     $this->any('/hora', function ($request, $response, $args) {
         $parsedBody=$request->getParsedBody();
         $asis = $this->db->asistencia();
+        $data['fecha']=$parsedBody['fecha'];
         $data['hora_entrada']=strtotime(''.$parsedBody['fecha'].' '.$parsedBody['entrada'].'');
         $data['hora_salida']=strtotime(''.$parsedBody['fecha'].' '.$parsedBody['salida']);
         $data['hora_acumulada']= date('H.is',$data['hora_salida'])- date('H.is',$data['hora_entrada']);
@@ -395,7 +439,7 @@ $app->group('/voluntarios', function () {
         {
           $data['hora_acumulada'] = $data['hora_acumulada']-1;
         }
-        $data['persona_idpersona']=$parsedBody['id'];
+        $data['idpersona']=$parsedBody['id'];
         $asis->insert($data);
         return $response->withRedirect('/voluntarios/detalles/'.$parsedBody['id'].'_1_0');
     })->setName('agregar_hora');
@@ -414,6 +458,7 @@ $app->group('/voluntarios', function () {
     $this->any('/actualizar_h',function($request,$response,$args){
       $parsedBody = $request->getParsedBody();
       $asistencia = $this->db->asistencia()->where('idasistencia',$parsedBody['id']);
+      $data['fecha']=$parsedBody['fecha'];
       $data['hora_entrada'] = strtotime(''.$parsedBody['fecha'].' '.$parsedBody['h_entrada']);
       $data['hora_salida'] = strtotime(''.$parsedBody['fecha'].' '.$parsedBody['h_salida']);
       $data['hora_acumulada'] = date('H.is',$data['hora_salida']) - date('H.is',$data['hora_entrada']);
@@ -516,7 +561,7 @@ $app->group('/trabajador', function (){
       $lista['trab'] = $this->db->trabajador()->where('persona_idpersona',$id);
       $no = $request->getAttribute('no');
       $pa = $request->getAttribute('pa');
-      $lista_num = $this->db->asistencia()->where('persona_idpersona',$id)->count();
+      $lista_num = $this->db->asistencia()->where('idpersona',$id)->count();
       $limite = 25;
       $paginas = $lista_num/$limite;
       $paginas =ceil($paginas);
@@ -535,7 +580,7 @@ $app->group('/trabajador', function (){
         }
       }
 
-      $lista['asis'] = $this->db->asistencia()->where('persona_idpersona',$id)->limit($limite,$pa);
+      $lista['asis'] = $this->db->asistencia()->where('idpersona',$id)->limit($limite,$pa);
       $trab_ad = $this->db->trabajador()->where('persona_idpersona',$id)->fetch();
       $admin = $this->db->admin()->where('trabajador_idtrabajador',$trab_ad['idtrabajador']);
       $lista['cant'] = count($admin);
@@ -584,6 +629,7 @@ $app->group('/trabajador', function (){
   $this->any('/hora', function ($request, $response, $args) {
       $parsedBody=$request->getParsedBody();
       $asis = $this->db->asistencia();
+      $data['fecha']=$parsedBody['fecha'];
       $data['hora_entrada']=strtotime(''.$parsedBody['fecha'].' '.$parsedBody['entrada'].'');
       $data['hora_salida']=strtotime(''.$parsedBody['fecha'].' '.$parsedBody['salida']);
       $data['hora_acumulada']= date('H.is',$data['hora_salida'])- date('H.is',$data['hora_entrada']);
@@ -591,7 +637,7 @@ $app->group('/trabajador', function (){
       {
         $data['hora_acumulada'] = $data['hora_acumulada']-1;
       }
-      $data['persona_idpersona']=$parsedBody['id'];
+      $data['idpersona']=$parsedBody['id'];
       $asis->insert($data);
       return $response->withRedirect('/trabajador/detalles/'.$parsedBody['id'].'_1_0');
   })->setName('agregar_hora');
@@ -607,6 +653,7 @@ $app->group('/trabajador', function (){
   $this->any('/actualizar_h',function($request,$response,$args){
     $parsedBody = $request->getParsedBody();
     $asistencia = $this->db->asistencia()->where('idasistencia',$parsedBody['id']);
+    $data['fecha']=$parsedBody['fecha'];
     $data['hora_entrada'] = strtotime(''.$parsedBody['fecha'].' '.$parsedBody['h_entrada']);
     $data['hora_salida'] = strtotime(''.$parsedBody['fecha'].' '.$parsedBody['h_salida']);
     $data['hora_acumulada'] = date('H.is',$data['hora_salida']) - date('H.is',$data['hora_entrada']);
@@ -639,6 +686,74 @@ $app->group('/trabajador', function (){
       $admin->delete();
       return $response->withRedirect('/trabajador/detalles/'.$parsedBody['id_per']);
   })->setName('agregar_admin');
+
+  $this->any('/lista_asis_mes/{id}', function($request, $response, $args){
+      $id = $request->getAttribute('id');
+      $mes = date('m');
+      $anio = date('Y');
+      $my_date = new DateTime();
+      $meses_t = array("","january","february","march","april","may","june","july","august","september","october","november","december");
+      $meses_s = array("","Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
+      //cantidad a utilizar en los ciclos
+      $cant = array("first","second","third","fourth","fifth","sixth");
+      //Representacion numerica del mes es = m;
+      //conseguir el primer dia del mes
+      $p_dia = $my_date->modify('first day of '.$meses_t[$mes].' '.$anio);
+      $p_dia_f = $p_dia->format('Y-m-d');
+      $p_dia_ft = strtotime($p_dia_f);
+      $u_dia = $my_date->modify('last day of '.$meses_t[$mes].' '.$anio);
+      $u_dia_f = $u_dia->format('Y-m-d');
+      $u_dia_ft = strtotime($u_dia_f);
+      $lista = $this->db->asistencia()->select('hora_entrada','hora_salida','idpersona')->where('fecha >= "'.$p_dia_f.'" AND fecha <= "'.$u_dia_f.'" AND idpersona LIKE '.$id);
+      $pers = $this->db->persona()->select('nombre','apellido')->where('idpersona',$id)->fetch();
+      $datos['informacion']['nombre'] = $pers['nombre']." ".$pers['apellido'];
+      $datos['cabecera']['titulo'] = $meses_s[$mes]." del ".$anio;
+      $j = 0;
+      for ($i=0; $i <= count($lista) ; $i++) {
+        if (date('w',$lista[$i]['hora_entrada'])==1) {
+          $datos['registro']['lunes'][$j] = $lista[$i];
+          $j += 1;
+        }
+      }
+      $j = 0;
+      for ($i=0; $i <= count($lista) ; $i++) {
+        if (date('w',$lista[$i]['hora_entrada'])==2) {
+          $datos['registro']['martes'][$j]= $lista[$i];
+          $j += 1;
+        }
+      }
+      $j = 0;
+      for ($i=0; $i <= count($lista) ; $i++) {
+        if (date('w',$lista[$i]['hora_entrada'])==3) {
+          $datos['registro']['miercoles'][$j] = $lista[$i];
+          $j += 1;
+        }
+      }
+      $j = 0;
+      for ($i=0; $i <= count($lista) ; $i++) {
+        if (date('w',$lista[$i]['hora_entrada'])==4) {
+          $datos['registro']['jueves'][$j]= $lista[$i];
+          $j += 1;
+        }
+      }
+      $j = 0;
+      for ($i=0; $i <= count($lista) ; $i++) {
+        if (date('w',$lista[$i]['hora_entrada'])==5) {
+          $datos['registro']['viernes'][$j] = $lista[$i];
+          $j += 1;
+        }
+      }
+      for ($i=0; $i <= count($lista) ; $i++) {
+        if (date('w',$lista[$i]['hora_entrada'])==6) {
+          $datos['registro']['sabado'][$j] = $lista[$i];
+          $j += 1;
+        }
+      }
+      //echo json_encode($datos['registro']); die();
+      $datos['cantidad'] = ceil(count($lista)/5);
+      echo json_encode($datos['registro']); die();
+      return $this->view->render($response, '/trabajador/listaxmes.html',$datos);
+  })->setName('asisxmes');
 
 });
 
