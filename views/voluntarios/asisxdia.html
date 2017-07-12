@@ -27,7 +27,11 @@
 						<th>{{datos['nombre']}}</th>
 						<th>{{datos['apellido']}}</th>
 						<th>{{datos['hora_entrada']|date('H:i')}}</th>
+						{%if datos['hora_salida']==0%}
+						<th>-</th>
+						{%else%}
 						<th>{{datos['hora_salida']|date('H:i')}}</th>
+						{%endif%}
 						<th>{{datos['hora_acumulada']}}</th>
 					</tr>
 				{%endfor%}

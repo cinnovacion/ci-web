@@ -7,10 +7,9 @@
 	<div class="panel">
 			<!--<input class="buscar" type="text" name="buscar" placeholder="Cédula" class="izquierda">
 			<button type="button" name="button"></button>-->
-			<h2>Administradores</h2>
 		<table>
 			<caption>
-				
+				<h3><strong>ADMINISTRADORES</strong></h3>
 				<form id="frm_s" class="" action="/trabajador/busqueda" method="post">
 					<!--<input id="cmd_s" class="button" type="submit" name="cmd_buscar">-->
 					<input id="vol_s" type="text" name="buscar" placeholder="Nombre">
@@ -26,13 +25,13 @@
 					<th>Usuario</th>
 					<th>Estado</th>
 					<!--th>Modificar</th-->
-					<th>ID</th>
+					<th>Modificar</th>
 				</tr>
 			</thead>
 			<tbody>
 				{%for dato in datos%}
 				<tr>
-				
+
 					<th>{{dato.nombre}}</th>
 					<th>{{dato.apellido}}</th>
 					<th>{{dato.usuario}}</th>
