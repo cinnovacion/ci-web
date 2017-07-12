@@ -755,6 +755,42 @@ $app->group('/trabajador', function (){
       return $this->view->render($response, '/trabajador/listaxmes.html',$datos);
   })->setName('asisxmes');
 
+  $this->any('/lista_admin', function ($request, $response, $args) {
+    $idtrab= $this->db->admin()->select("trabajador_idtrabajador");
+    $usuariotrab= $this->db->admin()->select("usuario","activo");
+    $trabajador = $this->db->trabajador()->select("persona_idpersona")->where("idtrabajador",$idtrab);
+    $persona = $this->db->persona()->select("nombre","apellido")->where("idpersona",$trabajador);
+       
+        foreach ($persona as $key => $value) {
+            $todo['datos'][$key]['nombre'] = $value['nombre'];
+            $todo['datos'][$key]['apellido'] = $value['apellido'];
+        }
+
+        
+        foreach ($usuariotrab as $key => $value) {
+            $todo['datos'][$key]['usuario'] = $value['usuario'];
+            $todo['datos'][$key]['activo'] = $value['activo'];
+        }
+        foreach ($idtrab as $key => $value) {
+            $todo['datos'][$key]['id'] = $value['trabajador_idtrabajador'];
+        }
+        //echo json_encode($todo); die();
+    return $this->view->render($response, '/trabajador/listaAdmin.html',$todo);
+})->setName('inicio');
+
+$this->any('/update_admin/{id}', function ($request, $response, $args) {
+    $id = $request->getAttribute('id');
+    $Estado = $this->db->admin()->select("activo")->where("trabajador_idtrabajador",$id)->fetch();
+    if ($Estado['activo']==1) {
+          $asistencia=$this->db->admin()->where("trabajador_idtrabajador",$id)->update(array('activo'=>0));
+    }
+    else
+    {
+        $asistencia=$this->db->admin()->where("trabajador_idtrabajador",$id)->update(array('activo'=>1));
+    }
+    return $response->withRedirect('/trabajador/lista_admin');
+})->setName('updateAdm');
+
 });
 
 $app->group('/ajax', function () {

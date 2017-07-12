@@ -175,6 +175,7 @@ CREATE TABLE IF NOT EXISTS `asscic`.`admin` (
   `idadmin` INT NOT NULL AUTO_INCREMENT,
   `usuario` VARCHAR(45) NOT NULL,
   `password` VARCHAR(45) NOT NULL,
+  `activo` BOOLEAN NOT NULL,
   `trabajador_idtrabajador` INT NOT NULL,
   PRIMARY KEY (`idadmin`, `trabajador_idtrabajador`),
   INDEX `fk_admin_trabajador1_idx` (`trabajador_idtrabajador` ASC),
@@ -273,7 +274,7 @@ COMMIT;
 
 START TRANSACTION;
 USE  `asscic`;
-INSERT INTO `asscic`.`admin` (`idadmin`,`usuario`,`password`,`trabajador_idtrabajador`) VALUES (DEFAULT,'jorge','1234',1);
+INSERT INTO `asscic`.`admin` (`idadmin`,`usuario`,`password`,`activo`,`trabajador_idtrabajador`) VALUES (DEFAULT,'jorge','1234',1,1);
 
 COMMIT;
 

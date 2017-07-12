@@ -1,19 +1,16 @@
 {% extends "layouts/layout_admin.html" %}
 
 {% block content %}
-<!--<div>
-	<form class="panel" method="POST" action="">
-	<input class="buscar" type="text" name="buscar" placeholder="Cédula" class="izquierda">
-	<button type="button" name="button" style="background-image: url(/resources/img/search.png);"></button>
-	</form>
-</div>-->
+
+
 <div class="centrar panel">
 	<div class="panel">
 			<!--<input class="buscar" type="text" name="buscar" placeholder="Cédula" class="izquierda">
 			<button type="button" name="button"></button>-->
+			<h2>Administradores</h2>
 		<table>
 			<caption>
-				<a class="button" id="vol_cmd" href="/trabajador/trabajador_reg">Nuevo Empleado</a>
+				
 				<form id="frm_s" class="" action="/trabajador/busqueda" method="post">
 					<!--<input id="cmd_s" class="button" type="submit" name="cmd_buscar">-->
 					<input id="vol_s" type="text" name="buscar" placeholder="Nombre">
@@ -26,30 +23,30 @@
 				<tr>
 					<th>Nombre</th>
 					<th>Apellido</th>
-					<th>Cédula</th>
-					<th>Telefono</th>
-					<th>Detalles</th>
+					<th>Usuario</th>
+					<th>Estado</th>
+					<!--th>Modificar</th-->
+					<th>ID</th>
 				</tr>
 			</thead>
 			<tbody>
-				{%for datos in persona%}
+				{%for dato in datos%}
 				<tr>
-					<th>{{datos.nombre}}</th>
-					<th>{{datos.apellido}}</th>
-					<th>{{datos.cedula}}</th>
-					<th>{{datos.telefono}}</th>
-					<th><a class='button' href="/trabajador/detalles/{{datos.idpersona}}_1_0">Mas</a></th>
+				
+					<th>{{dato.nombre}}</th>
+					<th>{{dato.apellido}}</th>
+					<th>{{dato.usuario}}</th>
+
+					{% if dato.activo == 1 %}
+				    <th>{{"Activo"}}</th>
+				    {% else %}
+				    <th>{{"Inactivo"}}</th>
+					{% endif %}
+					<th><a class='button' href="/trabajador/update_admin/{{dato.id}}">Cambiar</a></th>
 				</tr>
 				{%endfor%}
 			</tbody>
-			<!--<tfoot>
-				<tr>
-					{%for datos in paginas%}
-					<th><a class="button button-clear layout_items pag" href="/voluntarios/lista/{{datos.no_pag}}_{{datos.partir_de}}">{{datos.no_pag}}</a></th>
-					{%endfor%}
-				</tr>
-			</tfoot>-->
-			</table>
+		</table>
 	</div>
 </div>
 <div class="centrar" style="margin-bottom: 120px; margin-top:0px;">
