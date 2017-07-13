@@ -689,6 +689,17 @@ $app->group('/trabajador', function (){
 
   $this->any('/lista_asis_mes/{id}', function($request, $response, $args){
       $id = $request->getAttribute('id');
+
+      $anio_min = $this->db->asistencia()->select('hora_entrada')->where('idpersona',$id)->min('hora_entrada');
+      $vol = $this->db->voluntario()->select('persona_idpersona');
+      $for_max = date('Y');
+      $for_min = date('Y',$anio_min);
+      $w = 0;
+      for ($i=$for_min; $i <=$for_max ; $i++) {
+        $datos['asistencia'][$w]['anios']= $i;
+        $w = $w+1;
+      }
+
       $mes = date('m');
       $anio = date('Y');
       $my_date = new DateTime();
@@ -696,6 +707,7 @@ $app->group('/trabajador', function (){
       $meses_s = array("","Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
       //cantidad a utilizar en los ciclos
       $cant = array("first","second","third","fourth","fifth","sixth");
+      $datos['cabecera']['titulo'] = $meses_s[$mes]." del ".$anio;
       //Representacion numerica del mes es = m;
       //conseguir el primer dia del mes
       $p_dia = $my_date->modify('first day of '.$meses_t[$mes].' '.$anio);
@@ -704,10 +716,10 @@ $app->group('/trabajador', function (){
       $u_dia = $my_date->modify('last day of '.$meses_t[$mes].' '.$anio);
       $u_dia_f = $u_dia->format('Y-m-d');
       $u_dia_ft = strtotime($u_dia_f);
-      $lista = $this->db->asistencia()->select('hora_entrada','hora_salida','idpersona')->where('fecha >= "'.$p_dia_f.'" AND fecha <= "'.$u_dia_f.'" AND idpersona LIKE '.$id);
+      $lista = $this->db->asistencia()->select('fecha','hora_entrada','hora_salida','idpersona')->where('fecha >= "'.$p_dia_f.'" AND fecha <= "'.$u_dia_f.'" AND idpersona LIKE '.$id);
       $pers = $this->db->persona()->select('nombre','apellido')->where('idpersona',$id)->fetch();
       $datos['informacion']['nombre'] = $pers['nombre']." ".$pers['apellido'];
-      $datos['cabecera']['titulo'] = $meses_s[$mes]." del ".$anio;
+
       $j = 0;
       for ($i=0; $i <= count($lista) ; $i++) {
         if (date('w',$lista[$i]['hora_entrada'])==1) {
@@ -743,6 +755,7 @@ $app->group('/trabajador', function (){
           $j += 1;
         }
       }
+      $j = 0;
       for ($i=0; $i <= count($lista) ; $i++) {
         if (date('w',$lista[$i]['hora_entrada'])==6) {
           $datos['registro']['sabado'][$j] = $lista[$i];
@@ -750,8 +763,8 @@ $app->group('/trabajador', function (){
         }
       }
       //echo json_encode($datos['registro']); die();
-      $datos['cantidad'] = ceil(count($lista)/5);
-      echo json_encode($datos['registro']); die();
+      $datos['cantidad'] = ceil(count($lista)/6);
+      //echo json_encode($datos['registro']); die();
       return $this->view->render($response, '/trabajador/listaxmes.html',$datos);
   })->setName('asisxmes');
 

@@ -6,8 +6,14 @@
 		<div class="row">
 			<div class="column column-50" style="margin-top:20px">
 				<form class="" action="/voluntarios/busqueda_semana" method="post">
-					<label for="months">Mes:</label>
-					<select id="months" class="" name="mes" style="width:50%">
+					<label for="years" class="lab_sem">Año:</label>
+					<select id="years"  name="" class="sel_sem" >
+						{%for datos in asistencia%}
+						<option value="{{datos.anios}}" {{(datos.anios=='now'|date('Y'))?'selected="selected"':' '}}>{{datos.anios}}</option>
+						{%endfor%}
+					</select>
+					<label for="months" class="lab_sem">Mes:</label>
+					<select id="months" name="mes" class="sel_sem">
 						<option value="0" {{('01'=='now'|date('m'))?'selected="selected"':' '}}>Enero</option>
 						<option value="1" {{('02'=='now'|date('m'))?'selected="selected"':' '}}>Febrero</option>
 						<option value="2" {{('03'=='now'|date('m'))?'selected="selected"':' '}}>Marzo</option>
@@ -28,7 +34,10 @@
 		</div>
 		<div class="panel" style="margin-top: 0">
 			<table>
-				<caption><h4><strong></strong></h4></caption>
+				<caption>
+					<p><h4><strong>{{informacion['nombre']}}</strong></h4></p>
+					<p><h4><strong>{{cabecera['titulo']}}</strong></h4></p>
+				</caption>
 				<thead>
 					<tr>
 						<th>Lunes</th>
@@ -41,13 +50,63 @@
 					</tr>
 				</thead>
 				<tbody>
+					{%set i = 0%}
+					{%for j in 1..cantidad%}
+					<tr>
+						<th>
+							{%if registro['lunes'][i]==true%}
+							<p class="p_detalles" id="opener">{{registro['lunes'][i]['fecha']}}</p>
+							<!--
+							  <ul>
+							  	<li>{{registro['lunes'][i]['fecha']}}</li>
+									<li>{{registro['lunes'][i]['hora_entrada']}}</li>
+									<li>{{registro['lunes'][i]['hora_salida']}}</li>
+									<li>{{registro['lunes'][i]['hora_acumulada']}}</li>
+							  </ul>
+							-->
+							{%else%}
+							<p class="p_detalles centrar">-</p>
+							{%endif%}
+						</th>
+						<th>
+							{%if registro['martes'][i]==true%}
+							<p class="p_detalles">{{registro['martes'][i]['fecha']}}</p>
+							{%else%}
+							<p class="p_detalles centrar">-</p>
+							{%endif%}
+						</th>
+						<th>
+							{%if registro['miercoles'][i]==true%}
+							<p class="p_detalles">{{registro['miercoles'][i]['fecha']}}</p>
+							{%else%}
+							<p class="p_detalles centrar">-</p>
+							{%endif%}
+						</th>
+						<th>
+							{%if registro['jueves'][i]==true%}
+							<p class="p_detalles">{{registro['jueves'][i]['fecha']}}</p>
+							{%else%}
+							<p class="p_detalles centrar">-</p>
+							{%endif%}
+						</th>
+						<th>
+							{%if registro['viernes'][i]==true%}
+							<p class="p_detalles">{{registro['viernes'][i]['fecha']}}</p>
+							{%else%}
+							<p class="p_detalles centrar">-</p>
+							{%endif%}
+						</th>
+						<th>
+							{%if registro['sabado'][i]==true%}
+							<p class="p_detalles">{{registro['sabado'][i]['fecha']}}</p>
+							{%else%}
+							<p class="p_detalles centrar">-</p>
+							{%endif%}
+						</th>
 					<th></th>
-					<th></th>
-					<th></th>
-					<th></th>
-					<th></th>
-					<th></th>
-					<th></th>
+					{%set i = i+1%}
+				{% endfor %}
+				</tr>
 				</tbody>
 			</table>
 		</div>
