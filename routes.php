@@ -548,8 +548,8 @@ $app->group('/trabajador', function (){
   $this->any('/busqueda', function($request,$response,$args){
     $parsedBody = $request->getParsedBody();
     $trabajador=$this->db->trabajador()->select('persona_idpersona');
-    $buscar = $this->db->persona()->where(array('idpersona'=>$trabajador, 'nombre LIKE ?'=>'%'.$parsedBody['buscar'].'%'));
-    return $this->view->render($response, '/trabajador/lista.html',['lis_trab'=>$buscar]);
+    $buscar['persona'] = $this->db->persona()->where(array('idpersona'=>$trabajador, 'nombre LIKE ?'=>'%'.$parsedBody['buscar'].'%'));
+    return $this->view->render($response, '/trabajador/lista.html',$buscar);
   })->setName('trabajador_buscar');
 
   //Mostrar detalles de un trabajador
@@ -729,7 +729,7 @@ $app->group('/trabajador', function (){
       }
       $j = 0;
       for ($i=0; $i <= $por ; $i++) {
-        if (date('w',$lista[$i]['hora_entrada'])==2) {
+        if (date('w',$lista[$i]['hora_entrada']) ==2) {
           $datos['registro']['martes'][$j]= $lista[$i];
           $j += 1;
         }
