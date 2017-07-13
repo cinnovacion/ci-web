@@ -333,6 +333,16 @@ $app->group('/voluntarios', function () {
           }
         }
         $lista['persona']=$this->db->persona()->where('idpersona',$voluntario)->limit($limite,$pa);
+        $listaAsis['persona']=$this->db->persona()->where('idpersona',$voluntario);
+        echo json_encode($listaAsis['persona'][1]['idpersona']);    die();
+        $listaAsisNum['persona']=$this->db->persona()->where('idpersona',$voluntario)->count();
+        /*foreach ($listaAsisNum['persona'][] as $key => $value) {
+            $sumatoria = $this->db->persona()->where('idpersona',$voluntario)
+            $todo['datos'][$key]['nombre'] = $value['nombre'];
+            $todo['datos'][$key]['apellido'] = $value['apellido'];
+        }*/
+
+
 
         return $this->view->render($response, '/voluntarios/lista.html',$lista);
     })->setName('voluntarios_lista');
@@ -803,6 +813,37 @@ $this->any('/update_admin/{id}', function ($request, $response, $args) {
     }
     return $response->withRedirect('/trabajador/lista_admin');
 })->setName('updateAdm');
+
+ $this->any('/buscar_administradores', function($request,$response,$args){
+    $parsedBody = $request->getParsedBody();
+    $idtrab= $this->db->admin()->select("trabajador_idtrabajador");
+
+    $usuariotrab= $this->db->admin()->select("usuario","activo");
+    $trabajador = $this->db->trabajador()->select("persona_idpersona")->where("idtrabajador",$idtrab);
+    echo $buscar = $this->db->persona()->where(array(':nombre' => 'dogstar', ':idpersona' => '1', ':apellido' => 'xxx'));
+    //$buscar['datos'] = $this->db->persona()->where(array('idpersona'=>$trabajador, 'nombre LIKE ?'=>'%'.$parsedBody['buscar'].'%') );
+    $i = 0;
+    foreach ($buscar['datos'] as $key => $value) {
+        $todo['datos'][$i]['nombre'] = $value['nombre'];
+        $todo['datos'][$i]['apellido'] = $value['apellido'];
+        $i += 1;
+    }
+    $i = 0;
+    foreach ($buscar['datos'] as $key => $value) {
+        $id[$i]=$value['idpersona'];
+        $i += 1;
+    }
+    $trabajadorInverso = $this->db->trabajador()->select("idtrabajador")->where("persona_idpersona",$id);
+    $admin_inversoU= $this->db->admin()->select("usuario","activo")->where("trabajador_idtrabajador",$trabajadorInverso);
+    $i = 0;
+    foreach ($admin_inversoU as $key => $value) {
+         $todo['datos'][$i]['usuario'] = $value['usuario'];
+         $todo['datos'][$i]['activo'] = $value['activo'];
+         $i += 1;
+    }
+    //echo json_encode($todo['datos']); die();
+    return $this->view->render($response, '/trabajador/listaAdmin.html',$todo);
+  })->setName('Admin_buscar');
 
 });
 
