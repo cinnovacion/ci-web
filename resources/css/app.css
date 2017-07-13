@@ -417,3 +417,24 @@ select:focus{
 .sel_sem{
   width:30%;
 }
+#act_cmd{
+  position: absolute;
+  top: 0.2rem;
+  left: 8.75rem;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+#inact_cmd{
+  position: absolute;
+  top: 0.2rem;
+  left: 16.8rem;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+#all_cmd{
+  position: absolute;
+  top: 0.2rem;
+  left: 26.2rem;
+  padding-left: 10px;
+  padding-right: 10px;
+}

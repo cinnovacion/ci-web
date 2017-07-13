@@ -110,19 +110,18 @@ $app->group('/visitas', function () {
             $todo['datos'][$key]['nombre'] = $value['nombre'];
             $todo['datos'][$key]['apellido'] = $value['apellido'];
             $todo['datos'][$key]['cedula'] = $value['cedula'];
+            $todo['datos'][$key]['idvisita'] = $value['idpersona'];
         }
-        foreach ($visita as $key => $value) {
-            $todo['datos'][$key]['idvisita'] = $value['idvisita'];
-        }
+
         return $this->view->render($response, '/visitas/lista.html',$todo);
     })->setName('visitas_lista');
 
     //Mostrar mas detalles de una visita
     $this->any('/mas/{id}', function ($request, $response, $args) {
         $id = $request->getAttribute('id');
-        $idpersona=$this->db->visita()->select('persona_idpersona')->where('idvisita',$id)->fetch();
+        $idpersona=$this->db->visita()->select('persona_idpersona')->where('persona_idpersona',$id)->fetch();
         $mas['persona']=$this->db->persona()->where('idpersona',$idpersona['persona_idpersona']);
-        $mas['visita'] = $this->db->visita()->where('idvisita',$id);
+        $mas['visita'] = $this->db->visita()->where('persona_idpersona',$id);
         return $this->view->render($response, '/visitas/mas.html',$mas);
     })->setName('visitas_mas');
 
@@ -162,7 +161,7 @@ $app->group('/visitas', function () {
         //insertar en la base de datos
         var_dump($fecha);
         $visita()->insert($data1);
-        return $response->withRedirect('/visitas/lista');
+        return $response->withRedirect('/visitas/lista/1_0');
     })->setName('visitas_reg');
 });
 //Grupo de rutas de Voluntarios
@@ -721,6 +720,7 @@ $app->group('/trabajador', function (){
       $datos['informacion']['nombre'] = $pers['nombre']." ".$pers['apellido'];
 
       $j = 0;
+      $por = count($lista);
       for ($i=0; $i <= count($lista) ; $i++) {
         if (date('w',$lista[$i]['hora_entrada'])==1) {
           $datos['registro']['lunes'][$j] = $lista[$i];
@@ -728,35 +728,35 @@ $app->group('/trabajador', function (){
         }
       }
       $j = 0;
-      for ($i=0; $i <= count($lista) ; $i++) {
+      for ($i=0; $i <= $por ; $i++) {
         if (date('w',$lista[$i]['hora_entrada'])==2) {
           $datos['registro']['martes'][$j]= $lista[$i];
           $j += 1;
         }
       }
       $j = 0;
-      for ($i=0; $i <= count($lista) ; $i++) {
+      for ($i=0; $i <= $por ; $i++) {
         if (date('w',$lista[$i]['hora_entrada'])==3) {
-          $datos['registro']['miercoles'][$j] = $lista[$i];
+          $datos['registro']['miercoles'][$j]=$lista[$i];
           $j += 1;
         }
       }
       $j = 0;
-      for ($i=0; $i <= count($lista) ; $i++) {
+      for ($i=0; $i <= $por ; $i++) {
         if (date('w',$lista[$i]['hora_entrada'])==4) {
           $datos['registro']['jueves'][$j]= $lista[$i];
           $j += 1;
         }
       }
       $j = 0;
-      for ($i=0; $i <= count($lista) ; $i++) {
+      for ($i=0; $i <= $por ; $i++) {
         if (date('w',$lista[$i]['hora_entrada'])==5) {
           $datos['registro']['viernes'][$j] = $lista[$i];
           $j += 1;
         }
       }
       $j = 0;
-      for ($i=0; $i <= count($lista) ; $i++) {
+      for ($i=0; $i <= $por ; $i++) {
         if (date('w',$lista[$i]['hora_entrada'])==6) {
           $datos['registro']['sabado'][$j] = $lista[$i];
           $j += 1;
@@ -767,6 +767,42 @@ $app->group('/trabajador', function (){
       //echo json_encode($datos['registro']); die();
       return $this->view->render($response, '/trabajador/listaxmes.html',$datos);
   })->setName('asisxmes');
+
+  $this->any('/lista_admin', function ($request, $response, $args) {
+    $idtrab= $this->db->admin()->select("trabajador_idtrabajador");
+    $usuariotrab= $this->db->admin()->select("usuario","activo");
+    $trabajador = $this->db->trabajador()->select("persona_idpersona")->where("idtrabajador",$idtrab);
+    $persona = $this->db->persona()->select("nombre","apellido")->where("idpersona",$trabajador);
+
+        foreach ($persona as $key => $value) {
+            $todo['datos'][$key]['nombre'] = $value['nombre'];
+            $todo['datos'][$key]['apellido'] = $value['apellido'];
+        }
+
+
+        foreach ($usuariotrab as $key => $value) {
+            $todo['datos'][$key]['usuario'] = $value['usuario'];
+            $todo['datos'][$key]['activo'] = $value['activo'];
+        }
+        foreach ($idtrab as $key => $value) {
+            $todo['datos'][$key]['id'] = $value['trabajador_idtrabajador'];
+        }
+        //echo json_encode($todo); die();
+    return $this->view->render($response, '/trabajador/listaAdmin.html',$todo);
+})->setName('admin');
+
+$this->any('/update_admin/{id}', function ($request, $response, $args) {
+    $id = $request->getAttribute('id');
+    $Estado = $this->db->admin()->select("activo")->where("trabajador_idtrabajador",$id)->fetch();
+    if ($Estado['activo']==1) {
+          $asistencia=$this->db->admin()->where("trabajador_idtrabajador",$id)->update(array('activo'=>0));
+    }
+    else
+    {
+        $asistencia=$this->db->admin()->where("trabajador_idtrabajador",$id)->update(array('activo'=>1));
+    }
+    return $response->withRedirect('/trabajador/lista_admin');
+})->setName('updateAdm');
 
 });
 

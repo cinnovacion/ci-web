@@ -5,15 +5,15 @@
 	<div class="panel" style="margin-bottom: 10px">
 		<div class="row">
 			<div class="column column-50" style="margin-top:20px">
-				<form class="" action="/voluntarios/busqueda_semana" method="post">
-					<label for="years" class="lab_sem">Año:</label>
-					<select id="years"  name="" class="sel_sem" >
+				<form class="" action="" method="post">
+					<label for="anio" class="lab_sem">Año:</label>
+					<select id="anio"  name="" class="sel_sem" >
 						{%for datos in asistencia%}
 						<option value="{{datos.anios}}" {{(datos.anios=='now'|date('Y'))?'selected="selected"':' '}}>{{datos.anios}}</option>
 						{%endfor%}
 					</select>
-					<label for="months" class="lab_sem">Mes:</label>
-					<select id="months" name="mes" class="sel_sem">
+					<label for="mes" class="lab_sem">Mes:</label>
+					<select id="mes" name="mes" class="sel_sem">
 						<option value="0" {{('01'=='now'|date('m'))?'selected="selected"':' '}}>Enero</option>
 						<option value="1" {{('02'=='now'|date('m'))?'selected="selected"':' '}}>Febrero</option>
 						<option value="2" {{('03'=='now'|date('m'))?'selected="selected"':' '}}>Marzo</option>

@@ -1,0 +1,59 @@
+{% extends "layouts/layout_admin.html" %}
+
+{% block content %}
+
+
+<div class="centrar panel">
+	<div class="panel">
+			<!--<input class="buscar" type="text" name="buscar" placeholder="Cédula" class="izquierda">
+			<button type="button" name="button"></button>-->
+		<table>
+			<caption>
+				<button class="button" id="act_cmd" >Activos</button>
+				<button class="button" id="inact_cmd" >Inactivos</button>
+				<button class="button" id="all_cmd" >Todos</button>
+				<h3><strong>ADMINISTRADORES</strong></h3>
+				<form id="frm_s" class="" action="/trabajador/busqueda" method="post">
+					<!--<input id="cmd_s" class="button" type="submit" name="cmd_buscar">-->
+					<input id="vol_s" type="text" name="buscar" placeholder="Nombre">
+					<input id="cmd_s" class="button" type="submit" name="cmd_buscar" value="Buscar">
+				</form>
+				<br>
+				<!--<h3><strong>LISTA DE VOLUNTARIOS</strong></h3>-->
+			</caption>
+			<thead>
+				<tr>
+					<th>Nombre</th>
+					<th>Apellido</th>
+					<th>Usuario</th>
+					<th>Estado</th>
+					<!--th>Modificar</th-->
+					<th>Modificar</th>
+				</tr>
+			</thead>
+			<tbody>
+				{%for dato in datos%}
+				<tr>
+
+					<th>{{dato.nombre}}</th>
+					<th>{{dato.apellido}}</th>
+					<th>{{dato.usuario}}</th>
+
+					{% if dato.activo == 1 %}
+				    <th>{{"Activo"}}</th>
+				    {% else %}
+				    <th>{{"Inactivo"}}</th>
+					{% endif %}
+					<th><a class='button' href="/trabajador/update_admin/{{dato.id}}">Cambiar</a></th>
+				</tr>
+				{%endfor%}
+			</tbody>
+		</table>
+	</div>
+</div>
+<div class="centrar" style="margin-bottom: 120px; margin-top:0px;">
+	{%for datos in paginas%}
+	<th><a class="button button-clear layout_items pag" href="/trabajador/lista/{{datos.no_pag}}_{{datos.partir_de}}">{{datos.no_pag}}</a></th>
+	{%endfor%}
+</div>
+{% endblock %}

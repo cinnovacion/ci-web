@@ -275,7 +275,9 @@
             $('#weeks').change();
           });
 
-
+          $('#act_cmd').click(function(){
+             $('#admin').css();
+          });
 
     }); // Fin de documento listo
 })(jQuery); // fin de espacio de nombre jquery
