@@ -825,11 +825,14 @@ $this->any('/update_admin/{id}', function ($request, $response, $args) {
  $this->any('/buscar_administradores', function($request,$response,$args){
     $parsedBody = $request->getParsedBody();
     $idtrab= $this->db->admin()->select("trabajador_idtrabajador");
-
+    $parsedBody['buscar'];
     $usuariotrab= $this->db->admin()->select("usuario","activo");
     $trabajador = $this->db->trabajador()->select("persona_idpersona")->where("idtrabajador",$idtrab);
+    //posible or
+    $or = $this->db->persona()->where('idpersona',$trabajador)->where('nombre LIKE ? %',$parsedBody['buscar'])->or('apellido LIKE ? %',$parsedBody['buscar']);
     //$personas = $this->db->persona()->where('idpersona ',$trabajador)->and('nombre LIKE ? %'.$parsedBody['buscar'].'%');
     //echo $buscar['datos'] = $this->db->persona()->where(array('idpersona'=>$trabajador, 'nombre LIKE ?'=>'%'.$parsedBody['buscar'].'%') );
+    echo json_encode($or);
     die();
     $i = 0;
     foreach ($buscar['datos'] as $key => $value) {
