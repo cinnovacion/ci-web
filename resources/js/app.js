@@ -216,7 +216,7 @@
 
         //Validar contraseña en el registro de administradores
         $('#reg_admin').click(function(){
-          if ($('#pass').val() !== $('#pass_d').val()) {
+          if ($('#pass').val() != $('#pass_d').val()) {
             event.preventDefault();
             $('.adm').css('display', 'block');
             $('#pass_d').focus();
@@ -258,7 +258,7 @@
               $('#js_vol').removeClass('js');
             }
 
-            $('.act_cmd').css('background-color','#7FC836');
+            $('.all_cmd').css('background-color','#7FC836');
             $("#years").change(function(){
               $('select[id=years]').val();
               $('#year').val($(this).val());
