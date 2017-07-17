@@ -57,7 +57,7 @@ a {
 
 a:hover {
     background-color: : #7fc836 !important;
-    border: 1px;
+    border: 1px !important;
     border-color: #448AFF;
 }
 
@@ -73,8 +73,7 @@ a.button {
   margin: 5px;
 }
 .layout_items:hover{
-  color: #7fc836 !important;
-
+  /*color: #7fc836 !important;*/
 }
 
 button {
@@ -417,24 +416,27 @@ select:focus{
 .sel_sem{
   width:30%;
 }
-#act_cmd{
+.act_cmd{
   position: absolute;
   top: 0.2rem;
-  left: 8.75rem;
+  left: 8.78rem;
   padding-left: 10px;
   padding-right: 10px;
 }
-#inact_cmd{
+.inact_cmd{
   position: absolute;
   top: 0.2rem;
-  left: 16.8rem;
+  left: 17rem;
   padding-left: 10px;
   padding-right: 10px;
 }
-#all_cmd{
+.all_cmd{
   position: absolute;
   top: 0.2rem;
-  left: 26.2rem;
+  left: 26.5rem;
   padding-left: 10px;
   padding-right: 10px;
+}
+.js{
+  color: #7FC836 !important;
 }

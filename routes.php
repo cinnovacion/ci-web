@@ -323,28 +323,36 @@ $app->group('/voluntarios', function () {
         for ($i=1; $i <=$paginas ; $i++) {
           if ($i== 1) {
               $partir_de = 0;
-              $lista['paginas'][$i]['no_pag'] = $i;
-              $lista['paginas'][$i]['partir_de'] = $partir_de;
+              $todo['paginas'][$i]['no_pag'] = $i;
+              $todo['paginas'][$i]['partir_de'] = $partir_de;
           }
           else {
               $partir_de = $limite + $partir_de;
-              $lista['paginas'][$i]['no_pag'] = $i;
-              $lista['paginas'][$i]['partir_de'] = $partir_de;
+              $todo['paginas'][$i]['no_pag'] = $i;
+              $todo['paginas'][$i]['partir_de'] = $partir_de;
           }
         }
-        $lista['persona']=$this->db->persona()->where('idpersona',$voluntario)->limit($limite,$pa);
-        $listaAsis['persona']=$this->db->persona()->where('idpersona',$voluntario);
-        echo json_encode($listaAsis['persona'][1]['idpersona']);    die();
-        $listaAsisNum['persona']=$this->db->persona()->where('idpersona',$voluntario)->count();
-        /*foreach ($listaAsisNum['persona'][] as $key => $value) {
-            $sumatoria = $this->db->persona()->where('idpersona',$voluntario)
-            $todo['datos'][$key]['nombre'] = $value['nombre'];
-            $todo['datos'][$key]['apellido'] = $value['apellido'];
-        }*/
-
-
-
-        return $this->view->render($response, '/voluntarios/lista.html',$lista);
+        $personas=$this->db->persona()->where('idpersona',$voluntario)->limit($limite,$pa);
+        $i = 0;
+        foreach ($voluntario as $key => $value) {
+          $time = $this->db->asistencia()->where('idpersona',$value['persona_idpersona'])->sum('hora_acumulada');
+          $horas[$i] = round($time,2);
+          $i += 1;
+        }
+        $i = 0;
+        foreach ($personas as $key => $value) {
+          $todo['datos'][$i]['idpersona'] = $value['idpersona'];
+          $todo['datos'][$i]['nombre'] = $value['nombre'];
+          $todo['datos'][$i]['apellido'] = $value['apellido'];
+          $todo['datos'][$i]['cedula'] = $value['cedula'];
+          $i += 1;
+        }
+        $i = 0;
+        foreach ($horas as $key => $value) {
+          $todo['datos'][$i]['hora_acumulada'] = $value;
+          $i += 1;
+        }
+        return $this->view->render($response, '/voluntarios/lista.html',$todo);
     })->setName('voluntarios_lista');
 
     //Busqueda de un Voluntario
@@ -820,8 +828,9 @@ $this->any('/update_admin/{id}', function ($request, $response, $args) {
 
     $usuariotrab= $this->db->admin()->select("usuario","activo");
     $trabajador = $this->db->trabajador()->select("persona_idpersona")->where("idtrabajador",$idtrab);
-    echo $buscar = $this->db->persona()->where(array(':nombre' => 'dogstar', ':idpersona' => '1', ':apellido' => 'xxx'));
-    //$buscar['datos'] = $this->db->persona()->where(array('idpersona'=>$trabajador, 'nombre LIKE ?'=>'%'.$parsedBody['buscar'].'%') );
+    //$personas = $this->db->persona()->where('idpersona ',$trabajador)->and('nombre LIKE ? %'.$parsedBody['buscar'].'%');
+    //echo $buscar['datos'] = $this->db->persona()->where(array('idpersona'=>$trabajador, 'nombre LIKE ?'=>'%'.$parsedBody['buscar'].'%') );
+    die();
     $i = 0;
     foreach ($buscar['datos'] as $key => $value) {
         $todo['datos'][$i]['nombre'] = $value['nombre'];

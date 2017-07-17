@@ -2,16 +2,104 @@
 
 {% block content %}
 
-
-<div class="centrar panel">
+<p id="js" style="display:none">trabajador</p>
+<div class="centrar panel" id="act_adm" style="display:block">
 	<div class="panel">
 			<!--<input class="buscar" type="text" name="buscar" placeholder="Cédula" class="izquierda">
 			<button type="button" name="button"></button>-->
 		<table>
 			<caption>
-				<button class="button" id="act_cmd" >Activos</button>
-				<button class="button" id="inact_cmd" >Inactivos</button>
-				<button class="button" id="all_cmd" >Todos</button>
+				<button class="button act_cmd" >Activos</button>
+				<button class="button inact_cmd" >Inactivos</button>
+				<button class="button all_cmd" >Todos</button>
+				<h3><strong>ADMINISTRADORES</strong></h3>
+				<form id="frm_s" class="" action="/trabajador/buscar_administradores" method="post">
+					<!--<input id="cmd_s" class="button" type="submit" name="cmd_buscar">-->
+					<input id="vol_s" type="text" name="buscar" placeholder="Nombre">
+					<input id="cmd_s" class="button" type="submit" name="cmd_buscar" value="Buscar">
+				</form>
+				<br>
+				<!--<h3><strong>LISTA DE VOLUNTARIOS</strong></h3>-->
+			</caption>
+			<thead>
+				<tr>
+					<th>Nombre</th>
+					<th>Apellido</th>
+					<th>Usuario</th>
+					<th>Estado</th>
+					<!--th>Modificar</th-->
+					<th>Modificar</th>
+				</tr>
+			</thead>
+			<tbody>
+				{%for dato in datos%}
+				<tr>
+					{% if dato.activo == 1 %}
+					<th>{{dato.nombre}}</th>
+					<th>{{dato.apellido}}</th>
+					<th>{{dato.usuario}}</th>
+				    <th>{{"Activo"}}</th>
+					<th><a class='button' href="/trabajador/update_admin/{{dato.id}}">Cambiar</a></th>
+					{% endif %}
+				</tr>
+				{%endfor%}
+			</tbody>
+		</table>
+	</div>
+</div>
+<div class="centrar panel" id="inact_adm" style="display:none">
+	<div class="panel">
+			<!--<input class="buscar" type="text" name="buscar" placeholder="Cédula" class="izquierda">
+			<button type="button" name="button"></button>-->
+		<table>
+			<caption>
+				<button class="button act_cmd" >Activos</button>
+				<button class="button inact_cmd" >Inactivos</button>
+				<button class="button all_cmd" >Todos</button>
+				<h3><strong>ADMINISTRADORES</strong></h3>
+				<form id="frm_s" class="" action="/trabajador/buscar_administradores" method="post">
+					<!--<input id="cmd_s" class="button" type="submit" name="cmd_buscar">-->
+					<input id="vol_s" type="text" name="buscar" placeholder="Nombre">
+					<input id="cmd_s" class="button" type="submit" name="cmd_buscar" value="Buscar">
+				</form>
+				<br>
+				<!--<h3><strong>LISTA DE VOLUNTARIOS</strong></h3>-->
+			</caption>
+			<thead>
+				<tr>
+					<th>Nombre</th>
+					<th>Apellido</th>
+					<th>Usuario</th>
+					<th>Estado</th>
+					<!--th>Modificar</th-->
+					<th>Modificar</th>
+				</tr>
+			</thead>
+			<tbody>
+				{%for dato in datos%}
+				<tr>
+					{% if dato.activo == 0 %}
+					<th>{{dato.nombre}}</th>
+					<th>{{dato.apellido}}</th>
+					<th>{{dato.usuario}}</th>
+				    <th>{{"Inactivo"}}</th>
+					<th><a class='button' href="/trabajador/update_admin/{{dato.id}}">Cambiar</a></th>
+					{% endif %}
+				</tr>
+				{%endfor%}
+			</tbody>
+		</table>
+	</div>
+</div>
+<div class="centrar panel" id="all_adm" style="display:none">
+	<div class="panel">
+			<!--<input class="buscar" type="text" name="buscar" placeholder="Cédula" class="izquierda">
+			<button type="button" name="button"></button>-->
+		<table>
+			<caption>
+				<button class="button act_cmd" >Activos</button>
+				<button class="button inact_cmd" >Inactivos</button>
+				<button class="button all_cmd" >Todos</button>
 				<h3><strong>ADMINISTRADORES</strong></h3>
 				<form id="frm_s" class="" action="/trabajador/buscar_administradores" method="post">
 					<!--<input id="cmd_s" class="button" type="submit" name="cmd_buscar">-->

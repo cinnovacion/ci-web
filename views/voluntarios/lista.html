@@ -1,6 +1,7 @@
 {% extends "layouts/layout_admin.html" %}
 
 {% block content %}
+<p id="js" style="display:none">voluntarios</p>
 <!--<div>
 	<form class="panel" method="POST" action="">
 	<input class="buscar" type="text" name="buscar" placeholder="Cédula" class="izquierda">
@@ -28,17 +29,17 @@
 					<th>Nombre</th>
 					<th>Apellido</th>
 					<th>Cédula</th>
-					<th>Telefono</th>
+					<th>Horas</th>
 					<th>Detalles</th>
 				</tr>
 			</thead>
 			<tbody>
-				{%for datos in persona%}
+				{%for datos in datos%}
 				<tr>
 					<th>{{datos['nombre']}}</th>
 					<th>{{datos['apellido']}}</th>
 					<th>{{datos['cedula']}}</th>
-					<th>{{datos['telefono']}}</th>
+					<th>{{datos['hora_acumulada']}}</th>
 					<th><a class='button' href="/voluntarios/detalles/{{datos.idpersona}}_1_0">Más</a></th>
 				</tr>
 				{%endfor%}

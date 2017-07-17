@@ -233,6 +233,32 @@
         });
           //ajax para la busqueda por semana
           $(document).ready(function() {
+            if ($('#js').text()=='cedula') {
+              $('#asis').addClass('js');
+              $('#js_vol').removeClass('js');
+              $('#js_emp').removeClass('js');
+              $('#js_vis').removeClass('js');
+            }
+            if ($('#js').text()=='visitas') {
+              $('#js_vis').addClass('js');
+              $('#asis').removeClass('js');
+              $('#js_vol').removeClass('js');
+              $('#js_emp').removeClass('js');
+            }
+            if ($('#js').text()=='voluntarios') {
+              $('#js_vol').addClass('js');
+              $('#asis').removeClass('js');
+              $('#js_vis').removeClass('js');
+              $('#js_emp').removeClass('js');
+            }
+            if ($('#js').text()=='trabajador') {
+              $('#js_emp').addClass('js');
+              $('#asis').removeClass('js');
+              $('#js_vis').removeClass('js');
+              $('#js_vol').removeClass('js');
+            }
+
+            $('.act_cmd').css('background-color','#7FC836');
             $("#years").change(function(){
               $('select[id=years]').val();
               $('#year').val($(this).val());
@@ -274,10 +300,30 @@
           $('#b_semana').click(function(){
             $('#weeks').change();
           });
-
-          $('#act_cmd').click(function(){
-             $('#admin').css();
-          });
+          $('.act_cmd').click(function(){
+            $('#act_adm').css('display','block');
+            $('#inact_adm').css('display','none');
+            $('#all_adm').css('display','none');
+            $('.act_cmd').css('background-color','#7FC836');
+            $('.inact_cmd').css('background-color','#448AFF');
+            $('.all_cmd').css('background-color','#448AFF');
+          })
+          $('.inact_cmd').click(function(){
+            $('#act_adm').css('display','none');
+            $('#inact_adm').css('display','block');
+            $('#all_adm').css('display','none');
+            $('.inact_cmd').css('background-color','#7FC836');
+            $('.act_cmd').css('background-color','#448AFF');
+            $('.all_cmd').css('background-color','#448AFF');
+          })
+          $('.all_cmd').click(function(){
+            $('#act_adm').css('display','none');
+            $('#inact_adm').css('display','none');
+            $('#all_adm').css('display','block');
+            $('.all_cmd').css('background-color','#7FC836');
+            $('.act_cmd').css('background-color','#448AFF');
+            $('.inact_cmd').css('background-color','#448AFF');
+          })
 
     }); // Fin de documento listo
 })(jQuery); // fin de espacio de nombre jquery
