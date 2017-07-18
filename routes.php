@@ -357,8 +357,10 @@ $app->group('/voluntarios', function () {
     $this->any('/busqueda', function($request,$response,$args){
       $parsedBody = $request->getParsedBody();
       $voluntario=$this->db->voluntario()->select('persona_idpersona');
-      $buscar['persona'] = $this->db->persona()->where(array('idpersona'=>$voluntario, 'nombre LIKE ?'=>'%'.$parsedBody['buscar'].'%'));
+      $buscar['datos'] = $this->db->persona()->where('idpersona',$voluntario) -> where('nombre LIKE ?','%'.$parsedBody['buscar'].'%')->or('apellido LIKE ? ','%'.$parsedBody['buscar'].'% ');
+      
       return $this->view->render($response, '/voluntarios/lista.html',$buscar);
+      //$buscar = $this->db->persona()->where('idpersona',$trabajador)->where('nombre LIKE ? ','%'.$parsedBody['buscar'].'%')->or('apellido LIKE ? ','%'.$parsedBody['buscar'].'%');
     })->setName('voluntarios_buscar');
 
     //Mostrar detalles de un voluntario
@@ -562,7 +564,7 @@ $app->group('/trabajador', function (){
   $this->any('/busqueda', function($request,$response,$args){
     $parsedBody = $request->getParsedBody();
     $trabajador=$this->db->trabajador()->select('persona_idpersona');
-    $buscar['persona'] = $this->db->persona()->where(array('idpersona'=>$trabajador, 'nombre LIKE ?'=>'%'.$parsedBody['buscar'].'%'));
+    $buscar['persona'] = $this->db->persona()->where('idpersona',$trabajador) -> where('nombre LIKE ?','%'.$parsedBody['buscar'].'%')->or('apellido LIKE ? ','%'.$parsedBody['buscar'].'%');
     return $this->view->render($response, '/trabajador/lista.html',$buscar);
   })->setName('trabajador_buscar');
 
@@ -696,7 +698,7 @@ $app->group('/trabajador', function (){
       $data['trabajador_idtrabajador'] = $parsedBody['id_trab'];
       $admin = $this->db->admin()->where('trabajador_idtrabajador',$parsedBody['id_trab'])->fetch();
       $admin->delete();
-      return $response->withRedirect('/trabajador/detalles/'.$parsedBody['id_per']);
+      return $response->withRedirect('/trabajador/detalles/'.$parsedBody['id_per'].'_1_0');
   })->setName('agregar_admin');
 
   $this->any('/lista_asis_mes/{id}', function($request, $response, $args){
@@ -783,9 +785,11 @@ $app->group('/trabajador', function (){
 
   $this->any('/lista_admin', function ($request, $response, $args) {
     $idtrab= $this->db->admin()->select("trabajador_idtrabajador");
+
     $usuariotrab= $this->db->admin()->select("usuario","activo");
     $trabajador = $this->db->trabajador()->select("persona_idpersona")->where("idtrabajador",$idtrab);
     $persona = $this->db->persona()->select("nombre","apellido")->where("idpersona",$trabajador);
+    $todo[]=0;
 
         foreach ($persona as $key => $value) {
             $todo['datos'][$key]['nombre'] = $value['nombre'];
@@ -800,6 +804,7 @@ $app->group('/trabajador', function (){
         foreach ($idtrab as $key => $value) {
             $todo['datos'][$key]['id'] = $value['trabajador_idtrabajador'];
         }
+        //echo json_encode($todo); die();
         //echo json_encode($todo); die();
     return $this->view->render($response, '/trabajador/listaAdmin.html',$todo);
 })->setName('admin');
@@ -824,22 +829,24 @@ $this->any('/update_admin/{id}', function ($request, $response, $args) {
     $usuariotrab= $this->db->admin()->select("usuario","activo");
     $trabajador = $this->db->trabajador()->select("persona_idpersona")->where("idtrabajador",$idtrab);
     //posible or
-    $or = $this->db->persona()->where('idpersona',$trabajador)->where('nombre LIKE ? %',$parsedBody['buscar'])->or('apellido LIKE ? %',$parsedBody['buscar']);
+    
+    $buscar = $this->db->persona()->where('idpersona',$trabajador)->where('nombre LIKE ? ','%'.$parsedBody['buscar'].'%')->or('apellido LIKE ? ','%'.$parsedBody['buscar'].'%');
     //$personas = $this->db->persona()->where('idpersona ',$trabajador)->and('nombre LIKE ? %'.$parsedBody['buscar'].'%');
     //echo $buscar['datos'] = $this->db->persona()->where(array('idpersona'=>$trabajador, 'nombre LIKE ?'=>'%'.$parsedBody['buscar'].'%') );
-    echo json_encode($or);
-    die();
+    
+    
     $i = 0;
-    foreach ($buscar['datos'] as $key => $value) {
+    foreach ($buscar as $key => $value) {
         $todo['datos'][$i]['nombre'] = $value['nombre'];
         $todo['datos'][$i]['apellido'] = $value['apellido'];
         $i += 1;
     }
     $i = 0;
-    foreach ($buscar['datos'] as $key => $value) {
+    foreach ($buscar as $key => $value) {
         $id[$i]=$value['idpersona'];
         $i += 1;
     }
+    
     $trabajadorInverso = $this->db->trabajador()->select("idtrabajador")->where("persona_idpersona",$id);
     $admin_inversoU= $this->db->admin()->select("usuario","activo")->where("trabajador_idtrabajador",$trabajadorInverso);
     $i = 0;
@@ -848,7 +855,7 @@ $this->any('/update_admin/{id}', function ($request, $response, $args) {
          $todo['datos'][$i]['activo'] = $value['activo'];
          $i += 1;
     }
-    //echo json_encode($todo['datos']); die();
+    //echo json_encode($todo); die();
     return $this->view->render($response, '/trabajador/listaAdmin.html',$todo);
   })->setName('Admin_buscar');
 
