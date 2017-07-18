@@ -28,7 +28,7 @@ $app->group('/inicio', function () {
             echo "El usuario es correcto";
             if (strcmp($prueba['password'], $contra) == 0) {
                 echo "La contraseña tambien es correcta";
-                return $response->withRedirect('/voluntarios/asis_dia');
+                return $response->withRedirect('/voluntarios/asis_dia/0');
             }else{
                 echo "La contraseña no es correcta";
             }
@@ -982,9 +982,9 @@ $app->group('/ajax', function () {
     });
     $this->any('/admin', function ($request, $response, $args) {
         $parsedBody = $request->getParsedBody();
-         //tomamos a una persona según cedula
-        $prueba = $this->db->admin()->select('password')->where('usuario', $parsedBody['usuario'])->fetch();
-        if ($prueba) {
+         //se comprueba que sea un administrador
+        $prueba = $this->db->admin()->select('password','activo')->where('usuario', $parsedBody['usuario'])->fetch();
+        if ($prueba['activo']==1) {
             if (strcmp($prueba['password'], $parsedBody['password']) == 0) {
                 return FALSE;
             }else{
