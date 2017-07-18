@@ -28,7 +28,7 @@ $app->group('/inicio', function () {
             echo "El usuario es correcto";
             if (strcmp($prueba['password'], $contra) == 0) {
                 echo "La contraseña tambien es correcta";
-                return $response->withRedirect('/voluntarios/asis_dia');
+                return $response->withRedirect('/voluntarios/asis_dia/0');
             }else{
                 echo "La contraseña no es correcta";
             }
@@ -162,6 +162,64 @@ $app->group('/visitas', function () {
         $visita()->insert($data1);
         return $response->withRedirect('/visitas/lista/0');
     })->setName('visitas_reg');
+
+    //Busqueda de un visitante
+    $this->any('/busqueda_visita/{pa}', function($request,$response,$args){
+
+      $pa = $request->getAttribute('pa');
+      $parsedBody = $request->getParsedBody();
+      $visita=$this->db->visita()->select('idvisita');
+      $lista_num = $this->db->persona()->where('idpersona',$visita) -> where('nombre LIKE ?','%'.$parsedBody['buscar'].'%')->or('apellido LIKE ? ','%'.$parsedBody['buscar'].'% ')->count();
+      $limite = 25;
+      $paginas = $lista_num/$limite;
+      $paginas =ceil($paginas);
+      for ($i=1; $i <=$paginas ; $i++) {
+        if ($i== 1) {
+            $partir_de = 0;
+            $buscar['paginas'][$i]['no_pag'] = $i;
+            $buscar['paginas'][$i]['partir_de'] = $partir_de;
+        }
+        else {
+            $partir_de = $limite + $partir_de;
+            $buscar['paginas'][$i]['no_pag'] = $i;
+            $buscar['paginas'][$i]['partir_de'] = $partir_de;
+        }
+      }
+
+      
+      $busca = $this->db->persona()->where('idpersona',$visita) -> where('nombre LIKE ?','%'.$parsedBody['buscar'].'%')->or('apellido LIKE ? ','%'.$parsedBody['buscar'].'% ')->limit($limite,$pa);
+      echo json_encode($busca); die();
+      $i = 0;
+        foreach ($busca as $key => $value) {
+         $time = $this->db->asistencia()->where('idpersona',$value['persona_idpersona'])->sum('hora_acumulada');
+          $horas[$i]['hora_acumulada'] = round($time,2);
+          $i += 1;
+        }
+        
+        $i = 0;
+        
+        foreach ($busca as $key => $value) {
+            $buscar['datos'][$i]['nombre'] = $value['nombre'];
+            $buscar['datos'][$i]['apellido'] = $value['apellido'];
+            $buscar['datos'][$i]['cedula'] = $value['cedula'];
+            $i += 1;
+        }
+        $i = 0;
+        foreach ($horas as $key => $value) {
+            $buscar['datos'][$i]['hora_acumulada'] = $value['hora_acumulada'];
+            $i += 1;
+        }
+        
+        
+       
+        
+      return $this->view->render($response, '/visitas/lista.html',$buscar);
+      //$buscar = $this->db->persona()->where('idpersona',$trabajador)->where('nombre LIKE ? ','%'.$parsedBody['buscar'].'%')->or('apellido LIKE ? ','%'.$parsedBody['buscar'].'%');
+    })->setName('visitantes_buscar');
+
+
+
+
 });
 //Grupo de rutas de Voluntarios
 $app->group('/voluntarios', function () {
@@ -396,6 +454,7 @@ $app->group('/voluntarios', function () {
     //Busqueda de un Voluntario
     $this->any('/busqueda/{pa}', function($request,$response,$args){
       $pa = $request->getAttribute('pa');
+      $voluntario=$this->db->voluntario()->select('persona_idpersona');
       $lista_num = $this->db->persona()->where('idpersona',$voluntario) -> where('nombre LIKE ?','%'.$parsedBody['buscar'].'%')->or('apellido LIKE ? ','%'.$parsedBody['buscar'].'% ')->count();
       $limite = 25;
       $paginas = $lista_num/$limite;
@@ -414,9 +473,33 @@ $app->group('/voluntarios', function () {
       }
 
       $parsedBody = $request->getParsedBody();
-      $voluntario=$this->db->voluntario()->select('persona_idpersona');
-      $buscar['datos'] = $this->db->persona()->where('idpersona',$voluntario) -> where('nombre LIKE ?','%'.$parsedBody['buscar'].'%')->or('apellido LIKE ? ','%'.$parsedBody['buscar'].'% ')->limit($limite,$pa);
-
+      
+      $busca = $this->db->persona()->where('idpersona',$voluntario) -> where('nombre LIKE ?','%'.$parsedBody['buscar'].'%')->or('apellido LIKE ? ','%'.$parsedBody['buscar'].'% ')->limit($limite,$pa);
+      
+      $i = 0;
+        foreach ($busca as $key => $value) {
+         $time = $this->db->asistencia()->where('idpersona',$value['persona_idpersona'])->sum('hora_acumulada');
+          $horas[$i]['hora_acumulada'] = round($time,2);
+          $i += 1;
+        }
+        
+        $i = 0;
+        
+        foreach ($busca as $key => $value) {
+            $buscar['datos'][$i]['nombre'] = $value['nombre'];
+            $buscar['datos'][$i]['apellido'] = $value['apellido'];
+            $buscar['datos'][$i]['cedula'] = $value['cedula'];
+            $i += 1;
+        }
+        $i = 0;
+        foreach ($horas as $key => $value) {
+            $buscar['datos'][$i]['hora_acumulada'] = $value['hora_acumulada'];
+            $i += 1;
+        }
+        
+        
+       
+        
       return $this->view->render($response, '/voluntarios/lista.html',$buscar);
       //$buscar = $this->db->persona()->where('idpersona',$trabajador)->where('nombre LIKE ? ','%'.$parsedBody['buscar'].'%')->or('apellido LIKE ? ','%'.$parsedBody['buscar'].'%');
     })->setName('voluntarios_buscar');
