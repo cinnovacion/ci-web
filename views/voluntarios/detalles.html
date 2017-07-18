@@ -5,7 +5,7 @@
 <div class="panel" style="margin-right:0px;">
   <div class="row panel" style="margin-left:0px; margin-bottom:0px;">
       <div class="column column-50">
-        <a href="/voluntarios/lista/1_0" class="button" style="margin-top:5px;">◄ Atrás</a>
+        <a href="/voluntarios/lista/0" class="button" style="margin-top:5px;">◄ Atrás</a>
         {%for datos in persona%}
         <a class="button" href="/voluntarios/editar/{{datos.idpersona}}">Editar</a>
         <p class="p_detalles"><b>Nombre:</b> {{datos.nombre}} {{datos.apellido}}</p>
@@ -51,7 +51,7 @@
   <div class="column">
     <div class="centrar panel">
       {%for datos in paginas%}
-      <th><a class="button button-clear layout_items pag" href="/voluntarios/detalles/{{datos.id}}_{{datos.no_pag}}_{{datos.partir_de}}">{{datos.no_pag}}</a></th>
+      <th><a class="button button-clear layout_items pag" href="/voluntarios/detalles/{{datos.id}}_{{datos.partir_de}}">{{datos.no_pag}}</a></th>
       {%endfor%}
       <table>
         <thead>

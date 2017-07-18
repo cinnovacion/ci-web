@@ -40,7 +40,7 @@
 					<th>{{datos['apellido']}}</th>
 					<th>{{datos['cedula']}}</th>
 					<th>{{datos['hora_acumulada']}}</th>
-					<th><a class='button' href="/voluntarios/detalles/{{datos.idpersona}}_1_0">Más</a></th>
+					<th><a class='button' href="/voluntarios/detalles/{{datos.idpersona}}_0">Más</a></th>
 				</tr>
 				{%endfor%}
 			</tbody>
@@ -49,7 +49,7 @@
 </div>
 <div class="centrar" style="margin-bottom: 120px; margin-top:0px;">
 	{%for datos in paginas%}
-	<th><a class="button button-clear layout_items pag" href="/voluntarios/lista/{{datos.no_pag}}_{{datos.partir_de}}">{{datos.no_pag}}</a></th>
+	<th><a class="button button-clear layout_items pag" href="/voluntarios/lista/{{datos.partir_de}}">{{datos.no_pag}}</a></th>
 	{%endfor%}
 </div>
 {% endblock %}

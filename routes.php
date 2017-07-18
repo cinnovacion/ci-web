@@ -82,9 +82,8 @@ $app->group('/visitas', function () {
     })->setName('visitas');
 
     //Mostrar lista de visitas
-    $this->any('/lista/{no}_{pa}', function ($request, $response, $args) {
+    $this->any('/lista/{pa}', function ($request, $response, $args) {
         $todo[] = 0;
-        $no = $request->getAttribute('no');
         $pa = $request->getAttribute('pa');
         $vis=$this->db->visita()->select('persona_idpersona');
         $lista_num = $this->db->persona()->where('idpersona',$vis)->count();
@@ -161,7 +160,7 @@ $app->group('/visitas', function () {
         //insertar en la base de datos
         var_dump($fecha);
         $visita()->insert($data1);
-        return $response->withRedirect('/visitas/lista/1_0');
+        return $response->withRedirect('/visitas/lista/0');
     })->setName('visitas_reg');
 });
 //Grupo de rutas de Voluntarios
@@ -308,12 +307,11 @@ $app->group('/voluntarios', function () {
         $data1['area_idarea']=$parsedBody['area'];
         $vol_v->insert($data1);
 
-        return $response->withRedirect('/voluntarios/detalles/'.$persona_id['idpersona'].'_1_0');
+        return $response->withRedirect('/voluntarios/detalles/'.$persona_id['idpersona'].'0');
     })->setName('voluntarios_reg');
 
     //Mostrar lista de voluntarios registrados
-    $this->any('/lista/{no}_{pa}', function ($request, $response, $args) {
-        $no = $request->getAttribute('no');
+    $this->any('/lista/{pa}', function ($request, $response, $args) {
         $pa = $request->getAttribute('pa');
         $voluntario=$this->db->voluntario()->select('persona_idpersona');
         $lista_num = $this->db->persona()->where('idpersona',$voluntario)->count();
@@ -364,12 +362,11 @@ $app->group('/voluntarios', function () {
     })->setName('voluntarios_buscar');
 
     //Mostrar detalles de un voluntario
-    $this->any('/detalles/{id}_{no}_{pa}', function ($request, $response, $args) {
+    $this->any('/detalles/{id}_{pa}', function ($request, $response, $args) {
         $id = $request->getAttribute('id');
         $lista['persona'] = $this->db->persona()->where('idpersona',$id);
         $lista['volun'] = $this->db->voluntario()->where('persona_idpersona',$id);
         $id_vol = $this->db->voluntario()->select('idvoluntario')->where('persona_idpersona',$id)->fetch();
-        $no = $request->getAttribute('no');
         $pa = $request->getAttribute('pa');
         $lista_num = $this->db->asistencia()->where('idpersona',$id)->count();
         $limite = 25;
@@ -458,7 +455,7 @@ $app->group('/voluntarios', function () {
         }
         $data['idpersona']=$parsedBody['id'];
         $asis->insert($data);
-        return $response->withRedirect('/voluntarios/detalles/'.$parsedBody['id'].'_1_0');
+        return $response->withRedirect('/voluntarios/detalles/'.$parsedBody['id'].'0');
     })->setName('agregar_hora');
 
     //Editar horas
@@ -533,13 +530,12 @@ $app->group('/trabajador', function (){
             $data1['area_idarea']=$parsedBody['area'];
             $trab_t->insert($data1);
 
-            return $response->withRedirect('/trabajador/detalles/'.$persona_id['idpersona'].'_1_0');
+            return $response->withRedirect('/trabajador/detalles/'.$persona_id['idpersona'].'0');
             die();
   })->setName('trabajador_reg');
 
   //Lista de Trabajadores
-  $this->any('/lista/{no}_{pa}', function ($request, $response, $args) {
-      $no = $request->getAttribute('no');
+  $this->any('/lista/{pa}', function ($request, $response, $args) {
       $pa = $request->getAttribute('pa');
       $trabajador=$this->db->trabajador()->select('persona_idpersona');
       $lista_num = $this->db->persona()->where('idpersona',$trabajador)->count();
@@ -571,12 +567,11 @@ $app->group('/trabajador', function (){
   })->setName('trabajador_buscar');
 
   //Mostrar detalles de un trabajador
-  $this->any('/detalles/{id}_{no}_{pa}', function ($request, $response, $args) {
+  $this->any('/detalles/{id}_{pa}', function ($request, $response, $args) {
       $id = $request->getAttribute('id');
       $lista['persona'] = $this->db->persona()->where('idpersona',$id);
       $area = $this->db->trabajador()->where('persona_idpersona',$id)->fetch();
       $lista['trab'] = $this->db->trabajador()->where('persona_idpersona',$id);
-      $no = $request->getAttribute('no');
       $pa = $request->getAttribute('pa');
       $lista_num = $this->db->asistencia()->where('idpersona',$id)->count();
       $limite = 25;
@@ -639,7 +634,7 @@ $app->group('/trabajador', function (){
             //$persona_id=$this->db->persona()->select('idpersona')->order('idpersona desc')->limit(1)->fetch();
             //$data1['persona_idpersona']=$persona_id['idpersona'];
             $trab_t->update($data1);
-            return $response->withRedirect('/trabajador/detalles/'.$id.'_1_0');
+            return $response->withRedirect('/trabajador/detalles/'.$id.'_0');
   })->setName('actualizar_trab');
 
   //agregar_hora
@@ -656,7 +651,7 @@ $app->group('/trabajador', function (){
       }
       $data['idpersona']=$parsedBody['id'];
       $asis->insert($data);
-      return $response->withRedirect('/trabajador/detalles/'.$parsedBody['id'].'_1_0');
+      return $response->withRedirect('/trabajador/detalles/'.$parsedBody['id'].'_0');
   })->setName('agregar_hora');
 
   $this->any('/editar_h/{id}',function($request,$response,$args){
@@ -679,7 +674,7 @@ $app->group('/trabajador', function (){
       $data['hora_acumulada'] = $data['hora_acumulada']-1;
     }
     $asistencia->update(array("hora_entrada" => $data['hora_entrada'],"hora_salida" => $data['hora_salida'],"hora_acumulada" => $data['hora_acumulada']));
-    return $response->withRedirect('/trabajador/detalles/'.$parsedBody['id_per'].'_1_0');
+    return $response->withRedirect('/trabajador/detalles/'.$parsedBody['id_per'].'_0');
   })->setName('actualizar_hora');
 
   //agregar_admin
@@ -690,7 +685,7 @@ $app->group('/trabajador', function (){
       $data['password'] = $parsedBody['pass'];
       $data['trabajador_idtrabajador'] = $parsedBody['id_trab'];
       $admin->insert($data);
-      return $response->withRedirect('/trabajador/detalles/'.$parsedBody['id_per'].'_1_0');
+      return $response->withRedirect('/trabajador/detalles/'.$parsedBody['id_per'].'_0');
   })->setName('agregar_admin');
 
   //quitar_admin
