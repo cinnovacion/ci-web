@@ -58,6 +58,17 @@
             }
         });
 
+        //radio-button tipo de voluntarios
+        $('#tipo_vol_0').click(function(){
+            if ($(this).is(':checked')) {
+              $('#ced').attr('maxlength','16')
+            }
+        });
+        $('#tipo_vol_1').click(function(){
+            if ($(this).is(':checked')) {
+              $('#ced').attr('maxlength','45')
+            }
+        });
         //Agregar Org
         $('#btn_agr_org').click(function(){
             $('#modal_agr_org').css('display', 'block');
@@ -225,10 +236,27 @@
         });
         //Corregir el ingreso de la cedula
         $('.submit_reg').click(function(){
+              if ($('#tipo_vol_0').is(':checked')) {
+                var x = $('.cedula_val').val();
+                if (x.length<16 && x.length>=14) {
+                  var y = x.substring(0,3)+"-"+x.substring(3,9)+"-"+x.substring(9);
+                  $('.cedula_val').val(y);
+                }
+                else {
+                  event.preventDefault();
+                  $('#ced_err').css('display','block');
+                }
+              }
+        });
+        $('.submit_reg_trab').click(function(){
           var x = $('.cedula_val').val();
-          if (x.length<16 && x.length>0) {
+          if (x.length<16 && x.length>=14) {
             var y = x.substring(0,3)+"-"+x.substring(3,9)+"-"+x.substring(9);
             $('.cedula_val').val(y);
+          }
+          else {
+            event.preventDefault();
+            $('#ced_err').css('display','block');
           }
         });
           //ajax para la busqueda por semana

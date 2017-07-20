@@ -134,8 +134,8 @@ $app->group('/visitas', function () {
 
         $data['nombre']=$parsedBody['nombre'];
         $data['apellido']=$parsedBody['apellido'];
-        $data['cedula']=$parsedBody['ced'];
         $persona->insert($data);
+        $data1['cedula']=$parsedBody['ced'];
         $data1['placa']=$parsedBody['no_placa'];
         $data1['org']=$parsedBody['org_vi'];
         $data1['tipo_visita']=$parsedBody['tipo_visita'];
@@ -160,7 +160,7 @@ $app->group('/visitas', function () {
         //insertar en la base de datos
         var_dump($fecha);
         $visita()->insert($data1);
-        return $response->withRedirect('/visitas/lista/0');
+        return $response->withRedirect('/visitas/visitas_reg');
     })->setName('visitas_reg');
 
     //Busqueda de un visitante
@@ -386,7 +386,7 @@ $app->group('/voluntarios', function () {
         $data1['area_idarea']=$parsedBody['area'];
         $vol_v->insert($data1);
 
-        return $response->withRedirect('/voluntarios/detalles/'.$persona_id['idpersona'].'0');
+        return $response->withRedirect('/voluntarios/detalles/'.$persona_id['idpersona'].'_0');
     })->setName('voluntarios_reg');
 
     //Mostrar lista de voluntarios registrados
@@ -861,7 +861,7 @@ $app->group('/trabajador', function (){
       $meses_s = array("","Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
       //cantidad a utilizar en los ciclos
       $cant = array("first","second","third","fourth","fifth","sixth");
-      $datos['cabecera']['titulo'] = $meses_s[$mes]." del ".$anio;
+      $datos['cabecera']['titulo'] = $meses_s[intval($mes)]." del ".$anio;
       //Representacion numerica del mes es = m;
       //conseguir el primer dia del mes
       $p_dia = $my_date->modify('first day of '.$meses_t[$mes].' '.$anio);
@@ -920,8 +920,92 @@ $app->group('/trabajador', function (){
       //echo json_encode($datos['registro']); die();
       $datos['cantidad'] = ceil(count($lista)/6);
       //echo json_encode($datos['registro']); die();
+      $datos['id']['persona'] = $id;
       return $this->view->render($response, '/trabajador/listaxmes.html',$datos);
   })->setName('asisxmes');
+
+  $this->any('/busqueda_asis_mes', function($request, $response, $args){
+      $parsedBody = $request->getParsedBody();
+      $id = $parsedBody['id_trab'];
+      $anio_min = $this->db->asistencia()->select('hora_entrada')->where('idpersona',$id)->min('hora_entrada');
+      $vol = $this->db->voluntario()->select('persona_idpersona');
+      $for_max = date('Y');
+      $for_min = date('Y',$anio_min);
+      $w = 0;
+      for ($i=$for_min; $i <=$for_max ; $i++) {
+        $datos['asistencia'][$w]['anios']= $i;
+        $w = $w+1;
+      }
+
+      $mes = $parsedBody['mes'];
+      $anio = $parsedBody['anio'];
+      $my_date = new DateTime();
+      $meses_t = array("january","february","march","april","may","june","july","august","september","october","november","december");
+      $meses_s = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
+      //cantidad a utilizar en los ciclos
+      $cant = array("first","second","third","fourth","fifth","sixth");
+      $datos['cabecera']['titulo'] = $meses_s[intval($mes)]." del ".$anio;
+      //Representacion numerica del mes es = m;
+      //conseguir el primer dia del mes
+      $p_dia = $my_date->modify('first day of '.$meses_t[$mes].' '.$anio);
+      $p_dia_f = $p_dia->format('Y-m-d');
+      $p_dia_ft = strtotime($p_dia_f);
+      $u_dia = $my_date->modify('last day of '.$meses_t[$mes].' '.$anio);
+      $u_dia_f = $u_dia->format('Y-m-d');
+      $u_dia_ft = strtotime($u_dia_f);
+      $lista = $this->db->asistencia()->select('fecha','hora_entrada','hora_salida','idpersona')->where('fecha >= "'.$p_dia_f.'" AND fecha <= "'.$u_dia_f.'" AND idpersona LIKE '.$id);
+      $pers = $this->db->persona()->select('nombre','apellido')->where('idpersona',$id)->fetch();
+      $datos['informacion']['nombre'] = $pers['nombre']." ".$pers['apellido'];
+
+      $j = 0;
+      $por = count($lista);
+      for ($i=0; $i <= count($lista) ; $i++) {
+        if (date('w',$lista[$i]['hora_entrada'])==1) {
+          $datos['registro']['lunes'][$j] = $lista[$i];
+          $j += 1;
+        }
+      }
+      $j = 0;
+      for ($i=0; $i <= $por ; $i++) {
+        if (date('w',$lista[$i]['hora_entrada']) ==2) {
+          $datos['registro']['martes'][$j]= $lista[$i];
+          $j += 1;
+        }
+      }
+      $j = 0;
+      for ($i=0; $i <= $por ; $i++) {
+        if (date('w',$lista[$i]['hora_entrada'])==3) {
+          $datos['registro']['miercoles'][$j]=$lista[$i];
+          $j += 1;
+        }
+      }
+      $j = 0;
+      for ($i=0; $i <= $por ; $i++) {
+        if (date('w',$lista[$i]['hora_entrada'])==4) {
+          $datos['registro']['jueves'][$j]= $lista[$i];
+          $j += 1;
+        }
+      }
+      $j = 0;
+      for ($i=0; $i <= $por ; $i++) {
+        if (date('w',$lista[$i]['hora_entrada'])==5) {
+          $datos['registro']['viernes'][$j] = $lista[$i];
+          $j += 1;
+        }
+      }
+      $j = 0;
+      for ($i=0; $i <= $por ; $i++) {
+        if (date('w',$lista[$i]['hora_entrada'])==6) {
+          $datos['registro']['sabado'][$j] = $lista[$i];
+          $j += 1;
+        }
+      }
+      //echo json_encode($datos['registro']); die();
+      $datos['cantidad'] = ceil(count($lista)/6);
+      //echo json_encode($datos['registro']); die();
+      $datos['id']['persona'] = $id;
+      return $this->view->render($response, '/trabajador/listaxmes.html',$datos);
+  })->setName('busquedaxmes');
 
   $this->any('/lista_admin', function ($request, $response, $args) {
         $todo[]=0;

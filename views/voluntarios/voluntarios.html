@@ -8,27 +8,32 @@
     <form action="/voluntarios/registro" method="post">
       <fieldset>
         <h2 class="centrar">Registrar Voluntarios</h2>
-        <hr>
+        <label for="">Tipo de Voluntario:</label>
+        <input type="radio" name="tipo de voluntario" value="nacional" id="tipo_vol_0"><strong>Nacional</strong>
+        <input type="radio" name="tipo de voluntario" value="nacional" id="tipo_vol_1"><strong>Internacional</strong>
         <div class="row">
           <div class="column column-50">
 
             <label for="nombre">Nombre:</label>
-            <input type="text" name="nombre" placeholder="Ingrese su Nombre" autofocus="on" value="" required>
+            <input type="text" name="nombre" placeholder="Ingrese su Nombre" autofocus="on" value="" required maxlength="45">
 
             <label for="apellido">Apellido:</label>
-            <input type="text" name="apellido" id="apellido" placeholder="Ingrese su Apellido" value="" required>
-
+            <input type="text" name="apellido" id="apellido" placeholder="Ingrese su Apellido" value="" required maxlength="45">
             <label for="ced">No. de Cédula:</label>
-            <input type="text" name="ced" id="ced" class="cedula_val" placeholder="Ingrese su Cédula" value="" required>
+            <input type="text" name="ced" id="ced" class="cedula_val" placeholder="Ingrese su Cédula" value="" required maxlength="16">
+            <div class="alert danger" id="ced_err" style="display:none;">
+                <span class="closebtn">&times;</span>
+                <p>Ingrese la cedula correctamente.</p>
+            </div>
 
             <label for="direccion">Dirección:</label>
-            <input type="text" name="direccion" id="direccion" placeholder="Ingrese su Dirección" value="">
+            <input type="text" name="direccion" id="direccion" placeholder="Ingrese su Dirección" value="" maxlength="100">
 
             <label for="no_telefono">No. Telefono:</label>
-            <input type="tel" name="no_telefono" id="no_telefono" placeholder="Ingrese su número de telefono" value="">
+            <input type="tel" name="no_telefono" id="no_telefono" placeholder="Ingrese su número de telefono" value="" maxlength="12">
 
             <label for="correo">Correo:</label>
-            <input type="text" name="correo" id="correo" placeholder="Ingrese su correo electrónico" value="">
+            <input type="email" name="correo" id="correo" placeholder="Ingrese su correo electrónico" value="" maxlength="45">
 
           </div>
           <div class="column column-50">
