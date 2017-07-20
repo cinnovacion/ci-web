@@ -440,3 +440,9 @@ select:focus{
 .js{
   color: #7FC836 !important;
 }
+.paginacion{
+  background-color: #fff;
+  width: 100%;
+  margin-bottom: 0;
+  height: 0%;
+}

@@ -50,11 +50,24 @@
 			{% block content %}{% endblock %}
 		</div>
 		<footer>
-			<div class="row">
+			{%if paginas == true%}
+			<div class="centrar paginacion" style="margin-bottom: 0px; margin-top:0px;">
+				{%for datos in paginas%}
+				<th><a class="button button-clear layout_items pag" href="/voluntarios/lista/{{datos.partir_de}}">{{datos.no_pag}}</a></th>
+				{%endfor%}
+			</div>
+			<div class="row" style="height: 77px;">
 				<div class="column alto centrar">
 					<h5 id="copy">Centro de Innovación - Fundación Zamora Terán</h5>
 				</div>
 			</div>
+			{%else%}
+			<div class="row" style="">
+				<div class="column alto centrar">
+					<h5 id="copy">Centro de Innovación - Fundación Zamora Terán</h5>
+				</div>
+			</div>
+			{%endif%}
 		</footer>
 
 		<!-- JS -->

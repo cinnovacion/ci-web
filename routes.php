@@ -370,9 +370,10 @@ $app->group('/voluntarios', function () {
               $todo['paginas'][$i]['partir_de'] = $partir_de;
           }
         }
+        $id = $this->db->voluntario()->select('persona_idpersona')->limit($limite,$pa);
         $personas=$this->db->persona()->where('idpersona',$voluntario)->limit($limite,$pa);
         $i = 0;
-        foreach ($voluntario as $key => $value) {
+        foreach ($id as $key => $value) {
           $time = $this->db->asistencia()->where('idpersona',$value['persona_idpersona'])->sum('hora_acumulada');
           $horas[$i] = round($time,2);
           $i += 1;

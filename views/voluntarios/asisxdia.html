@@ -9,8 +9,7 @@
 		<table>
 			<caption>
 				<a class="button" id="vol_cmd" href="/voluntarios/lista_asis_semana">Asistencia Semanal</a>
-				<br>
-				<br>
+				<h2><strong>Asistencia del Dia</strong></h2>
 			</caption>
 			<thead>
 				<tr>
@@ -38,12 +37,6 @@
 			</tbody>
 		</table>
 	</div>
-</div>
-
-<div class="centrar" style="margin-bottom: 120px; margin-top:0px;">
-	{%for datos in paginas%}
-	<th><a class="button button-clear layout_items pag" href="/voluntarios/lista/{{datos.partir_de}}">{{datos.no_pag}}</a></th>
-	{%endfor%}
 </div>
 
 {% endblock %}
