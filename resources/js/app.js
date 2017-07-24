@@ -66,7 +66,7 @@
         });
         $('#tipo_vol_1').click(function(){
             if ($(this).is(':checked')) {
-              $('#ced').attr('maxlength','45')
+              $('#ced').attr('maxlength','24')
             }
         });
         //Agregar Org
@@ -141,9 +141,10 @@
         $('#submit').click(function(event){
             event.preventDefault();
             var x = $('.cedula_val').val();
-            if (x.length<16 && x.length>0) {
+            if (x.length<16 && x.length>=14) {
               var y = x.substring(0,3)+"-"+x.substring(3,9)+"-"+x.substring(9);
-              $('.cedula_val').val(y);
+              var z = y.toUpperCase();
+              $('.cedula_val').val(z);
             }
             $.ajax({
                 url: "/ajax/cedula",
@@ -240,9 +241,10 @@
                 var x = $('.cedula_val').val();
                 if (x.length<16 && x.length>=14) {
                   var y = x.substring(0,3)+"-"+x.substring(3,9)+"-"+x.substring(9);
-                  $('.cedula_val').val(y);
+                  var z = y.toUpperCase();
+                  $('.cedula_val').val(z);
                 }
-                else {
+                else if (x.length<14) {
                   event.preventDefault();
                   $('#ced_err').css('display','block');
                 }
@@ -261,6 +263,8 @@
         });
           //ajax para la busqueda por semana
           $(document).ready(function() {
+            $('.select2').select2();
+
             if ($('#js').text()=='cedula') {
               $('#asis').addClass('js');
               $('#js_vol').removeClass('js');

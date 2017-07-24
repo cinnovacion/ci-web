@@ -39,21 +39,26 @@
           <div class="column column-50">
             <div id="orga" style="display: block;">
               <label for="org">Organización:</label>
-              <select name="org" id="org" class="combobox">
+              <select name="org" id="org" class="select2">
+                <option value="0">Ninguna</option>
                 {% for names in template[0] %}
                   <option value="{{names.idinstitucion}}">{{names.nombre}}</option>
                 {% endfor %}
               </select>
+              <br>
+              <br>
               <a class='button' id="btn_agr_org">Agregar</a>
             </div>
 
             <div id="car" style="display: block;">
               <label for="carrera">Carrera:</label>
-              <select name="carrera" id="carrera" class="combobox">
+              <select name="carrera" id="carrera" class="select2">
                 {% for names in template[1] %}
                   <option value="{{names.idcarrera}}">{{names.nombre}}</option>
                 {% endfor %}
               </select>
+              <br>
+              <br>
               <a class="button" id="btn_agr_carr">Agregar</a>
             </div>
 
@@ -61,11 +66,13 @@
             <input type="text" name="fecha" id="datepicker" value="{{'now'|date('Y-m-d')}}" readonly required>
             <div id="area" style="display: block;">
               <label for="area">Área:</label>
-              <select name="area" id="area">
+              <select name="area" id="area" class="select2">
                 {% for names in template[3] %}
                 <option value="{{names.idarea}}">{{names.nombre}}</option>
                 {% endfor %}
               </select>
+              <br>
+              <br>
             </div>
           </div>
         </div>
