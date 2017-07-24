@@ -9,6 +9,7 @@
 		<link rel="icon" href="http://fundacionzt.org/wp-content/themes/fundacion/assets/img/logo.png">
 		<link rel="stylesheet" type="text/css" href="/resources/css/milligram.min.css">
 		<link rel="stylesheet" type="text/css" href="/resources/css/app.css">
+		<link rel="stylesheet" type="text/css" href="/resources/css/select2.css">
 		<link rel="stylesheet" href="/resources/css/jquery-ui.min.css">
 	</head>
 	<body>
@@ -17,31 +18,31 @@
 				<div class="column alto centrar">
 					<a href="/"><img src="http://fundacionzt.org/wp-content/themes/fundacion/assets/img/logo.png"></a>
 				</div>
-    			<div class="column alto centrar">
-    			<a class="button button-clear layout_items" href="/" id="asis" >Asistencia</a>
-					<a class="button button-clear layout_items" href="/visitas/lista/0" id="js_vis">Visitas</a>
-					<a class="button button-clear layout_items" href="/voluntarios/lista/0" id="js_vol">Voluntarios</a>
-					<a class="button button-clear layout_items pad" href="/trabajador/lista/0" id="js_emp">Empleados</a>
-    			</div>
-    			<div class="column alto centrar" style="padding-right: 20px;">
-						<a class="button" href="/trabajador/lista_admin">Administrar</a>
-						<!--button id="btn_admin">Administrar</button>
-							<! MODAL_LOGIN -->
-							<div id="modal_login" class="modal">
-								<span class="close" title="Cerrar">&times;</span>
-								<form class="modal-content animate" method="post" action="/inicio/login">
-									<div class="panel">
-										<h2>Iniciar Sesión</h2>
-									<div class="container">
-										<input type="text" placeholder="Usuario" name="user" required autofocus="on">
-										<br>
-										<input type="password" placeholder="Contraseña" name="pass" required>
-										<br>
-										<input class="button" type="submit" value="Acceder">
-									</div>
-									</div>
-								</form>
-						</div>
+  			<div class="column alto centrar">
+  			<a class="button button-clear layout_items" href="/" id="asis" >Asistencia</a>
+				<a class="button button-clear layout_items" href="/visitas/lista/0" id="js_vis">Visitas</a>
+				<a class="button button-clear layout_items" href="/voluntarios/lista/0" id="js_vol">Voluntarios</a>
+				<a class="button button-clear layout_items pad" href="/trabajador/lista/0" id="js_emp">Empleados</a>
+  			</div>
+  			<div class="column alto centrar" style="padding-right: 20px;">
+					<a class="button" href="/trabajador/lista_admin">Administrar</a>
+					<!--button id="btn_admin">Administrar</button>
+					<! MODAL_LOGIN -->
+					<div id="modal_login" class="modal">
+						<span class="close" title="Cerrar">&times;</span>
+						<form class="modal-content animate" method="post" action="/inicio/login">
+							<div class="panel">
+								<h2>Iniciar Sesión</h2>
+								<div class="container">
+									<input type="text" placeholder="Usuario" name="user" required autofocus="on">
+									<br>
+									<input type="password" placeholder="Contraseña" name="pass" required>
+									<br>
+									<input class="button" type="submit" value="Acceder">
+								</div>
+							</div>
+						</form>
+				</div>
 				</div>
 			</div>
 		</nav>
@@ -53,7 +54,11 @@
 			{%if paginas == true%}
 			<div class="centrar paginacion" style="margin-bottom: 0px; margin-top:0px;">
 				{%for datos in paginas%}
-				<th><a class="button button-clear layout_items pag" href="/voluntarios/lista/{{datos.partir_de}}">{{datos.no_pag}}</a></th>
+				{%if datos.subdiv == 'detalles'%}
+				<a class="button button-clear layout_items pag" href="/{{datos.nombre_pag}}/{{datos.subdiv}}/{{datos.id}}_{{datos.partir_de}}">{{datos.no_pag}}</a>
+				{%else%}
+				<a class="button button-clear layout_items pag" href="/{{datos.nombre_pag}}/{{datos.subdiv}}/{{datos.partir_de}}">{{datos.no_pag}}</a>
+				{%endif%}
 				{%endfor%}
 			</div>
 			<div class="row" style="height: 77px;">
@@ -75,5 +80,7 @@
 		<script type="text/javascript" src="/resources/js/jquery-ui.min.js"></script>
 		<script type="text/javascript" src="/resources/js/datepicker-es.js"></script>
 		<script type="text/javascript" src="/resources/js/app.js"></script>
+		<script type="text/javascript" src="/resources/js/select2.js"></script>
+		<script type="text/javascript" src="/resources/js/jspdf.min.js"></script>
 	</body>
 </html>

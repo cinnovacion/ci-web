@@ -10,7 +10,7 @@ setlocale(LC_ALL , 'es_ES');
 
 $app->any('/', function ($request, $response, $args) {
     return $this->view->render($response, 'inicio.html');
-})->setName('inicio');
+})->setName('in1icio');
 
 // Ruta para iniciar sesion como administrador
 $app->group('/inicio', function () {
@@ -95,22 +95,33 @@ $app->group('/visitas', function () {
               $partir_de = 0;
               $todo['paginas'][$i]['no_pag'] = $i;
               $todo['paginas'][$i]['partir_de'] = $partir_de;
+              $todo['paginas'][$i]['nombre_pag'] = "visitas";
+              $todo['paginas'][$i]['subdiv'] = "lista";
           }
           else {
               $partir_de = $limite + $partir_de;
               $todo['paginas'][$i]['no_pag'] = $i;
               $todo['paginas'][$i]['partir_de'] = $partir_de;
+              $todo['paginas'][$i]['nombre_pag'] = "visitas";
+              $todo['paginas'][$i]['subdiv'] = "lista";
           }
         }
-        $visita= $this->db->visita()->limit($limite,$pa);
+        $visita= $this->db->visita()->select('cedula')->limit($limite,$pa);
         $id=$this->db->visita()->select('persona_idpersona');
         $persona=$this->db->persona()->where('idpersona',$id)->limit($limite,$pa);
+        $i = 0;
         foreach ($persona as $key => $value) {
-            $todo['datos'][$key]['nombre'] = $value['nombre'];
-            $todo['datos'][$key]['apellido'] = $value['apellido'];
-            $todo['datos'][$key]['cedula'] = $value['cedula'];
-            $todo['datos'][$key]['idvisita'] = $value['idpersona'];
+            $todo['datos'][$i]['nombre'] = $value['nombre'];
+            $todo['datos'][$i]['apellido'] = $value['apellido'];
+            $todo['datos'][$i]['idvisita'] = $value['idpersona'];
+            $i +=1;
         }
+        $i  = 0;
+        foreach ($visita as $key => $value) {
+          $todo['datos'][$i]['cedula'] = $value['cedula'];
+          $i +=1;
+        }
+
 
         return $this->view->render($response, '/visitas/lista.html',$todo);
     })->setName('visitas_lista');
@@ -165,12 +176,14 @@ $app->group('/visitas', function () {
 
     //Busqueda de un visitante
     $this->any('/busqueda_visita/{pa}', function($request,$response,$args){
-
+      $buscar = [];
       $pa = $request->getAttribute('pa');
       $parsedBody = $request->getParsedBody();
+
       $visita=$this->db->visita()->select('idvisita','persona_idpersona');
      
       $lista_num = $this->db->persona()->where('idpersona',$visita['1']['persona_idpersona']) -> where('nombre LIKE ?','%'.$parsedBody['buscar'].'%')->or('apellido LIKE ? ','%'.$parsedBody['buscar'].'% ');//->count();
+
       $limite = 25;
       $paginas = $lista_num/$limite;
       $paginas =ceil($paginas);
@@ -187,17 +200,22 @@ $app->group('/visitas', function () {
         }
       }
 
+
       echo json_encode( $busca = $this->db->persona()->where('idpersona',$visita['1']['persona_idpersona']) -> where('nombre LIKE ?','%'.$parsedBody['buscar'].'%')->or('apellido LIKE ? ','%'.$parsedBody['buscar'].'% ')->limit($limite,$pa)); die();
+
       $i = 0;
         $i = 0;
 
         foreach ($busca as $key => $value) {
             $buscar['datos'][$i]['nombre'] = $value['nombre'];
             $buscar['datos'][$i]['apellido'] = $value['apellido'];
-            $buscar['datos'][$i]['cedula'] = $value['cedula'];
+            $buscar['datos'][$i]['idvisita'] = $value['idpersona'];
             $i += 1;
         }
         $i = 0;
+        foreach ($vis as $key => $value) {
+          $buscar['datos'][$i]['cedula'] = $value['cedula'];
+        }
       return $this->view->render($response, '/visitas/lista.html',$buscar);
       //$buscar = $this->db->persona()->where('idpersona',$trabajador)->where('nombre LIKE ? ','%'.$parsedBody['buscar'].'%')->or('apellido LIKE ? ','%'.$parsedBody['buscar'].'%');
     })->setName('visitantes_buscar');
@@ -221,11 +239,15 @@ $app->group('/voluntarios', function () {
               $partir_de = 0;
               $todo['paginas'][$i]['no_pag'] = $i;
               $todo['paginas'][$i]['partir_de'] = $partir_de;
+              $todo['paginas'][$i]['nombre_pag'] = "voluntarios";
+              $todo['paginas'][$i]['subdiv'] = "asis_dia";
           }
           else {
               $partir_de = $limite + $partir_de;
               $todo['paginas'][$i]['no_pag'] = $i;
               $todo['paginas'][$i]['partir_de'] = $partir_de;
+              $todo['paginas'][$i]['nombre_pag'] = "voluntarios";
+              $todo['paginas'][$i]['subdiv'] = "asis_dia";
           }
         }
 
@@ -392,6 +414,7 @@ $app->group('/voluntarios', function () {
 
     //Mostrar lista de voluntarios registrados
     $this->any('/lista/{pa}', function ($request, $response, $args) {
+        $todo = [];
         $pa = $request->getAttribute('pa');
         $voluntario=$this->db->voluntario()->select('persona_idpersona');
         $lista_num = $this->db->persona()->where('idpersona',$voluntario)->count();
@@ -403,11 +426,15 @@ $app->group('/voluntarios', function () {
               $partir_de = 0;
               $todo['paginas'][$i]['no_pag'] = $i;
               $todo['paginas'][$i]['partir_de'] = $partir_de;
+              $todo['paginas'][$i]['nombre_pag'] = "voluntarios";
+              $todo['paginas'][$i]['subdiv'] = "lista";
           }
           else {
               $partir_de = $limite + $partir_de;
               $todo['paginas'][$i]['no_pag'] = $i;
               $todo['paginas'][$i]['partir_de'] = $partir_de;
+              $todo['paginas'][$i]['nombre_pag'] = "voluntarios";
+              $todo['paginas'][$i]['subdiv'] = "lista";
           }
         }
         $id = $this->db->voluntario()->select('persona_idpersona')->limit($limite,$pa);
@@ -504,12 +531,16 @@ $app->group('/voluntarios', function () {
               $lista['paginas'][$i]['id'] = $id;
               $lista['paginas'][$i]['no_pag'] = $i;
               $lista['paginas'][$i]['partir_de'] = $partir_de;
+              $lista['paginas'][$i]['nombre_pag'] = "voluntarios";
+              $lista['paginas'][$i]['subdiv'] = "detalles";
           }
           else {
               $partir_de = $limite + $partir_de;
               $lista['paginas'][$i]['id'] = $id;
               $lista['paginas'][$i]['no_pag'] = $i;
               $lista['paginas'][$i]['partir_de'] = $partir_de;
+              $lista['paginas'][$i]['nombre_pag'] = "voluntarios";
+              $lista['paginas'][$i]['subdiv'] = "detalles";
           }
         }
         $lista['asis'] = $this->db->asistencia()->where('idpersona',$id)->limit($limite,$pa);
@@ -581,7 +612,7 @@ $app->group('/voluntarios', function () {
         }
         $data['idpersona']=$parsedBody['id'];
         $asis->insert($data);
-        return $response->withRedirect('/voluntarios/detalles/'.$parsedBody['id'].'0');
+        return $response->withRedirect('/voluntarios/detalles/'.$parsedBody['id'].'_0');
     })->setName('agregar_hora');
 
     //Editar horas
@@ -617,7 +648,7 @@ $app->group('/voluntarios', function () {
       $data['nombre'] = $parsedBody['nombre_activ'];
       $data['voluntario_idvoluntario'] = $parsedBody['id_vol'];
       $activ_n->insert($data);
-      return $response->withRedirect('/voluntarios/detalles/'.$persona_id['persona_idpersona'].'_1_0');
+      return $response->withRedirect('/voluntarios/detalles/'.$persona_id['persona_idpersona'].'_0');
     })->setName('actualizar_hora');
 
 });
@@ -656,7 +687,7 @@ $app->group('/trabajador', function (){
             $data1['area_idarea']=$parsedBody['area'];
             $trab_t->insert($data1);
 
-            return $response->withRedirect('/trabajador/detalles/'.$persona_id['idpersona'].'0');
+            return $response->withRedirect('/trabajador/detalles/'.$persona_id['idpersona'].'_0');
             die();
   })->setName('trabajador_reg');
 
@@ -673,11 +704,15 @@ $app->group('/trabajador', function (){
             $partir_de = 0;
             $lista['paginas'][$i]['no_pag'] = $i;
             $lista['paginas'][$i]['partir_de'] = $partir_de;
+            $lista['paginas'][$i]['nombre_pag'] = "trabajador";
+            $lista['paginas'][$i]['subdiv'] = "lista";
         }
         else {
             $partir_de = $limite + $partir_de;
             $lista['paginas'][$i]['no_pag'] = $i;
             $lista['paginas'][$i]['partir_de'] = $partir_de;
+            $lista['paginas'][$i]['nombre_pag'] = "trabajador";
+            $lista['paginas'][$i]['subdiv'] = "lista";
         }
       }
       $lista['persona']=$this->db->persona()->where('idpersona',$trabajador)->limit($limite,$pa);
@@ -726,12 +761,16 @@ $app->group('/trabajador', function (){
             $lista['paginas'][$i]['id'] = $id;
             $lista['paginas'][$i]['no_pag'] = $i;
             $lista['paginas'][$i]['partir_de'] = $partir_de;
+            $lista['paginas'][$i]['nombre_pag'] = "trabajador";
+            $lista['paginas'][$i]['subdiv'] = "detalles";
         }
         else {
             $partir_de = $limite + $partir_de;
             $lista['paginas'][$i]['id'] = $id;
             $lista['paginas'][$i]['no_pag'] = $i;
             $lista['paginas'][$i]['partir_de'] = $partir_de;
+            $lista['paginas'][$i]['nombre_pag'] = "trabajador";
+            $lista['paginas'][$i]['subdiv'] = "detalles";
         }
       }
 
@@ -957,7 +996,6 @@ $app->group('/trabajador', function (){
       $lista = $this->db->asistencia()->select('fecha','hora_entrada','hora_salida','idpersona')->where('fecha >= "'.$p_dia_f.'" AND fecha <= "'.$u_dia_f.'" AND idpersona LIKE '.$id);
       $pers = $this->db->persona()->select('nombre','apellido')->where('idpersona',$id)->fetch();
       $datos['informacion']['nombre'] = $pers['nombre']." ".$pers['apellido'];
-
       $j = 0;
       $por = count($lista);
       for ($i=0; $i <= count($lista) ; $i++) {
