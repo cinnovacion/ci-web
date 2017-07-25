@@ -180,7 +180,7 @@ $app->group('/visitas', function () {
       $pa = $request->getAttribute('pa');
       $parsedBody = $request->getParsedBody();
       $visita=$this->db->visita()->select('persona_idpersona');
-      $lista_num = $this->db->persona()->where('idpersona',$visita) -> where('nombre LIKE ?','%'.$parsedBody['buscar'].'%')->or('apellido LIKE ? ','%'.$parsedBody['buscar'].'% ')->count();
+      $lista_num = $this->db->persona()->where('idpersona',$visita)->where('nombre LIKE ?','%'.$parsedBody['buscar'].'%')->or('apellido LIKE ? ','%'.$parsedBody['buscar'].'%')->count();
       $limite = 25;
       $paginas = $lista_num/$limite;
       $paginas =ceil($paginas);
@@ -196,9 +196,8 @@ $app->group('/visitas', function () {
             $buscar['paginas'][$i]['partir_de'] = $partir_de;
         }
       }
-
-      $busca = $this->db->persona()->where('idpersona',$visita) -> where('nombre LIKE ?','%'.$parsedBody['buscar'].'%')->or('apellido LIKE ? ','%'.$parsedBody['buscar'].'% ')->limit($limite,$pa);
-      $id_per = $this->db->persona()->select('idpersona')->where('idpersona',$visita) -> where('nombre LIKE ?','%'.$parsedBody['buscar'].'%')->or('apellido LIKE ? ','%'.$parsedBody['buscar'].'% ')->limit($limite,$pa);
+      $busca = $this->db->persona()->where('idpersona',$visita)->where('nombre LIKE ?','%'.$parsedBody['buscar'].'%')->or('apellido LIKE ? ','%'.$parsedBody['buscar'].'%')->limit($limite,$pa);
+      $id_per = $this->db->persona()->select('idpersona')->where('idpersona',$visita) -> where('nombre LIKE ?','%'.$parsedBody['buscar'].'%')->or('apellido LIKE ? ','%'.$parsedBody['buscar'].'%')->limit($limite,$pa);
       $vis = $this->db->visita()->where('persona_idpersona',$id_per);
       $i = 0;
         $i = 0;
@@ -462,7 +461,7 @@ $app->group('/voluntarios', function () {
     $this->any('/busqueda/{pa}', function($request,$response,$args){
       $pa = $request->getAttribute('pa');
       $voluntario=$this->db->voluntario()->select('persona_idpersona');
-      $lista_num = $this->db->persona()->where('idpersona',$voluntario) -> where('nombre LIKE ?','%'.$parsedBody['buscar'].'%')->or('apellido LIKE ? ','%'.$parsedBody['buscar'].'% ')->count();
+      $lista_num = $this->db->persona()->where('idpersona',$voluntario) -> where('nombre LIKE ?','%'.$parsedBody['buscar'].'%')->or('apellido LIKE ? ','%'.$parsedBody['buscar'].'%')->count();
       $limite = 25;
       $paginas = $lista_num/$limite;
       $paginas =ceil($paginas);
@@ -481,7 +480,7 @@ $app->group('/voluntarios', function () {
 
       $parsedBody = $request->getParsedBody();
 
-      $busca = $this->db->persona()->where('idpersona',$voluntario) -> where('nombre LIKE ?','%'.$parsedBody['buscar'].'%')->or('apellido LIKE ? ','%'.$parsedBody['buscar'].'% ')->limit($limite,$pa);
+      $busca = $this->db->persona()->where('idpersona',$voluntario) -> where('nombre LIKE ?','%'.$parsedBody['buscar'].'%')->or('apellido LIKE ? ','%'.$parsedBody['buscar'].'%')->limit($limite,$pa);
 
       $i = 0;
         foreach ($busca as $key => $value) {
@@ -719,6 +718,7 @@ $app->group('/trabajador', function (){
   //Busqueda de un Trabjador
   $this->any('/busqueda/{pa}', function($request,$response,$args){
     $pa = $request->getAttribute('pa');
+    $trabajador=$this->db->trabajador()->select('persona_idpersona');
     $lista_num = $this->db->persona()->where('idpersona',$trabajador) -> where('nombre LIKE ?','%'.$parsedBody['buscar'].'%')->or('apellido LIKE ? ','%'.$parsedBody['buscar'].'%')->count();
     $limite = 25;
     $paginas = $lista_num/$limite;
@@ -736,7 +736,6 @@ $app->group('/trabajador', function (){
       }
     }
     $parsedBody = $request->getParsedBody();
-    $trabajador=$this->db->trabajador()->select('persona_idpersona');
     $buscar['persona'] = $this->db->persona()->where('idpersona',$trabajador) -> where('nombre LIKE ?','%'.$parsedBody['buscar'].'%')->or('apellido LIKE ? ','%'.$parsedBody['buscar'].'%')->limit($limite,$pa);
     return $this->view->render($response, '/trabajador/lista.html',$buscar);
   })->setName('trabajador_buscar');
