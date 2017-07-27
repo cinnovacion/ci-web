@@ -473,14 +473,14 @@ $app->group('/voluntarios', function () {
               $todo['paginas'][$i]['no_pag'] = $i;
               $todo['paginas'][$i]['partir_de'] = $partir_de;
               $todo['paginas'][$i]['nombre_pag'] = "voluntarios";
-              $todo['paginas'][$i]['subdiv'] = "lista";
+              $todo['paginas'][$i]['subdiv'] = "lista_inactivos";
           }
           else {
               $partir_de = $limite + $partir_de;
               $todo['paginas'][$i]['no_pag'] = $i;
               $todo['paginas'][$i]['partir_de'] = $partir_de;
               $todo['paginas'][$i]['nombre_pag'] = "voluntarios";
-              $todo['paginas'][$i]['subdiv'] = "lista_inativos";
+              $todo['paginas'][$i]['subdiv'] = "lista_inactivos";
           }
         }
         $id = $this->db->voluntario()->select('persona_idpersona')->where('activo',0)->limit($limite,$pa);
