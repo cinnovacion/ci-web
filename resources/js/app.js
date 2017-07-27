@@ -203,6 +203,13 @@
         $('.close').click(function(){
            $('#modal_agr_admin').css('display', 'none');
         });
+        //actualizar admin
+        $('#btn_reg_admin').click(function(){
+            $('#modal_reg_admin').css('display', 'block');
+        });
+        $('.close').click(function(){
+           $('#modal_reg_admin').css('display', 'none');
+        });
         $(window).click(function(event){
             if (event.target.id == $('#modal_agr_admin').attr('id')) {
                 $('#modal_agr_admin').css('display', 'none');

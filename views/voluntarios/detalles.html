@@ -8,6 +8,19 @@
         <a href="/voluntarios/lista/0" class="button" style="margin-top:5px;">◄ Atrás</a>
         {%for datos in persona%}
         <a class="button" href="/voluntarios/editar/{{datos.idpersona}}">Editar</a>
+        {%endfor%}
+        {%for dato in volun%}
+          {%if dato.activo == 1%}
+            {%for datos in persona%}
+              <a class="button" href="/voluntarios/baja/{{datos.idpersona}}">Dar de baja</a>
+            {%endfor%}
+          {%elseif dato.activo == 0%}
+            {%for datos in persona%}
+              <a class="button" href="/voluntarios/baja/{{datos.idpersona}}">Dar de alta</a>
+            {%endfor%}
+          {%endif%}
+        {%endfor%}
+        {%for datos in persona%}
         <p class="p_detalles"><b>Nombre:</b> {{datos.nombre}} {{datos.apellido}}</p>
         <p class="p_detalles"><b>Cedula:</b> {{datos.cedula}}</p>
         <p class="p_detalles"><b>Telefono:</b> {{datos.telefono}}</p>
@@ -58,6 +71,7 @@
             <th>Hora de salida</th>
             <th>Horas acumuladas</th>
             <th>Editar</th>
+            <th>Borrar</th>
           </tr>
         </thead>
         <tbody>
@@ -68,6 +82,7 @@
             <th>{{datos.hora_salida|date('H:i:s')}}</th>
             <th>{{datos.hora_acumulada}}</th>
             <th><a href="/voluntarios/editar_h/{{datos.idasistencia}}_{{datos.idpersona}}" class="button">Editar</a></th>
+            <th><a href="/voluntarios/quitar_h/{{datos.idasistencia}}_{{datos.idpersona}}" class="button">Borrar</a></th>
           </tr>
           {%endfor%}
         </tbody>

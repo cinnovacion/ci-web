@@ -399,6 +399,7 @@ $app->group('/voluntarios', function () {
         $data1['carnet']=time()."-".$parsedBody['ced'];
         $data1['fecha_ingreso']=strtotime($parsedBody['fecha']);
         $persona_id=$this->db->persona()->select('idpersona')->order('idpersona desc')->limit(1)->fetch();
+        $data1['activo']=1;
         $data1['persona_idpersona']=$persona_id['idpersona'];
         $data1['institucion_idinstitucion']=$parsedBody['org'];
         $data1['carrera_idcarrera']=$parsedBody['carrera'];
@@ -412,7 +413,7 @@ $app->group('/voluntarios', function () {
     $this->any('/lista/{pa}', function ($request, $response, $args) {
         $todo = [];
         $pa = $request->getAttribute('pa');
-        $voluntario=$this->db->voluntario()->select('persona_idpersona');
+        $voluntario=$this->db->voluntario()->select('persona_idpersona')->where('activo',1);
         $lista_num = $this->db->persona()->where('idpersona',$voluntario)->count();
         $limite = 25;
         $paginas = $lista_num/$limite;
@@ -433,7 +434,7 @@ $app->group('/voluntarios', function () {
               $todo['paginas'][$i]['subdiv'] = "lista";
           }
         }
-        $id = $this->db->voluntario()->select('persona_idpersona')->limit($limite,$pa);
+        $id = $this->db->voluntario()->select('persona_idpersona')->where('activo',1)->limit($limite,$pa);
         $personas=$this->db->persona()->where('idpersona',$voluntario)->limit($limite,$pa);
         $i = 0;
         foreach ($id as $key => $value) {
@@ -457,10 +458,59 @@ $app->group('/voluntarios', function () {
         return $this->view->render($response, '/voluntarios/lista.html',$todo);
     })->setName('voluntarios_lista');
 
+    //Lista de voluntarios inactivos
+    $this->any('/lista_inactivos/{pa}', function ($request, $response, $args) {
+        $todo = [];
+        $pa = $request->getAttribute('pa');
+        $voluntario=$this->db->voluntario()->select('persona_idpersona')->where('activo',0);
+        $lista_num = $this->db->persona()->where('idpersona',$voluntario)->count();
+        $limite = 25;
+        $paginas = $lista_num/$limite;
+        $paginas =ceil($paginas);
+        for ($i=1; $i <=$paginas ; $i++) {
+          if ($i== 1) {
+              $partir_de = 0;
+              $todo['paginas'][$i]['no_pag'] = $i;
+              $todo['paginas'][$i]['partir_de'] = $partir_de;
+              $todo['paginas'][$i]['nombre_pag'] = "voluntarios";
+              $todo['paginas'][$i]['subdiv'] = "lista";
+          }
+          else {
+              $partir_de = $limite + $partir_de;
+              $todo['paginas'][$i]['no_pag'] = $i;
+              $todo['paginas'][$i]['partir_de'] = $partir_de;
+              $todo['paginas'][$i]['nombre_pag'] = "voluntarios";
+              $todo['paginas'][$i]['subdiv'] = "lista_inativos";
+          }
+        }
+        $id = $this->db->voluntario()->select('persona_idpersona')->where('activo',0)->limit($limite,$pa);
+        $personas=$this->db->persona()->where('idpersona',$voluntario)->limit($limite,$pa);
+        $i = 0;
+        foreach ($id as $key => $value) {
+          $time = $this->db->asistencia()->where('idpersona',$value['persona_idpersona'])->sum('hora_acumulada');
+          $horas[$i] = round($time,2);
+          $i += 1;
+        }
+        $i = 0;
+        foreach ($personas as $key => $value) {
+          $todo['datos'][$i]['idpersona'] = $value['idpersona'];
+          $todo['datos'][$i]['nombre'] = $value['nombre'];
+          $todo['datos'][$i]['apellido'] = $value['apellido'];
+          $todo['datos'][$i]['cedula'] = $value['cedula'];
+          $i += 1;
+        }
+        $i = 0;
+        foreach ($horas as $key => $value) {
+          $todo['datos'][$i]['hora_acumulada'] = $value;
+          $i += 1;
+        }
+        return $this->view->render($response, '/voluntarios/lista_inactivos.html',$todo);
+    })->setName('voluntarios_lista_inactivos');
+
     //Busqueda de un Voluntario
     $this->any('/busqueda/{pa}', function($request,$response,$args){
       $pa = $request->getAttribute('pa');
-      $voluntario=$this->db->voluntario()->select('persona_idpersona');
+      $voluntario=$this->db->voluntario()->select('persona_idpersona')->where('activo',1);
       $lista_num = $this->db->persona()->where('idpersona',$voluntario) -> where('nombre LIKE ?','%'.$parsedBody['buscar'].'%')->or('apellido LIKE ? ','%'.$parsedBody['buscar'].'%')->count();
       $limite = 25;
       $paginas = $lista_num/$limite;
@@ -479,9 +529,7 @@ $app->group('/voluntarios', function () {
       }
 
       $parsedBody = $request->getParsedBody();
-
       $busca = $this->db->persona()->where('idpersona',$voluntario) -> where('nombre LIKE ?','%'.$parsedBody['buscar'].'%')->or('apellido LIKE ? ','%'.$parsedBody['buscar'].'%')->limit($limite,$pa);
-
       $i = 0;
         foreach ($busca as $key => $value) {
          $time = $this->db->asistencia()->where('idpersona',$value['persona_idpersona'])->sum('hora_acumulada');
@@ -502,13 +550,56 @@ $app->group('/voluntarios', function () {
             $buscar['datos'][$i]['hora_acumulada'] = $value['hora_acumulada'];
             $i += 1;
         }
-
-
-
-
       return $this->view->render($response, '/voluntarios/lista.html',$buscar);
       //$buscar = $this->db->persona()->where('idpersona',$trabajador)->where('nombre LIKE ? ','%'.$parsedBody['buscar'].'%')->or('apellido LIKE ? ','%'.$parsedBody['buscar'].'%');
     })->setName('voluntarios_buscar');
+
+    //Busqueda volunarios inactivos
+    $this->any('/busqueda_inactivos/{pa}', function($request,$response,$args){
+      $pa = $request->getAttribute('pa');
+      $voluntario=$this->db->voluntario()->select('persona_idpersona')->where('activo',0);
+      $lista_num = $this->db->persona()->where('idpersona',$voluntario) -> where('nombre LIKE ?','%'.$parsedBody['buscar'].'%')->or('apellido LIKE ? ','%'.$parsedBody['buscar'].'%')->count();
+      $limite = 25;
+      $paginas = $lista_num/$limite;
+      $paginas =ceil($paginas);
+      for ($i=1; $i <=$paginas ; $i++) {
+        if ($i== 1) {
+            $partir_de = 0;
+            $buscar['paginas'][$i]['no_pag'] = $i;
+            $buscar['paginas'][$i]['partir_de'] = $partir_de;
+        }
+        else {
+            $partir_de = $limite + $partir_de;
+            $buscar['paginas'][$i]['no_pag'] = $i;
+            $buscar['paginas'][$i]['partir_de'] = $partir_de;
+        }
+      }
+
+      $parsedBody = $request->getParsedBody();
+      $busca = $this->db->persona()->where('idpersona',$voluntario) -> where('nombre LIKE ?','%'.$parsedBody['buscar'].'%')->or('apellido LIKE ? ','%'.$parsedBody['buscar'].'%')->limit($limite,$pa);
+      $i = 0;
+        foreach ($busca as $key => $value) {
+         $time = $this->db->asistencia()->where('idpersona',$value['persona_idpersona'])->sum('hora_acumulada');
+          $horas[$i]['hora_acumulada'] = round($time,2);
+          $i += 1;
+        }
+
+        $i = 0;
+
+        foreach ($busca as $key => $value) {
+            $buscar['datos'][$i]['nombre'] = $value['nombre'];
+            $buscar['datos'][$i]['apellido'] = $value['apellido'];
+            $buscar['datos'][$i]['cedula'] = $value['cedula'];
+            $i += 1;
+        }
+        $i = 0;
+        foreach ($horas as $key => $value) {
+            $buscar['datos'][$i]['hora_acumulada'] = $value['hora_acumulada'];
+            $i += 1;
+        }
+      return $this->view->render($response, '/voluntarios/lista_inactivos.html',$buscar);
+      //$buscar = $this->db->persona()->where('idpersona',$trabajador)->where('nombre LIKE ? ','%'.$parsedBody['buscar'].'%')->or('apellido LIKE ? ','%'.$parsedBody['buscar'].'%');
+    })->setName('voluntarios_buscar_inactivos');
 
     //Mostrar detalles de un voluntario
     $this->any('/detalles/{id}_{pa}', function ($request, $response, $args) {
@@ -591,8 +682,21 @@ $app->group('/voluntarios', function () {
         $data1['area_idarea'] = $parsedBody['area'];
         $vol_v->update($data1);
 
-        return $response->withRedirect('/voluntarios/detalles/'.$id.'_1_0');
+        return $response->withRedirect('/voluntarios/detalles/'.$id.'_0');
     })->setName('voluntarios_up');
+
+    //Dar de baja a un voluntario
+    $this->any('/baja/{id}', function ($request, $response, $args) {
+        $id = $request->getAttribute('id');
+        $baja = $this->db->voluntario()->where('persona_idpersona',$id)->fetch();
+        if ($baja['activo'] == 1) {
+          $baja = $this->db->voluntario()->where('persona_idpersona',$id)->update(array('activo'=>0));
+        }
+        elseif ($baja['activo'] == 0) {
+          $baja = $this->db->voluntario()->where('persona_idpersona',$id)->update(array('activo'=>1));
+        }
+        return $response->withRedirect('/voluntarios/lista/0');
+    })->setName('voluntario_editar');
 
     //Agregar Horas
     $this->any('/hora', function ($request, $response, $args) {
@@ -619,6 +723,14 @@ $app->group('/voluntarios', function () {
       $data['asistencia'] = $asistencia;
       $data['voluntario_id'] = $id_per;
       return $this->view->render($response, '/voluntarios/editar_hora.html', $data);
+    })->setName('editar_hora');
+
+    //quitar horas
+    $this->any('/quitar_h/{id}_{id_per}',function($request,$response,$args){
+      $id = $request->getAttribute('id');
+      $idper = $request->getAttribute('id_per');
+      $asistencia = $this->db->asistencia()->where('idasistencia',$id)->delete();
+      return $response->withRedirect('/trabajador/detalles/'.$idper.'_0');
     })->setName('editar_hora');
 
     //Actualizar_horas
@@ -772,8 +884,9 @@ $app->group('/trabajador', function (){
 
       $lista['asis'] = $this->db->asistencia()->where('idpersona',$id)->limit($limite,$pa);
       $trab_ad = $this->db->trabajador()->where('persona_idpersona',$id)->fetch();
-      $admin = $this->db->admin()->where('trabajador_idtrabajador',$trab_ad['idtrabajador']);
+      $admin = $this->db->admin()->where('trabajador_idtrabajador',$trab_ad['idtrabajador'])->fetch();
       $lista['cant'] = count($admin);
+      $lista['admin'] = $admin;
       $lista['area'] = $this->db->area()->where('idarea',$area['area_idarea']);
       return $this->view->render($response, '/trabajador/detalles.html',$lista);
   })->setName('trabajador_detalles');
@@ -839,6 +952,13 @@ $app->group('/trabajador', function (){
     return $this->view->render($response, '/trabajador/editar_hora.html', $data);
   })->setName('editar_hora');
 
+  $this->any('/quitar_h/{id}',function($request,$response,$args){
+    $id = $request->getAttribute('id');
+    $idper = $this->db->asistencia()->select('idpersona')->where('idasistencia',$id)->fetch();
+    $asistencia = $this->db->asistencia()->where('idasistencia',$id)->delete();
+    return $response->withRedirect('/trabajador/detalles/'.$idper['idpersona'].'_0');
+  })->setName('editar_hora');
+
   //Actualizar_horas
   $this->any('/actualizar_h',function($request,$response,$args){
     $parsedBody = $request->getParsedBody();
@@ -873,8 +993,14 @@ $app->group('/trabajador', function (){
       $data['password'] = $parsedBody['pass'];
       $data['trabajador_idtrabajador'] = $parsedBody['id_trab'];
       $admin = $this->db->admin()->where('trabajador_idtrabajador',$parsedBody['id_trab'])->fetch();
-      $admin->delete();
-      return $response->withRedirect('/trabajador/detalles/'.$parsedBody['id_per'].'_1_0');
+      if ($admin['activo'] == 1) {
+        $admin = $this->db->admin()->where('trabajador_idtrabajador',$parsedBody['id_trab'])->update(array('activo'=>0));
+      }
+      else {
+        $admin = $this->db->admin()->where('trabajador_idtrabajador',$parsedBody['id_trab'])->update(array('activo'=>1));
+      }
+
+      return $response->withRedirect('/trabajador/detalles/'.$parsedBody['id_per'].'_0');
   })->setName('agregar_admin');
 
   $this->any('/lista_asis_mes/{id}', function($request, $response, $args){

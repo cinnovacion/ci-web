@@ -72,6 +72,7 @@ CREATE TABLE IF NOT EXISTS `asscic`.`voluntario` (
   `carnet` VARCHAR(45) NULL,
   `fecha_ingreso` INT(11) NOT NULL,
   `fecha_ultima` INT(11) NOT NULL,
+  `activo` BOOLEAN NOT NULL,
   `persona_idpersona` INT NOT NULL,
   `institucion_idinstitucion` INT NOT NULL,
   `carrera_idcarrera` INT NOT NULL,

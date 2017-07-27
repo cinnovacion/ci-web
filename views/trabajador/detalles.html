@@ -8,31 +8,35 @@
 
         <a href="/trabajador/lista/0" class="button" style="margin-top:5px;">◄ Atrás</a>
         {%for datos in persona%}
-        <p class="p_detalles"><b>Nombre:</b> {{datos.nombre}} {{datos.apellido}}</p>
-        <p class="p_detalles"><b>Cedula:</b> {{datos.cedula}}</p>
-        <p class="p_detalles"><b>Telefono:</b> {{datos.telefono}}</p>
-        <p class="p_detalles"><b>Correo:</b> {{datos.correo}}</p>
-        <p class="p_detalles"><b>Dirección:</b> {{datos.direccion}}</p>
-        <a class="button" href="/trabajador/editar/{{datos.idpersona}}">Editar</a>
-        <a class="button" id="btn_agr_hora">Añadir Horas</a>
+          <p class="p_detalles"><b>Nombre:</b> {{datos.nombre}} {{datos.apellido}}</p>
+          <p class="p_detalles"><b>Cedula:</b> {{datos.cedula}}</p>
+          <p class="p_detalles"><b>Telefono:</b> {{datos.telefono}}</p>
+          <p class="p_detalles"><b>Correo:</b> {{datos.correo}}</p>
+          <p class="p_detalles"><b>Dirección:</b> {{datos.direccion}}</p>
+          <a class="button" href="/trabajador/editar/{{datos.idpersona}}">Editar</a>
+          <a class="button" id="btn_agr_hora">Añadir Horas</a>
         {%endfor%}
         </div>
         <div class="column column-50">
-        {%if cant== 0%}
-        <a class="button" style="margin-top:5px;" id="btn_agr_admin">Volver Admin</a>
-        {%elseif cant == 1%}
-        <a class="button" style="margin-top:5px;" id="btn_deg_admin">Degradar Admin</a>
+        {%if cant== 0 or admin['activo'] == 0%}
+          {%if admin['activo'] == 0%}
+            <a  class="button" style="margin-top:5px;" id="btn_reg_admin"> Volver Admin</a>
+          {%elseif cant == 0%}
+            <a class="button" style="margin-top:5px;" id="btn_agr_admin">Volver Admin</a>
+          {%endif%}
+        {%elseif cant == 1 or admin['activo'] == 1%}
+          <a class="button" style="margin-top:5px;" id="btn_deg_admin">Degradar Admin</a>
         {%endif%}
         {%for datos in persona%}
-        <a class="button" href="/trabajador/lista_asis_mes/{{datos.idpersona}}">Asistencia Mensual</a>
+          <a class="button" href="/trabajador/lista_asis_mes/{{datos.idpersona}}">Asistencia Mensual</a>
         {%endfor%}
         {%for datos in area%}
-        <br>
-        <p class="p_detalles"><b>Área:</b> {{datos.nombre}}</p>
+          <br>
+          <p class="p_detalles"><b>Área:</b> {{datos.nombre}}</p>
         {%endfor%}
         {%for datos in trab%}
-        <p class="p_detalles"><b>Carnet:</b> {{datos.carnet}}</p>
-        <p class="p_detalles"><b>Cargo:</b> {{datos.cargo}}</p>
+          <p class="p_detalles"><b>Carnet:</b> {{datos.carnet}}</p>
+          <p class="p_detalles"><b>Cargo:</b> {{datos.cargo}}</p>
         {%endfor%}
       </div>
   </div>
@@ -45,6 +49,7 @@
             <th>Hora de entrada</th>
             <th>Hora de salida</th>
             <th>Editar</th>
+            <th>Borrar</th>
           </tr>
         </thead>
         <tbody>
@@ -54,6 +59,7 @@
             <th>{{datos.hora_entrada|date('H:i:s')}}</th>
             <th>{{datos.hora_salida|date('H:i:s')}}</th>
             <th><a href="/trabajador/editar_h/{{datos.idasistencia}}" class="button">Editar</a></th>
+            <th><a href="/trabajador/quitar_h/{{datos.idasistencia}}" class="button">Borrar</a></th>
           </tr>
           {%endfor%}
         </tbody>
@@ -114,6 +120,25 @@
 <form class="modal-content animate" method="post" name="horas" action="/trabajador/deg_admin">
   <div class="centrar">
     <h4>¿Desea retirar permisos de administrador a
+      {%for datos in persona%}{{datos.nombre}} {{datos.apellido}}{%endfor%}?
+    </h4>
+  </div>
+  <div class="container centrar">
+    {%for datos in trab%}
+    <input type="text" style="display:none;" name="id_trab" value="{{datos.idtrabajador}}">
+    <input type="text" style="display:none;" name="id_per" value="{{datos.persona_idpersona}}">
+    {%endfor%}
+    <br>
+    <input type="submit" class="button" id="reg_admin" name="" value="Si">
+    <input type="submit" class="button" id="can_admin" name="" value="No">
+  </div>
+  </form>
+</div>
+<div id="modal_reg_admin" class="modal">
+<span class="close" title="Cerrar">&times;</span>
+<form class="modal-content animate" method="post" name="horas" action="/trabajador/deg_admin">
+  <div class="centrar">
+    <h4>¿Desea regresar permisos de administrador a
       {%for datos in persona%}{{datos.nombre}} {{datos.apellido}}{%endfor%}?
     </h4>
   </div>

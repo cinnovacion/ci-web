@@ -396,6 +396,20 @@ table{
   padding-left: 10px;
   padding-right: 10px;
 }
+#in_cmd{
+  position: absolute;
+  top: 0.2rem;
+  left: 42.6rem;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+#ac_cmd{
+  position: absolute;
+  top: 0.2rem;
+  left: 8.75rem;
+  padding-left: 10px;
+  padding-right: 10px;
+}
 /*lista desplegable js*/
 #accordion {
     width: 41.5rem;
