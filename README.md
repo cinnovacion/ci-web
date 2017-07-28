@@ -89,7 +89,7 @@ $ mysql_secure_installation
 $ mysql -u root -p
 > CREATE DATABASE asscic;
 > QUIT
-$ mysql -u root -p asscic < db/asscic_db.sql
+$ mysql -u root -p asscic < resources/db/asscic_db.sql
 ```
 
 ## Iniciar el servidor
