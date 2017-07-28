@@ -10,7 +10,7 @@ setlocale(LC_ALL , 'es_ES');
 
 $app->any('/', function ($request, $response, $args) {
     return $this->view->render($response, 'inicio.html');
-})->setName('in1icio');
+})->setName('inicio');
 
 // Ruta para iniciar sesion como administrador
 $app->group('/inicio', function () {
