@@ -245,7 +245,7 @@
         //Corregir el ingreso de la cedula
         $('.submit_reg').click(function(){
               if ($('#tipo_vol_0').is(':checked')) {
-                var x = $('.cedula_val').val();
+                var x = $('cedula_val').val();
                 if (x.length<16 && x.length>=14) {
                   var y = x.substring(0,3)+"-"+x.substring(3,9)+"-"+x.substring(9);
                   var z = y.toUpperCase();
@@ -257,13 +257,15 @@
                 }
               }
         });
-        $('.submit_reg_trab').click(function(){
-          var x = $('.cedula_val').val();
+        $('#submit_reg_trab').click(function(){
+          var x = $('#ced').val();
+          console.log(x.length);
           if (x.length<16 && x.length>=14) {
+
             var y = x.substring(0,3)+"-"+x.substring(3,9)+"-"+x.substring(9);
             $('.cedula_val').val(y);
           }
-          else {
+          else if (x.length<14){
             event.preventDefault();
             $('#ced_err').css('display','block');
           }

@@ -7,14 +7,15 @@
 			<div class="column column-50" style="margin-top:20px">
 				<form class="" action="/trabajador/busqueda_asis_mes" method="post">
 					<input type="text" name="id_trab" value="{{id['persona']}}" style="display:none;">
-					<label for="anio" class="lab_sem">Año:</label>
-					<select id="anio"  name="anio" class="sel_sem" >
+					<label for="years" class="lab_sem">Año:</label>
+					<select id="years"  name="anio" class="sel_sem" >
 						{%for datos in asistencia%}
 						<option value="{{datos.anios}}" {{(datos.anios=='now'|date('Y'))?'selected="selected"':' '}}>{{datos.anios}}</option>
 						{%endfor%}
 					</select>
-					<label for="mes" class="lab_sem">Mes:</label>
-					<select id="mes" name="mes" class="sel_sem">
+					<input type="text" name="year" id="year" value="" style="display:none">
+					<label for="months" class="lab_sem" style="margin-left:2.3rem">Mes:</label>
+					<select id="months" name="mes" class="sel_sem">
 						<option value="0" {{('01'=='now'|date('m'))?'selected="selected"':' '}}>Enero</option>
 						<option value="1" {{('02'=='now'|date('m'))?'selected="selected"':' '}}>Febrero</option>
 						<option value="2" {{('03'=='now'|date('m'))?'selected="selected"':' '}}>Marzo</option>
@@ -28,6 +29,13 @@
 						<option value="10" {{('11'=='now'|date('m'))?'selected="selected"':' '}}>Noviembre</option>
 						<option value="11" {{('12'=='now'|date('m'))?'selected="selected"':' '}}>Diciembre</option>
 					</select>
+					<input type="text" name="month" id="month" value="" style="display:none">
+					<label for="weeks" style="color:#448AFF;" class="lab_sem" >Semana:</label>
+					<select id="weeks"  name="" style="width:70%">
+						<option value=""></option>
+					</select>
+					<input type="text" name="f_inicio" id="f_inicio" value="" style="display:none">
+					<input type="text" name="f_final" id="f_final" value="" style="display:none">
 					<input type="submit" id="b_semana" name="" class="button" value="Buscar">
 					</div>
 					</form>
@@ -47,7 +55,6 @@
 						<th>Jueves</th>
 						<th>Viernes</th>
 						<th>Sábado</th>
-						<th>Domingo</th>
 					</tr>
 				</thead>
 				<tbody>

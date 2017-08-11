@@ -19,10 +19,10 @@
         </div>
         <div class="column column-50">
         {%if cant== 0 or admin['activo'] == 0%}
-          {%if admin['activo'] == 0%}
-            <a  class="button" style="margin-top:5px;" id="btn_reg_admin"> Volver Admin</a>
-          {%elseif cant == 0%}
+          {%if admin== false%}
             <a class="button" style="margin-top:5px;" id="btn_agr_admin">Volver Admin</a>
+          {%elseif admin['activo'] == 0%}
+            <a  class="button" style="margin-top:5px;" id="btn_reg_admin"> Volver Admin</a>
           {%endif%}
         {%elseif cant == 1 or admin['activo'] == 1%}
           <a class="button" style="margin-top:5px;" id="btn_deg_admin">Degradar Admin</a>
