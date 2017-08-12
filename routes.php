@@ -167,7 +167,6 @@ $app->group('/visitas', function () {
 
     //Mostrar lista de visitas
     $this->any('/lista/{pa}', function ($request, $response, $args) {
-        $todo[] = 0;
         $pa = $request->getAttribute('pa');
         $vis=$this->db->visita()->select('persona_idpersona');
         $lista_num = $this->db->persona()->where('idpersona',$vis)->count();
@@ -175,6 +174,7 @@ $app->group('/visitas', function () {
         $nombre_pag = "visitas";
         $subdiv = "lista";
         $todo  = semanas($lista_num,$nombre_pag,$subdiv);
+        $todo[] = 0;
         $visita= $this->db->visita()->select('cedula')->limit($limite,$pa);
         $id=$this->db->visita()->select('persona_idpersona');
         $persona=$this->db->persona()->where('idpersona',$id)->limit($limite,$pa);
@@ -339,7 +339,7 @@ $app->group('/voluntarios', function () {
 
         $lista = $this->db->asistencia()->select('asistencia.fecha','asistencia.hora_entrada','asistencia.hora_salida','asistencia.hora_acumulada','persona.nombre','persona.apellido')->where('hora_entrada >= '.$inicio.' AND hora_salida <= '.$final)->limit($limite,$pa);
         $datos = busqueda_semana($lista);
-
+        $datos[] = 0;
         $datos['cantidad'] = ceil(count($lista)/5);
 
         return $this->view->render($response, '/voluntarios/listaxtiempo.html',$datos);
@@ -407,7 +407,6 @@ $app->group('/voluntarios', function () {
 
     //Mostrar lista de voluntarios registrados
     $this->any('/lista/{pa}', function ($request, $response, $args) {
-        $todo = [];
         $pa = $request->getAttribute('pa');
         $voluntario=$this->db->voluntario()->select('persona_idpersona')->where('activo',1);
         $lista_num = $this->db->persona()->where('idpersona',$voluntario)->count();
@@ -415,6 +414,7 @@ $app->group('/voluntarios', function () {
         $nombre_pag = "voluntarios";
         $subdiv = "lista";
         $todo  = semanas($lista_num,$nombre_pag,$subdiv);
+        $todo[] = 0;
 
         $id = $this->db->voluntario()->select('persona_idpersona')->where('activo',1)->limit($limite,$pa);
         $personas=$this->db->persona()->where('idpersona',$voluntario)->limit($limite,$pa);
@@ -442,7 +442,6 @@ $app->group('/voluntarios', function () {
 
     //Lista de voluntarios inactivos
     $this->any('/lista_inactivos/{pa}', function ($request, $response, $args) {
-        $todo = [];
         $pa = $request->getAttribute('pa');
         $voluntario=$this->db->voluntario()->select('persona_idpersona')->where('activo',0);
         $lista_num = $this->db->persona()->where('idpersona',$voluntario)->count();
@@ -450,7 +449,7 @@ $app->group('/voluntarios', function () {
         $nombre_pag = "voluntarios";
         $subdiv = "lista_inactivos";
         $todo  = semanas($lista_num,$nombre_pag,$subdiv);
-
+        $todo[] = 0;
         $id = $this->db->voluntario()->select('persona_idpersona')->where('activo',0)->limit($limite,$pa);
         $personas=$this->db->persona()->where('idpersona',$voluntario)->limit($limite,$pa);
         $i = 0;
@@ -738,7 +737,7 @@ $app->group('/trabajador', function (){
       $nombre_pag = "trabajador";
       $subdiv = "lista";
       $lista  = semanas($lista_num,$nombre_pag,$subdiv);
-
+      $lista[] = 0;
       $lista['persona']=$this->db->persona()->where('idpersona',$trabajador)->limit($limite,$pa);
       return $this->view->render($response, '/trabajador/lista.html',$lista);
   })->setName('trabajador_lista');
@@ -951,13 +950,13 @@ $app->group('/trabajador', function (){
   })->setName('busquedaxmes');
 
   $this->any('/lista_admin', function ($request, $response, $args) {
-        $todo[]=0;
         $pa = $request->getAttribute('pa');
         $lista_num = $this->db->persona()->select("nombre","apellido")->where("idpersona",$trabajador)->count();
         $limite = 25;
         $nombre_pag = "trabajador";
         $subdiv = "lista_admin";
         $todo  = semanas($lista_num,$nombre_pag,$subdiv);
+        $todo[]=0;
 
         $idtrab= $this->db->admin()->select("trabajador_idtrabajador");
 
