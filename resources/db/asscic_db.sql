@@ -276,7 +276,7 @@ COMMIT;
 
 START TRANSACTION;
 USE  `asscic`;
-INSERT INTO `asscic`.`admin` (`idadmin`,`usuario`,`password`,`activo`,`trabajador_idtrabajador`) VALUES (DEFAULT,'jorge','1234',1,1);
+INSERT INTO `asscic`.`admin` (`idadmin`,`usuario`,`password`,`activo`,`trabajador_idtrabajador`) VALUES (DEFAULT,'jorge','YZOVlw==',1,1);
 
 COMMIT;
 
