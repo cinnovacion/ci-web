@@ -93,15 +93,17 @@ function decrypt($string) {
    return $result;
 }
 $app->any('/', function ($request, $response, $args) {
+    session_destroy();
+    unset($_SESSION);
     return $this->view->render($response, 'inicio.html');
 })->setName('inicio');
 
 // Ruta para iniciar sesion como administrador
 $app->group('/inicio', function () {
     $this->any('/login', function ($request, $response, $args) {
-        $parsedBody = $request->getParsedBody();
-        $user    = $parsedBody['user'];
-        $contra  = encrypt($parsedBody['pass']);
+        $input = $request->getParsedBody();
+        $user    = $input['user'];
+        $contra  = encrypt($input['pass']);
 
         //verificando si el usuario y cedula existen
         //$prueba = $this->db->admin->where(array('usuario' => $user, 'password' =>$contra))->fetch();
@@ -109,19 +111,23 @@ $app->group('/inicio', function () {
         //verificando usuario y si es correcto verificar contraseña
         $prueba = $this->db->admin->select('password')->where('usuario', $user)->fetch();
         if ($prueba) {
-            echo "El usuario es correcto";
-            if (strcmp($prueba['password'], $contra) == 0) {
-                echo "La contraseña tambien es correcta";
-                return $response->withRedirect('/voluntarios/asis_dia/0');
-            }else{
-                echo "La contraseña no es correcta";
-            }
-        }else{
-            echo "El usuario es incorrecto";
+          if($contra == $prueba['password']) {
+              $_SESSION["usuario"] = $input['user'];
+              return $this->response->withRedirect('/voluntarios/asis_dia/0');
+          } else {
+              return $this->response->withRedirect('/');
+          }
         }
 
     })->setName('login');
 
+    $this->any('/logout', function ($request, $response, $args) {
+        session_destroy();
+        unset($_SESSION);
+        echo $_SESSION["usuario"];
+
+        return $this->response->withRedirect('/');
+    });
     // Registro de asistencia -- Voluntarios y Trabajadores --
     $this->any('/asistencia_reg', function ($request, $response, $args) {
         $parsedBody = $request->getParsedBody();
@@ -274,6 +280,11 @@ $app->group('/visitas', function () {
       //$buscar = $this->db->persona()->where('idpersona',$trabajador)->where('nombre LIKE ? ','%'.$parsedBody['buscar'].'%')->or('apellido LIKE ? ','%'.$parsedBody['buscar'].'%');
     })->setName('visitantes_buscar');
 
+})->add(function ($request, $response, $next) {
+    if(!isset($_SESSION["usuario"]))
+        return $this->response->withRedirect('/');
+    $response = $next($request, $response);
+    return $response;
 });
 //Grupo de rutas de Voluntarios
 $app->group('/voluntarios', function () {
@@ -688,6 +699,11 @@ $app->group('/voluntarios', function () {
       return $response->withRedirect('/voluntarios/detalles/'.$persona_id['persona_idpersona'].'_0');
     })->setName('actualizar_hora');
 
+})->add(function ($request, $response, $next) {
+    if(!isset($_SESSION["usuario"]))
+        return $this->response->withRedirect('/');
+    $response = $next($request, $response);
+    return $response;
 });
 
 //Grupo de Trabajador
@@ -1033,6 +1049,11 @@ $this->any('/update_admin/{id}', function ($request, $response, $args) {
     return $this->view->render($response, '/trabajador/listaAdmin.html',$todo);
   })->setName('Admin_buscar');
 
+})->add(function ($request, $response, $next) {
+    if(!isset($_SESSION["usuario"]))
+        return $this->response->withRedirect('/');
+    $response = $next($request, $response);
+    return $response;
 });
 
 $app->group('/ajax', function () {

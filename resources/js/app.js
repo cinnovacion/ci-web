@@ -279,24 +279,35 @@
               $('#js_vol').removeClass('js');
               $('#js_emp').removeClass('js');
               $('#js_vis').removeClass('js');
+              $('#asis_dia').removeClass('js');
             }
             if ($('#js').text()=='visitas') {
               $('#js_vis').addClass('js');
               $('#asis').removeClass('js');
               $('#js_vol').removeClass('js');
               $('#js_emp').removeClass('js');
+              $('#asis_dia').removeClass('js');
             }
             if ($('#js').text()=='voluntarios') {
               $('#js_vol').addClass('js');
               $('#asis').removeClass('js');
               $('#js_vis').removeClass('js');
               $('#js_emp').removeClass('js');
+              $('#asis_dia').removeClass('js');
             }
             if ($('#js').text()=='trabajador') {
               $('#js_emp').addClass('js');
               $('#asis').removeClass('js');
               $('#js_vis').removeClass('js');
               $('#js_vol').removeClass('js');
+              $('#asis_dia').removeClass('js');
+            }
+            if ($('#js').text()=='asisxdia') {
+              $('#asis_dia').addClass('js');
+              $('#asis').removeClass('js');
+              $('#js_vol').removeClass('js');
+              $('#js_emp').removeClass('js');
+              $('#js_vis').removeClass('js');
             }
 
             $('.all_cmd').css('background-color','#7FC836');
